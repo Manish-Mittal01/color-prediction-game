@@ -1,0 +1,31 @@
+.input_box_btn[data-v-309ccc10] {
+    padding: 15px 0 0 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.two_btn {
+    width: 240px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+.input_box_btn .two_btn button {
+    padding: 0 15px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    background: #f5f5f5;
+    font-size: 14px;
+    color: rgba(0,0,0,.87);
+    border: 0;
+    border-radius: 2px;
+    box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+    transition: .3s cubic-bezier(.25,.8,.5,1),color 1ms;
+}
+.ripplegrey {
+    position: relative;
+    overflow: hidden;
+}
