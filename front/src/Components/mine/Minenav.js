@@ -12,12 +12,14 @@ const Minenav = () => {
     });
 
     useEffect(() => {
-        let user = JSON.parse(localStorage.getItem("user"))
-        const userData = jwt(user.token);
-        setUser({
-            user: userData.user_code,
-            mobile: userData.mobile
-        })
+        let user = JSON.parse(localStorage.getItem("user"));
+        if (user) {
+            const userData = jwt(user.token);
+            setUser({
+                user: userData.user_code,
+                mobile: userData.mobile
+            });
+        }
     }, []);
 
 

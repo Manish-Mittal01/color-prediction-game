@@ -5,6 +5,7 @@ import { BsFillKeyFill } from "react-icons/bs";
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../axios/axios';
+
 const Login = () => {
     const [userDetails, setUserDetails] = useState({
         mobile: "",
@@ -17,18 +18,16 @@ const Login = () => {
     async function login() {
         const user = userDetails;
         setErr("")
-        if (user.mobile.length !== 10) return setErr("invalid mobile number");
+        // if (user.mobile.length !== 10) return setErr("invalid mobile number");
 
         await axios.post("user/login", user)
             .then(resp => {
-                console.log(resp.data)
                 setUser(resp.data);
                 localStorage.setItem("authToken", JSON.stringify(user));
                 localStorage.setItem("user", JSON.stringify(resp.data));
                 navigate("/win");
             })
             .catch(err => {
-                console.log(err.response.data)
                 setErr(err.response.data.err);
             })
     }

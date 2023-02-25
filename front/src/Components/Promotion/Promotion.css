@@ -1,0 +1,152 @@
+.right_zz .wrapper {
+    background: #fff;
+    padding: 16px 15px;
+    display: inline-block;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgb(0 0 0 / 20%), 0 8px 10px 1px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%) !important;
+    position: absolute;
+    top: 7%;
+    right: 3%;
+}
+
+.right_zz .right_nav li {
+    padding: 15px 0;
+    font-size: 15px;
+}
+
+ul.right_nav {
+    margin: 0px -12px !important;
+}
+
+ul.right_nav li {
+    font-weight: 500;
+    line-height: 2;
+    font-size: 16px;
+    color: #393939;
+}
+
+.container {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.container .headline {
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.container .headline span {
+    font-size: 24px;
+    font-weight: 400;
+}
+
+/*  */
+.level_box {
+    background: #fff;
+}
+
+.level_content {
+    width: 100%;
+}
+
+.level_content .level_list {
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.level_content .level_list .layout {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.level_list .layout li {
+    width: 50%;
+}
+
+.level_list .layout li ol {
+    text-align: center;
+    font-size: 16px;
+    color: #757575;
+}
+
+.level_list .layout li .two_ol {
+    font-size: 22px;
+    color: rgba(0, 0, 0, .87);
+    line-height: 1.5;
+}
+
+.layout_bot {
+    padding: 15px 0;
+    position: relative;
+}
+
+.layout_bot .bot_list {
+    border-bottom: 1px solid #949494;
+    padding: 15px 0 12px;
+}
+
+.bot_list .titles {
+    font-size: 12px;
+    color: rgba(0, 0, 0, .54);
+    margin-bottom: 5px;
+}
+
+.bot_list .answer {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.heights {
+    height: 70px;
+    line-height: 1.5;
+}
+
+.openlink {
+    width: 100%;
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.openlink button {
+    width: 50%;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 0;
+    background: #f5f5f5;
+    border-radius: 2px;
+    box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+}
+
+.ripplegrey:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #666 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10);
+    opacity: 0;
+    transition: transform .3s, opacity .5s;
+}
+
+.ripplegrey {
+    position: relative;
+    overflow: hidden;
+}
+
+.table_cus_5d {
+    padding: 20px 34px;
+}

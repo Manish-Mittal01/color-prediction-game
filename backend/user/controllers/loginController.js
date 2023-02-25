@@ -6,20 +6,22 @@ const { success, error } = require('../common/Constants').status;
 
 module.exports.login = async (req, res) => {
     const { mobile, password } = req.body;
-    if (!mobile || !password) return res.status(400).json({
-        status: error,
-        message: "",
-        err: "invalid data"
-    })
+
+    const errMsg = (error) => {
+        res.status(400).json({
+            status: error,
+            message: "",
+            err: error
+        })
+    }
+    if (!mobile || !password) return errMsg("invalid data")
 
     const user = await User.findOne({
         mobile: mobile
     });
-    if (!user) return res.status(404).json({
-        status: error,
-        message: "",
-        err: "no user found"
-    });
+    if (!user) return errMsg("no user found");
+    if (user.status === "blocked") return errMsg("user blocked");
+
     const validUser = await bcrypt.compare(password, user.password);
     if (user.mobile === mobile && validUser) {
         const token = jwt.sign({

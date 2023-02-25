@@ -4,7 +4,6 @@ import { IoBagCheckOutline } from "react-icons/io5";
 import { RiFileListLine } from "react-icons/ri";
 import { TfiBag } from "react-icons/tfi";
 import { MdAccountBalanceWallet, MdAttachMoney, MdDownload, MdMessage, MdSecurity } from "react-icons/md";
-import Dropdown from 'react-bootstrap/Dropdown';
 import { BsCreditCard2Back } from 'react-icons/bs';
 import { FaBuilding } from 'react-icons/fa';
 import { BiMessageError } from "react-icons/bi";
@@ -13,12 +12,15 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Accordion } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+
+
 const Dashboeard = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
   return (
     <>
       <div className='dashboard'>
@@ -34,14 +36,14 @@ const Dashboeard = () => {
             <li>
               <ol>
                 <RiFileListLine />
-                <span>Orders</span>
+                <span onClick={() => navigate('/Orders')} >Orders</span>
               </ol>
             </li>
             {/* promotion */}
             <li>
               <ol>
                 <TfiBag />
-                <span>Promotion</span>
+                <span onClick={() => navigate("/Promotion")} >Promotion</span>
               </ol>
             </li>
             {/* Red Envelope */}
@@ -54,22 +56,22 @@ const Dashboeard = () => {
             {/* Wallet  */}
             <li>
               <ol>
-                <MdAccountBalanceWallet />
-                <span className='d_flex'>
-                  <Dropdown>
-                    <Dropdown.Toggle >
-                      Wallet
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu >
-                      <Dropdown.Item href="#/action-1" >
-                        Recharge
-                      </Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">Withdrawal</Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">Transactions</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </span>
+                <Accordion >
+                  <Accordion.Item eventKey={"0"} className="accordionItem">
+                    <Accordion.Header><MdAccountBalanceWallet /> Wallet</Accordion.Header>
+                    <Accordion.Body style={{ padding: "10px 16px" }}>
+                      <button className='accordionBtn' onClick={() => {
+                        navigate("/recharge")
+                      }}>Recharge</button><br />
+                      <button className='accordionBtn' onClick={() => {
+                        navigate("/withdrawal")
+                      }}>Withdrawal</button><br />
+                      <button className='accordionBtn' onClick={() => {
+                        navigate("/transaction")
+                      }}>Transactions</button>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
               </ol>
             </li>
 
@@ -81,30 +83,25 @@ const Dashboeard = () => {
               </ol>
             </li>
             {/* Address */}
-            <li>
+            {/* <li>
               <ol>
                 <FaBuilding />
                 <span>Address</span>
               </ol>
-            </li>
+            </li> */}
             {/* Account Security */}
             <li>
               <ol>
-                <MdSecurity />
-                <span className='d_flex'>
-                  <Dropdown>
-                    <Dropdown.Toggle >
-                      Account Security
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu >
-                      <Dropdown.Item href="#/action-1" >
-                        Forget Password
-                      </Dropdown.Item>
-
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </span>
+                <Accordion >
+                  <Accordion.Item eventKey={"0"} className="accordionItem">
+                    <Accordion.Header>  <MdSecurity /> Account Security</Accordion.Header>
+                    <Accordion.Body style={{ padding: "10px 16px" }}>
+                      <button className='accordionBtn' onClick={() => {
+                        navigate("/resetpassword")
+                      }}>Change Password</button>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
               </ol>
             </li>
 

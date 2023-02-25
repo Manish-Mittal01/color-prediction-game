@@ -16,7 +16,11 @@ const userSchema = Schema({
         type: String,
         required: true
     },
-    recommendation_code: String
+    recommendation_code: String,
+    status: {
+        type: String,
+        default: "active"
+    }
 }, { timestamps: true, versionKey: false });
 
 userSchema.methods.generateJWT = () => {

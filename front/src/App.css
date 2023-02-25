@@ -17,7 +17,10 @@ span.nav_icon {
 }
 
 .sections_login {
-  padding: 11px 0px;
+  padding: 4px 0px;
+  align-items: baseline;
+  font-weight: 400;
+  display: flex;
   color: #fff;
   background: #009688;
 }
@@ -13397,9 +13400,9 @@ form.padd_cus {
   margin: 14px 13px;
 }
 
-/* input#username {
+input#username {
   width: 100%;
-} */
+}
 
 .pic:first-child {
   z-index: 100
@@ -13456,6 +13459,26 @@ input[type=number] {
   transition: transform .3s, opacity .5s;
 }
 
+span.nav_icon svg {
+  font-size: 27px;
+}
+
+span.nav_path {
+  font-size: 23px;
+}
+
+.balance_av_text_withrawal {
+  font-size: 2rem;
+}
+
+.tips {
+  font-size: 14px;
+  color: rgba(0, 0, 0, .87);
+  padding: 10px 0;
+  text-align: center;
+}
+
+
 .err {
   text-align: center;
   margin: -10px;
@@ -13495,4 +13518,37 @@ input[type=number] {
   background: transparent !important;
   color: #555;
   box-shadow: none;
+}
+
+.p_records {
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.pagination button {
+  width: 40px;
+  height: 40px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: #eee;
+  border-color: #eee;
+}
+
+.pagination button.active {
+  font-weight: 900;
+  border-color: #101010;
+  background: #ffe400;
+  color: #101010;
 }

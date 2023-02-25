@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 require("dotenv/config");
-const app = require('../app')
+const app = require('../app');
+const periodTimer = require("../user/controllers/periodTimerController");
 
 mongoose.connect(process.env.DB_URL,
     {
@@ -16,5 +17,6 @@ mongoose.connect(process.env.DB_URL,
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
-    console.log(`app is running on ${port}`)
-})
+    console.log(`app is running on ${port}`);
+    periodTimer();
+});

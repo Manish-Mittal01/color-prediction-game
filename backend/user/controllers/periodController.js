@@ -2,71 +2,69 @@ const Period = require("../Models/PeriodModel");
 const { success, error } = require('../common/Constants').status;
 const { periods } = require('../common/Constants');
 const Bet = require("../Models/betModel");
+const PeriodTimer = require("../Models/periodTimerModel")
 
 const records = async () => {
     async function getPeriods(periodname) {
-        let data = await Period.find({
+        let data = await PeriodTimer.find({
             periodName: periodname
-        });
+        }).limit(200);
+        console.log(data.length)
         return data;
     };
     let parityData = await getPeriods(periods[0]);
     let sapreData = await getPeriods(periods[1]);
     let bconData = await getPeriods(periods[2]);
     let emredData = await getPeriods(periods[3]);
-    let parityPeriod = parityData[parityData.length - 1].period + 1;
-    let saprePeriod = sapreData[sapreData.length - 1].period + 1;
-    let bconPeriod = bconData[bconData.length - 1].period + 1;
-    let emredPeriod = emredData[emredData.length - 1].period + 1;
 
     return {
         parityData,
         sapreData,
         bconData,
-        emredData,
-        parityPeriod,
-        saprePeriod,
-        bconPeriod,
-        emredPeriod
+        emredData
     }
 }
 
 module.exports.periods = async (req, res) => {
     const newPeriods = await records();
 
-    function updatePeriod(periodname, peroid) {
-        return {
-            periodName: periodname,
-            period: peroid
-        };
-    };
-    const newPeriod1 = await new Period(updatePeriod(periods[0], newPeriods.parityPeriod));
-    let result1 = await newPeriod1.save();
-    const newPeriod2 = await new Period(updatePeriod(periods[1], newPeriods.saprePeriod));
-    let result2 = await newPeriod2.save();
-    const newPeriod3 = await new Period(updatePeriod(periods[2], newPeriods.bconPeriod));
-    let result3 = await newPeriod3.save();
-    const newPeriod4 = await new Period(updatePeriod(periods[3], newPeriods.emredPeriod));
-    let result4 = await newPeriod4.save();
+    let ParityPeriod = await PeriodTimer.find({
+        periodName: periods[0]
+    });
+    ParityPeriod = ParityPeriod[ParityPeriod.length - 1];
+    let SaprePeriod = await PeriodTimer.find({
+        periodName: periods[1]
+    });
+    SaprePeriod = SaprePeriod[SaprePeriod.length - 1];
+    let BconPeriod = await PeriodTimer.find({
+        periodName: periods[2]
+    });
+    BconPeriod = BconPeriod[BconPeriod.length - 1];
+    let EmredPeriod = await PeriodTimer.find({
+        periodName: periods[3]
+    });
+    EmredPeriod = EmredPeriod[EmredPeriod.length - 1];
 
+    let timer = ParityPeriod.expireAt - Date.now();
 
     return res.status(200).send({
         status: success,
+        timer: timer,
         data: {
             Parity: {
-                currentPeriod: newPeriods.parityPeriod,
+                currentPeriod: ParityPeriod,
                 previousResults: newPeriods.parityData
             },
             Sapre: {
-                currentPeriod: newPeriods.saprePeriod,
+                currentPeriod: SaprePeriod,
                 previousResults: newPeriods.sapreData
             },
             Bcon: {
-                currentPeriod: newPeriods.bconPeriod,
+                currentPeriod: BconPeriod,
                 previousResults: newPeriods.bconData
             },
             Emred: {
-                currentPeriod: newPeriods.emredPeriod,
+                currentPeriod: EmredPeriod,
                 previousResults: newPeriods.emredData
             },
         },
@@ -127,6 +125,13 @@ module.exports.periodResult = async (req, res) => {
         });
 
         let getNumber = result.expectedNumber[result.expectedColor];
+
+        // let number = await Period.findOne({
+        //     _id: periodResult._id
+        // })
+        // console.log("number", number);
+
+        // condition check
         let newPeriod = await Period.updateOne(
             { _id: periodResult._id },
             {

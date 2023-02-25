@@ -1,0 +1,167 @@
+.balance_av_text p,
+span {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.recharge_btn {
+    width: 100%;
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 12px 0 24px;
+}
+
+.recharge_btn button {
+    background: #009688;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 2px;
+    border: 0;
+    padding: 14px 0;
+    text-align: center;
+    width: 52%;
+}
+
+.balance_av_text {
+    display: flex;
+    justify-content: center;
+    margin: 18px 0px;
+}
+
+.amount_list {
+    width: 100%;
+    padding: 25px 10% 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.amount_list button {
+    width: 28%;
+    margin: 5px 5px;
+    padding: 10px 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 14px;
+    box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+    transition: .3s cubic-bezier(.25, .8, .5, 1), color 1ms;
+    background: #f5f5f5;
+    border: 0;
+}
+
+.choose_active {
+    background: #2196f3 !important;
+    color: #fff !important;
+    border-radius: 2px;
+}
+
+div#paybox span {
+    font-size: 15px;
+}
+
+.code_input_box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.code_input {
+    width: 95%;
+    height: 48px;
+    border-radius: 4px;
+    box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+    transition: background .3s cubic-bezier(.25, .8, .5, 1);
+    padding: 0 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.code_input img {
+    width: 22px;
+    height: 22px;
+    margin-right: 5px;
+}
+
+.code_input input {
+    width: 90%;
+    font-size: 14px;
+    border: 0;
+}
+
+.sections_login {
+    padding: 13px 0px;
+    align-items: baseline;
+    justify-content: space-between;
+    font-weight: 400;
+    display: flex;
+    color: #fff;
+    background: #009688;
+}
+
+.d_d span svg {
+    font-size: 25px;
+    margin-right: 10px;
+}
+
+.norecord_f {
+
+    font-size: 12px;
+    text-align: center;
+    padding: 15px 0px;
+    color: rgb(136, 136, 136);
+    display: none;
+}
+
+.sections_login_s {
+    color: #fff;
+    height: 56px;
+    width: 100%;
+    line-height: 56px;
+    padding: 0 15px;
+    box-sizing: border-box;
+    background: #009688;
+    box-shadow: 0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%);
+    transition: .2s cubic-bezier(.4, 0, .2, 1);
+    justify-content: space-between;
+}
+
+.recharge_box {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    background: #fff;
+    box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+    transition: .3s cubic-bezier(.25, .8, .5, 1);
+}
+
+.completed_list .list_box {
+    padding: 0 0 5px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.list_box li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.list_box li ol {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.list_box li ol p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #757575;
+}
+
+.dropdown button {
+    font-size: 18px;
+}

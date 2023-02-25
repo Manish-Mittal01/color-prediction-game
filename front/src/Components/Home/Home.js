@@ -9,7 +9,6 @@ export const Products = memo(() => {
   function GetData() {
     let data = localStorage.getItem("products")
     let products = JSON.parse(data);
-    console.log(products)
     if (products && products.length > 0) {
       setImg(products);
     }

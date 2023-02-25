@@ -17,7 +17,8 @@ module.exports.sendOtp = async (req, res) => {
             err: err
         });
     }
-    if (!mobile) return errorMsg("mobile is required");
+    if (!mobile) return errorMsg("mobile is required")
+    else if (mobile.length !== 10) return errorMsg("invalid mobile number");
     if (!mode) return errorMsg("mode is required");
     // else if (!["new user", "reset password"].includes(mode)) return errorMsg("invalid mode");
 
@@ -53,7 +54,7 @@ module.exports.sendOtp = async (req, res) => {
 }
 
 module.exports.verifyOtp = async (req, res) => {
-    const { mobile, password, recommendation_code, otp, mode } = req.body;
+    const { mobile, password, recommendation_code, otp, mode, status } = req.body;
     function errorMsg(err) {
         return res.status(400).json({
             status: error,
@@ -88,7 +89,7 @@ module.exports.verifyOtp = async (req, res) => {
                 result = await user.save();
 
             }
-            else {
+            else if (mode === "reset password") {
                 const salt = await bcrypt.genSalt(10);
                 let newPassword = await bcrypt.hash(password, salt);
                 result = await User.updateOne(
