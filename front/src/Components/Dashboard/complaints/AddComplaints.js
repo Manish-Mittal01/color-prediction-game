@@ -25,7 +25,7 @@ const AddComplaints = () => {
                         <p>Description</p><input type="text" />
                     </li>
                 </ul>
-                <p class="tips">Service: 10:00~17:00, Mon~Fri about 1~5 business days</p>
+                <p className="tips">Service: 10:00~17:00, Mon~Fri about 1~5 business days</p>
                 <div className="continue_btn">
                     <button className="ripple">Continue</button>
                 </div>

@@ -11,17 +11,17 @@ const Recharge_Record = () => {
                 </div>
             </div>
             {/*  */}
-            <div class="recharge_box">
-                <div class="completed_list">
-                    <ul class="list_box"><li>
+            <div className="recharge_box">
+                <div className="completed_list">
+                    <ul className="list_box"><li>
                         <ol><p>₹ 200</p><p style={{ color: "red" }}>Failed</p></ol
-                        ><ol><p>MGEK5102402167Y57989324318</p><p class="times">EKpay</p></ol>
-                        <ol><p class="oddnum">2/21/2023, 10:56:17 PM</p></ol>
+                        ><ol><p>MGEK5102402167Y57989324318</p><p className="times">EKpay</p></ol>
+                        <ol><p className="oddnum">2/21/2023, 10:56:17 PM</p></ol>
                     </li></ul></div>
-                {/* <div class="pagination"><ul class="page_box">
-                    <li class="page"><span>0-10</span> of 2</li>
-                    <li class="page_btn"><i class="van-icon van-icon-arrow-left"></i>
-                        <i class="van-icon van-icon-arrow"></i></li>
+                {/* <div className="pagination"><ul className="page_box">
+                    <li className="page"><span>0-10</span> of 2</li>
+                    <li className="page_btn"><i className="van-icon van-icon-arrow-left"></i>
+                        <i className="van-icon van-icon-arrow"></i></li>
                 </ul></div> */}
             </div>
 

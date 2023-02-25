@@ -10,7 +10,7 @@ function TableRecord({ history, tab }) {
 
     const lastPostIndex = currentPage * postsPerPage;
     const firstPostIndex = lastPostIndex - postsPerPage;
-    const currentPosts = history.previousResults.slice(firstPostIndex, lastPostIndex);
+    let currentPosts = history.previousResults.slice(firstPostIndex, lastPostIndex);
 
 
     return (
@@ -30,9 +30,9 @@ function TableRecord({ history, tab }) {
                 </thead>
                 <tbody>
                     {
-                        (currentPosts?.length > 0) &&
+                        (currentPosts && currentPosts?.length > 0) &&
                         currentPosts.map((item, index) => (
-                            <tr key={item.period + index}>
+                            <tr key={item.period}>
                                 <td>{item.period}</td>
                                 <td>{item.price}</td>
                                 <td className='c_code'>{item.number}</td>

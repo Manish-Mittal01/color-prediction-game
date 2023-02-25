@@ -15,12 +15,13 @@ import AuthLogin from './Components/Auth/AuthLogin';
 import Policies from './Components/Dashboard/policies/Policies';
 import Riskmanagement from './Components/Dashboard/riskmanagement/Riskmanagement';
 import Complaints from './Components/Dashboard/complaints/Complaints';
-import Recharge from './Components/Recharge/Recharge';
+import Recharge, { SubmitRechargeRequest } from './Components/Recharge/Recharge';
 import Recharge_Record from './Components/Recharge/Recharge_Record';
 import Orders from './Components/Orders/Orders';
 import Withdrawal from './Components/withdrawal/Withdrawal';
 import Transactions from './Components/transaction/Transaction';
 import Promotion from './Components/Promotion/Promotion';
+import Bankcard from './Components/bankCard/BankCard';
 
 
 function App() {
@@ -44,6 +45,8 @@ function App() {
           <Route path="/RechargeRecord" element={<Recharge_Record />} />
           <Route path="/Orders" element={<Orders />} />
           <Route path="/Promotion" element={<Promotion />} />
+          <Route path="/Bankcard" element={<Bankcard />} />
+          <Route path="/SubmitRechargeRequest" element={<SubmitRechargeRequest />} />
 
 
 
@@ -54,7 +57,6 @@ function App() {
           <Route path="/apply-record" element={<ApplyRecord />}/>
           <Route path="/RedEnvelope" element={<RedEnvelope />}/>
           <Route path="/AddBankCard" element={<AddBankCard />}/>
-          <Route path="/Bankcard" element={<Bankcard />}/>
            */}
 
 

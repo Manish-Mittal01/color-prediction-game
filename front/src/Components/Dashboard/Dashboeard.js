@@ -29,28 +29,28 @@ const Dashboeard = () => {
             <li onClick={handleShow}>
               <ol>
                 <IoBagCheckOutline />
-                <span>Sign In</span>
+                <span className='listItem' >Sign In</span>
               </ol>
             </li>
             {/* order */}
             <li>
               <ol>
                 <RiFileListLine />
-                <span onClick={() => navigate('/Orders')} >Orders</span>
+                <span className='listItem' onClick={() => navigate('/Orders')} >Orders</span>
               </ol>
             </li>
             {/* promotion */}
             <li>
               <ol>
                 <TfiBag />
-                <span onClick={() => navigate("/Promotion")} >Promotion</span>
+                <span className='listItem' onClick={() => navigate("/Promotion")} >Promotion</span>
               </ol>
             </li>
             {/* Red Envelope */}
             <li>
               <ol>
                 <MdAttachMoney />
-                <span>Red Envelope</span>
+                <span className='listItem'>Red Envelope</span>
               </ol>
             </li>
             {/* Wallet  */}
@@ -60,13 +60,13 @@ const Dashboeard = () => {
                   <Accordion.Item eventKey={"0"} className="accordionItem">
                     <Accordion.Header><MdAccountBalanceWallet /> Wallet</Accordion.Header>
                     <Accordion.Body style={{ padding: "10px 16px" }}>
-                      <button className='accordionBtn' onClick={() => {
+                      <button className='accordionBtn listItem' onClick={() => {
                         navigate("/recharge")
                       }}>Recharge</button><br />
-                      <button className='accordionBtn' onClick={() => {
+                      <button className='accordionBtn listItem' onClick={() => {
                         navigate("/withdrawal")
                       }}>Withdrawal</button><br />
-                      <button className='accordionBtn' onClick={() => {
+                      <button className='accordionBtn listItem' onClick={() => {
                         navigate("/transaction")
                       }}>Transactions</button>
                     </Accordion.Body>
@@ -77,9 +77,9 @@ const Dashboeard = () => {
 
             {/* Bank Card */}
             <li>
-              <ol>
+              <ol onClick={() => navigate("/Bankcard")} >
                 <BsCreditCard2Back />
-                <span>Bank Card</span>
+                <span className='listItem'>Bank Card</span>
               </ol>
             </li>
             {/* Address */}
@@ -96,7 +96,7 @@ const Dashboeard = () => {
                   <Accordion.Item eventKey={"0"} className="accordionItem">
                     <Accordion.Header>  <MdSecurity /> Account Security</Accordion.Header>
                     <Accordion.Body style={{ padding: "10px 16px" }}>
-                      <button className='accordionBtn' onClick={() => {
+                      <button className='accordionBtn listItem' onClick={() => {
                         navigate("/resetpassword")
                       }}>Change Password</button>
                     </Accordion.Body>
@@ -109,14 +109,14 @@ const Dashboeard = () => {
             <li>
               <ol>
                 <MdDownload />
-                <span>App Download</span>
+                <span className='listItem'>App Download</span>
               </ol>
             </li>
             {/* Complaints & Suggestions */}
             <li>
               <ol>
                 <MdMessage />
-                <span onClick={() => navigate("/complaints")} >Complaints & Suggestions</span>
+                <span className='listItem' onClick={() => navigate("/complaints")} >Complaints & Suggestions</span>
               </ol>
             </li>
             {/* About */}
@@ -127,10 +127,10 @@ const Dashboeard = () => {
                   <Accordion.Item eventKey={"0"} className="accordionItem">
                     <Accordion.Header> <BiMessageError /> About</Accordion.Header>
                     <Accordion.Body style={{ padding: "10px 16px" }}>
-                      <button className='accordionBtn' onClick={() => {
+                      <button className='accordionBtn listItem' onClick={() => {
                         navigate("/policies")
                       }}>Privacy Ploicy</button><br />
-                      <button className='accordionBtn' onClick={() => {
+                      <button className='accordionBtn listItem' onClick={() => {
                         navigate("/riskmanagements")
                       }}>Risk Disclosure Agreement</button>
                     </Accordion.Body>

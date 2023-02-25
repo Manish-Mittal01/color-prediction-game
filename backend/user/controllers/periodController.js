@@ -8,8 +8,7 @@ const records = async () => {
     async function getPeriods(periodname) {
         let data = await PeriodTimer.find({
             periodName: periodname
-        }).limit(200);
-        console.log(data.length)
+        }).sort({ _id: -1 }).limit(200);
         return data;
     };
     let parityData = await getPeriods(periods[0]);

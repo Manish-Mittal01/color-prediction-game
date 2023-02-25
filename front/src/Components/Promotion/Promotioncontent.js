@@ -1,12 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Promotion.css'
 import { MDBDataTable } from 'mdbreact';
+import jwt from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
+
+
 const Promotion_content = () => {
+    const [user, setUser] = useState()
+    const navigate = useNavigate();
 
     useEffect(() => {
-
+        let user = JSON.parse(localStorage.getItem("user"));
+        let userData = jwt(user.token);
+        setUser(userData.user_code)
     }, [])
-
     const data = {
         columns: [
             {
@@ -66,30 +73,30 @@ const Promotion_content = () => {
 
     return (
         <>
-            <div class="container">
-                <div class="headline"> Bonus:₹ <span >9253.71</span></div>
+            <div className="container">
+                <div className="headline"> Bonus:₹ <span >9253.71</span></div>
             </div>
 
-            <div class="level_box">
-                <div class="level_content">
-                    <div class="level_list">
-                        <ul class="layout"><li>
+            <div className="level_box">
+                <div className="level_content">
+                    <div className="level_list">
+                        <ul className="layout"><li>
                             <ol> Total People </ol>
-                            <ol class="two_ol">456</ol>
+                            <ol className="two_ol">456</ol>
                         </li><li><ol> Contribution </ol>
-                                <ol class="two_ol"> ₹ 236584.2</ol>
-                            </li></ul><div class="layout_bot">
-                            <div class="bot_list">
-                                <p class="titles">My Promotion Code</p>
-                                <p id="code" class="answer">775294181</p>
+                                <ol className="two_ol"> ₹ 236584.2</ol>
+                            </li></ul><div className="layout_bot">
+                            <div className="bot_list">
+                                <p className="titles">My Promotion Code</p>
+                                <p id="code" className="answer">{user}</p>
                             </div>
-                            <div class="bot_list">
-                                <p class="titles">My Promotion Link</p>
-                                <p class="answer heights" id="link"> https://domain.com//#/register?r_code=775294181</p>
+                            <div className="bot_list">
+                                <p className="titles">My Promotion Link</p>
+                                <p onClick={() => navigate("/register")} className="answer heights" id="link"> https://domain.com//#/register?r_code={user}</p>
                             </div>
                         </div>
-                        <div class="openlink">
-                            <button class="tag-read ripplegrey"> Copy Link </button>
+                        <div className="openlink">
+                            <button className="tag-read ripplegrey"> Copy Link </button>
                         </div>
                     </div>
                 </div>

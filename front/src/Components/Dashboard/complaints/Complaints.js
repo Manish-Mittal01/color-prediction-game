@@ -163,7 +163,7 @@ const Complaints = () => {
             <div className='nav_login'>
                 <div className='sections_order'>
                     <div>
-                        <span className='nav_icon'><BsArrowLeft /></span><span className='nav_path'>Orders</span>
+                        <span style={{ marginLeft: 14 }} className='nav_path'>Orders</span>
                     </div>
                     <div className='d_d'>
                         <span className='c_ic_5s' ><GrAdd style={{ color: "#fff" }} /></span>
@@ -178,11 +178,10 @@ const Complaints = () => {
                     fill
                 >
                     <Tab eventKey="home" title=" COMPLETED ">
-                        <p>xxxxALLxxxx</p>
+                        <p style={{ boxShadow: "1px 1px 1px 1px lightgrey", padding: 10 }} ></p>
                     </Tab>
                     <Tab eventKey="profile" title=" WAIT ">
-                        <p>xxxUNDELIVERxxxxx</p>
-
+                        <p style={{ boxShadow: "1px 1px 1px 1px lightgrey", padding: 10 }} ></p>
                     </Tab>
 
                 </Tabs>

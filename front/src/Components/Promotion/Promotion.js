@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { BsArrowLeft } from 'react-icons/bs'
 import './Promotion.css'
 import { GoThreeBars } from "react-icons/go";
 import Promotioncontent from './Promotioncontent';
@@ -11,11 +9,12 @@ const Promotion = () => {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
     return (
         <>
             <div className='nav_login'>
                 <div className='sections_login'>
-                    <div> <span className='nav_icon'><BsArrowLeft /></span><span className='nav_path'>Promotion</span></div>
+                    <div><span style={{ marginLeft: 14 }} className='nav_path'>Promotion</span></div>
                     <div className='d_d'> <span onClick={handleShow} ><GoThreeBars /></span></div>
                 </div>
             </div>

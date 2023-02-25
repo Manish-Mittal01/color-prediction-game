@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 
-const rechargeSchema = Schema({
+const depositSchema = Schema({
     user: {
         type: String,
         required: true
@@ -12,22 +12,18 @@ const rechargeSchema = Schema({
     },
     request_time: {
         type: Date,
-        required: true
+        required: true,
+        default: Date.now()
     },
-    upi: {
+    transactionId: {
         type: String,
         required: true
     },
-    mobile: {
-        type: Number,
-        required: true
-    },
-    request_type: {
+    status: {
         type: String,
-        required: true
-    },
-    accNumber: Number,
-    ifsc: String,
+        required: true,
+        default: "pending"
+    }
 }, { timestamps: true });
 
-module.exports = model('recharges', rechargeSchema)
+module.exports = model('disposits', depositSchema)

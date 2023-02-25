@@ -9,41 +9,48 @@ const Withdrawal = () => {
         <>
             <div className='nav_login'>
                 <div className='sections_login'>
-                    <div> <span className='nav_icon'><BsArrowLeft /></span><span className='nav_path'>Withdrawal</span></div>
+                    <div><span style={{ marginLeft: 14 }} className='nav_path'>Withdrawal</span></div>
                     <div className='d_d'> <span ><VscThreeBars /></span></div>
                 </div>
             </div>
             <div className='balance_av_text'>
-                <p className='balance_av_text-withrawal'>Balance:</p><span className='balance_av_text-withrawal'>₹ 200</span>
+                <p className='balance_av_text-withrawal'>Balance:
+                    <span className='balance_av_text-withrawal'> ₹200</span>
+                </p>
             </div>
-            <div className class="code_input_box">
-                <div className class="code_input">
+            <div className='balance_av_text' style={{ marginTop: -35 }}>
+                <p className='balance_av_text-withrawal' style={{ fontSize: 10 }}>Withdrawable Balance:
+                    <span style={{ fontSize: 10 }} className='balance_av_text-withrawal'> ₹200</span>
+                </p>
+            </div>
+            <div  className="code_input_box">
+                <div  className="code_input">
                     <img className src={withdro} alt="" />
                     <input className id="amount" type="number" placeholder="Enter or Select recharge amount" style={{ outline: 'none' }} />
                 </div>
             </div>
 
-            <div class="text_field"><p>Fee: <span className='nor'>0</span>,to account <span className='nor'>0</span></p></div>
+            <div className="text_field"><p>Fee: <span className='nor'>0</span>,to account <span className='nor'>0</span></p></div>
 
-            <div class="payment_box">
-                <p class="payment_text">Payout</p>
-                <div role="radiogroup" class="van-radio-group">
-                    <div role="radio" tabindex="0" aria-checked="true" class="van-radio">
-                        <div class="van-radio__icon van-radio__icon--square van-radio__icon--checked">
-                            <i class="van-icon van-icon-success"></i></div>
-                        <span class="van-radio__label">
-                            <span class="text">Bankcard</span>
+            <div className="payment_box">
+                <p className="payment_text">Payout</p>
+                <div role="radiogroup" className="van-radio-group">
+                    <div role="radio" tabindex="0" aria-checked="true" className="van-radio">
+                        <div className="van-radio__icon van-radio__icon--square van-radio__icon--checked">
+                            <i className="van-icon van-icon-success"></i></div>
+                        <span className="van-radio__label">
+                            <span className="text">Bankcard</span>
                         </span></div>
                 </div>
             </div>
             {/* add card */}
-            <div class="add_card">
-                <div class="van-collapse van-hairline--top-bottom">
-                    <div class="van-collapse-item">
-                        <div role="button" tabindex="0" aria-expanded="true" class="van-cell van-cell--clickable van-collapse-item__title van-collapse-item__title--expanded">
-                            <div class="van-cell__title">
+            <div className="add_card">
+                <div className="van-collapse van-hairline--top-bottom">
+                    <div className="van-collapse-item">
+                        <div role="button" tabindex="0" aria-expanded="true" className="van-cell van-cell--clickable van-collapse-item__title van-collapse-item__title--expanded">
+                            <div className="van-cell__title">
                                 <img src={card2} alt="" />
-                                {/* <div class="nav_name">Select Bank Card</div> */}
+                                {/* <div className="nav_name">Select Bank Card</div> */}
                                 <span className='d_flex'>
                                     <Dropdown>
                                         <Dropdown.Toggle >

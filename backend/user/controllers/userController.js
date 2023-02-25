@@ -54,7 +54,7 @@ module.exports.sendOtp = async (req, res) => {
 }
 
 module.exports.verifyOtp = async (req, res) => {
-    const { mobile, password, recommendation_code, otp, mode, status } = req.body;
+    const { mobile, password, recommendation_code, otp, mode } = req.body;
     function errorMsg(err) {
         return res.status(400).json({
             status: error,

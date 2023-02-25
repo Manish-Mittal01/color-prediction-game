@@ -12,7 +12,7 @@ const Orders = () => {
         <>
             <div className='nav_login'>
                 <div className='sections_order'>
-                    <div> <span className='nav_icon'><BsArrowLeft /></span><span className='nav_path'>Orders</span></div>
+                    <div><span style={{ marginLeft: 14 }} className='nav_path'>Orders</span></div>
 
                 </div>
             </div>
@@ -24,18 +24,18 @@ const Orders = () => {
                     fill
                 >
                     <Tab eventKey="home" title=" ALL ">
-                        <p>xxxxALLxxxx</p>
+                        <p style={{ boxShadow: "1px 1px 1px 1px lightgrey", padding: 10 }} ></p>
                     </Tab>
                     <Tab eventKey="profile" title=" UNDELIVER ">
-                        <p>xxxUNDELIVERxxxxx</p>
+                        <p style={{ boxShadow: "1px 1px 1px 1px lightgrey", padding: 10 }} ></p>
 
                     </Tab>
                     <Tab eventKey="longer-tab" title=" UNRECEIVE ">
-                        <p>xxxUNRECEIVExxxxx</p>
+                        <p style={{ boxShadow: "1px 1px 1px 1px lightgrey", padding: 10 }} ></p>
 
                     </Tab>
                     <Tab eventKey="contact" title=" SUCCESS " >
-                        <p>xxxSUCCESSxxxxx</p>
+                        <p style={{ boxShadow: "1px 1px 1px 1px lightgrey", padding: 10 }} ></p>
 
                     </Tab>
                 </Tabs>

@@ -108,7 +108,6 @@ const Win = () => {
         <button className='join_green' onClick={() => makeBet("green")} > Join Green </button>
         <button className=' Join_Violet' onClick={() => makeBet("voilet")}>  Join Violet  </button>
         <button className='join_red' onClick={() => makeBet("red")}> Join Red </button>
-
       </div>
 
       <div className='input_value'>
@@ -136,7 +135,7 @@ const Win = () => {
         <Modal.Body>
           <p className='title_dash'>Contract Money</p>
           <p className='title_dash'>Total contract money is 10</p>
-          <span className='wrap_checkbox'>  <Form.Check aria-label="option 1" /><span class="checkbox_cus">I agree <span onClick={() => setModalShow(true)} class="rule">PRESALE RULE</span></span></span>
+          <span className='wrap_checkbox'>  <Form.Check aria-label="option 1" /><span className="checkbox_cus">I agree <span onClick={() => setModalShow(true)} className="rule">PRESALE RULE</span></span></span>
         </Modal.Body>
         <Modal.Footer>
           <Button closeButton onClick={handleClose} style={{ color: '#00897b', marginRight: "10px", fontSize: "" }}>
@@ -154,10 +153,11 @@ const Win = () => {
       />
       {
         periods[tab] &&
-        <>
-          <TableRecord history={periods[tab]} tab={tab} />
-          <MyRecord tab={tab} />
-        </>
+        <TableRecord history={periods[tab]} tab={tab} />
+      }
+      {
+        periods[tab] &&
+        <MyRecord tab={tab} />
       }
 
     </>

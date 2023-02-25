@@ -5,7 +5,7 @@ const User = require("../Models/UserModel");
 const bcrypt = require("bcrypt");
 
 module.exports.bankDetails = async (req, res) => {
-    const { mobile, acc_number, ifsc, otp, user, acc_holder_name, branch } = req.body;
+    const { mobile, acc_number, ifsc, otp, user, acc_holder_name, branch, upi } = req.body;
     function errorMsg(err) {
         return res.status(400).json({
             status: error,
@@ -15,10 +15,12 @@ module.exports.bankDetails = async (req, res) => {
     }
 
     if (!user) return errorMsg("user is required");
-    if (!acc_holder_name) return errorMsg("acc_holder_name is required");
-    if (!acc_number) return errorMsg("acc_number is required");
-    if (!ifsc) return errorMsg("ifsc is required");
-    if (!branch) return errorMsg("branch is required");
+    if (acc_number) {
+        if (!ifsc) return errorMsg("ifsc is required");
+    }
+    else {
+        if (!upi) return errorMsg("upi or account details are required");
+    }
     if (!mobile) return errorMsg("mobile is required");
     if (!otp) return errorMsg("otp is required");
 
@@ -40,7 +42,8 @@ module.exports.bankDetails = async (req, res) => {
         acc_number,
         ifsc,
         mobile,
-        branch
+        branch,
+        upi
     }
 
     const addBank = new BankDetails(bank);
@@ -56,6 +59,6 @@ module.exports.bankDetails = async (req, res) => {
         status: success,
         message: "bank successfulkly added",
         err: "",
-        banks: banks
+        paymentDetails: banks
     })
 }

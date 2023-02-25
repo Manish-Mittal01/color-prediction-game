@@ -11,11 +11,9 @@ const bankDetails = Schema({
     },
     acc_number: {
         type: Number,
-        required: true
     },
     ifsc: {
         type: String,
-        required: true
     },
     mobile: {
         type: Number,
@@ -23,7 +21,9 @@ const bankDetails = Schema({
     },
     branch: {
         type: String,
-        required: true
+    },
+    upi: {
+        type: String
     }
 }, { versionKey: false });
 

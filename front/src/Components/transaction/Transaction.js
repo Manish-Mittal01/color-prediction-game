@@ -6,7 +6,7 @@ const Transactions = () => {
         <>
             <div className='nav_login'>
                 <div className='sections_login'>
-                    <div> <span className='nav_icon'><BsArrowLeft /></span><span className='nav_path'>Transactions</span></div>
+                    <div><span style={{ marginLeft: 14 }} className='nav_path'>Transactions</span></div>
                     {/* <div className='d_d'> <span onClick={handleShow} ><AiOutlineQuestionCircle /></span></div> */}
                 </div>
             </div>
@@ -19,7 +19,7 @@ const Transactions = () => {
                         <li className='kg_u5'>
                             <ol className='bold_cus'>
                                 <p>8057467541</p>
-                                <p className='oddnum'>₹ 200 </p>
+                                <p style={{ marginRight: 14 }} className='oddnum'>₹ 200 </p>
                             </ol>
                             <ol className='bold_cus'>
                                 <p className='times'>2023-02-22 05:04:41</p>
