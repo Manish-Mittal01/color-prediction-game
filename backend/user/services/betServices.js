@@ -12,7 +12,10 @@ class BetServices {
       .sort({ _id: -1 });
 
     if (results.length == 0) {
-      ResponseService.success(res, "No Bets Found", results, { code: 204 });
+      ResponseService.success(res, "No Bets Found", results, {
+        code: StatusCode.success,
+      });
+      return;
     }
 
     ResponseService.success(res, "Bets Found", results);
