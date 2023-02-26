@@ -68,9 +68,11 @@ class PeriodService {
   }
 
   static async getHistory(req, res) {
-    const periods = await Bet.find()
+    const periods = await PeriodModel.find()
       .limit(200 * 4)
       .sort({ _id: -1 });
+
+    console.log(periods);
 
     if (periods.length == 0) {
       ResponseService.success(
