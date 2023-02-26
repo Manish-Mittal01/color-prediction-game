@@ -1,4 +1,4 @@
-const { periodNames } = require("../../common/Constants");
+const { periodNames, StatusCode } = require("../../common/Constants");
 const PeriodModel = require("../Models/PeriodModel");
 const { ResponseService } = require("../../common/responseService");
 const { SessionController } = require("../controllers/sessionController");
@@ -14,15 +14,6 @@ class PeriodService {
       periodId: periodId,
       startTime: time,
       expiredAt: time + 3 * 60 * 1000,
-    };
-  }
-
-  static makeResponseObject(model) {
-    return {
-      id: model._id,
-      periodName: model.periodName,
-      periodId: model.periodId,
-      createdAt: model.createdAt,
     };
   }
 
@@ -50,6 +41,14 @@ class PeriodService {
   }
 
   static async getCurrentSession(req, res) {
+    function makeResponseObject(model) {
+      return {
+        id: model._id,
+        periodName: model.periodName,
+        periodId: model.periodId,
+        createdAt: model.createdAt,
+      };
+    }
     let periods;
     if (SessionController.currentSession !== undefined) {
       periods = SessionController.currentSession;
@@ -66,6 +65,61 @@ class PeriodService {
       Emred: this.makeResponseObject(periods[3]),
     };
     ResponseService.success(res, "Active Period", data);
+  }
+
+  static async getHistory(req, res) {
+    const periods = await Bet.find()
+      .limit(200 * 4)
+      .sort({ _id: -1 });
+
+    if (periods.length == 0) {
+      ResponseService.success(
+        res,
+        "No Periods Found",
+        {},
+        {
+          code: StatusCode.noData,
+        }
+      );
+      return;
+    }
+
+    function makeResponseObject(model) {
+      return {
+        periodId: model.periodId,
+        price: model.price,
+        resultNumber: model.resultNumber,
+        resultColor: model.resultColor,
+        startTime: model.startTime,
+        expiredAt: model.expiredAt,
+      };
+    }
+
+    const parity = [];
+    const sapre = [];
+    const bcone = [];
+    const emred = [];
+
+    periods.forEach((period) => {
+      if (period.periodName === periodNames[0]) {
+        parity.push(makeResponseObject(period));
+      } else if (period.periodName === periodNames[1]) {
+        sapre.push(makeResponseObject(period));
+      } else if (period.periodName === periodNames[2]) {
+        bcone.push(makeResponseObject(period));
+      } else if (period.periodName === periodNames[3]) {
+        emred.push(makeResponseObject(period));
+      }
+    });
+
+    const data = {
+      Parity: parity,
+      Sapre: sapre,
+      Bcone: bcone,
+      Emred: emred,
+    };
+
+    ResponseService.success(res, "Periods Found", data);
   }
 }
 

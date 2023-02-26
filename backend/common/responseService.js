@@ -1,10 +1,10 @@
 const { Status } = require("./Constants");
 
 class ResponseService {
-  static success(res, message, data) {
-    res.status(200).send({
+  static success(res, message, data, { code = 200 } = {}) {
+    res.status(code).send({
       status: Status.success,
-      statusCode: 200,
+      statusCode: code,
       message: message,
       data: data,
     });

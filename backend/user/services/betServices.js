@@ -6,9 +6,14 @@ const { ResponseService } = require("../../common/responseService");
 
 class BetServices {
   static async getBets(req, res) {
-    const userId = req.body.userId;
-    let results = await Bet.find({ userId: userId });
-    console.log(results);
+    const userId = req.query.userId;
+    const results = await Bet.find({ userId: userId })
+      .limit(100)
+      .sort({ _id: -1 });
+
+    if (results.length == 0) {
+      ResponseService.success(res, "No Bets Found", results, { code: 204 });
+    }
 
     ResponseService.success(res, "Bets Found", results);
   }
@@ -30,7 +35,7 @@ class BetServices {
     if (!validUser)
       return errorMsg("User does not exists!", StatusCode.notFound);
 
-    let result = await Bet({
+    let result = await new Bet({
       prediction: prediction,
       amount: amount,
       userId: userId,

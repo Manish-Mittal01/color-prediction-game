@@ -5,7 +5,10 @@ const bcrypt = require("bcrypt");
 
 const User = require("../Models/UserModel");
 const Otp = require("../Models/OtpModel");
+const { UserServices } = require("../services/userServices");
 const { success, error } = require("../../common/Constants").Status;
+
+class UserController {}
 
 module.exports.sendOtp = async (req, res) => {
   const { mobile, mode } = req.body;
@@ -147,3 +150,5 @@ module.exports.verifyOtp = async (req, res) => {
     return errorMsg("something wrong happened");
   }
 };
+
+module.exports.UserController = UserController;

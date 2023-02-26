@@ -14,6 +14,9 @@ const periodSchema = Schema(
     expiredAt: {
       type: Number,
     },
+    price: {
+      type: Number,
+    },
     isResultByAdmin: {
       type: Boolean,
       default: false,

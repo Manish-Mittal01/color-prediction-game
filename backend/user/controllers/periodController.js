@@ -19,7 +19,7 @@ class PeriodController {
   static getCurrentSession = async (req, res) =>
     PeriodService.getCurrentSession(req, res);
 
-  static async handlePeriod({ value = false } = {}) {
+  static async handlePeriod() {
     const sessions = await this.getAllPeriods();
     let hasSessionEnded;
     let startTime;
@@ -61,9 +61,11 @@ class PeriodController {
 
     // This will go to next iteration of the loop after 3 mins of start
     setTimeout(() => {
-      return this.handlePeriod({ value: true });
+      return this.handlePeriod();
     }, expireTime - Date.now());
   }
+
+  static getHistory = async (req, res) => PeriodService.getHistory(req, res);
 }
 
 // const records = async () => {
