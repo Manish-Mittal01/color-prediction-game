@@ -1,26 +1,29 @@
 const { Schema, model } = require("mongoose");
 
-const betSchema = Schema({
+const betSchema = Schema(
+  {
     periodName: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-    period: {
-        type: Number,
-        required: true
+    periodId: {
+      type: Number,
+      required: true,
     },
-    user: {
-        type: String,
-        required: true
+    userId: {
+      type: String,
+      required: true,
     },
     amount: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     prediction: {
-        type: String || Number,
-        required: true
-    }
-}, { timestamps: true, versionKey: false });
+      type: String || Number,
+      required: true,
+    },
+  },
+  { timestamps: true, versionKey: false }
+);
 
-module.exports = model('bets', betSchema)
+module.exports = model("bets", betSchema);

@@ -1,13 +1,14 @@
 const express = require("express");
-const userRouter = require('./user/routers/userRouter');
+const userRouter = require("./user/routers/userRouter");
+const periodRouter = require("./user/routers/periodRouter");
 const adminRouter = require("./admin/routers/adminRouter");
 const cors = require("cors");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/api/user', userRouter);
-app.use('/api/admin', adminRouter);
-
+app.use("/api/user", userRouter);
+app.use("/api/period", periodRouter);
+app.use("/api/admin", adminRouter);
 
 module.exports = app;

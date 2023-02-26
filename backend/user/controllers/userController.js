@@ -1,148 +1,150 @@
-const _ = require('lodash');
-const axios = require('axios');
-const otpGenerator = require('otp-generator');
-const bcrypt = require('bcrypt');
+const _ = require("lodash");
+const axios = require("axios");
+const otpGenerator = require("otp-generator");
+const bcrypt = require("bcrypt");
 
-const User = require('../Models/UserModel');
-const Otp = require('../Models/OtpModel');
-const { success, error } = require('../common/Constants').status;
-
+const User = require("../Models/UserModel");
+const Otp = require("../Models/OtpModel");
+const { success, error } = require("../common/Constants").Status;
 
 module.exports.sendOtp = async (req, res) => {
-    const { mobile, mode } = req.body;
-    function errorMsg(err) {
-        return res.status(400).json({
-            status: error,
-            message: "",
-            err: err
-        });
-    }
-    if (!mobile) return errorMsg("mobile is required")
-    else if (mobile.length !== 10) return errorMsg("invalid mobile number");
-    if (!mode) return errorMsg("mode is required");
-    // else if (!["new user", "reset password"].includes(mode)) return errorMsg("invalid mode");
-
-    const user = await User.findOne({
-        mobile: mobile
+  const { mobile, mode } = req.body;
+  function errorMsg(err) {
+    return res.status(400).json({
+      status: error,
+      message: "",
+      err: err,
     });
+  }
+  if (!mobile) return errorMsg("mobile is required");
+  else if (mobile.length !== 10) return errorMsg("invalid mobile number");
+  if (!mode) return errorMsg("mode is required");
+  // else if (!["new user", "reset password"].includes(mode)) return errorMsg("invalid mode");
 
-    if (mode === "new user" && user) return errorMsg("user already exists");
-    else if (mode === "reset password" && !user) return errorMsg("user does not exist");
+  const user = await User.findOne({
+    mobile: mobile,
+  });
 
-    const OTP = otpGenerator.generate(6, {
-        digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false
-    });
+  if (mode === "new user" && user) return errorMsg("user already exists");
+  else if (mode === "reset password" && !user)
+    return errorMsg("user does not exist");
 
-    // const greenwebsms = new URLSearchParams();
-    // greenwebsms.append('token', '05fa33c4cb50c35f4a258e85ccf50509');
-    // greenwebsms.append('to', `${mobile}`);
-    // greenwebsms.append('message', `verification code ${OTP}`);
-    // axios.post('http://api.greenweb.com.bd/api.php', greenwebsms).then((resp) => {
-    //     console.log(resp.data)
-    // })
+  const OTP = otpGenerator.generate(6, {
+    digits: true,
+    lowerCaseAlphabets: false,
+    upperCaseAlphabets: false,
+    specialChars: false,
+  });
 
-    const otp = new Otp({ mobile: mobile, otp: OTP });
-    const salt = await bcrypt.genSalt(10);
-    otp.otp = await bcrypt.hash(otp.otp, salt);
-    const result = await otp.save();
-    console.log(OTP)
-    return res.status(200).send({
-        status: success,
-        message: `OTP sent successfully ${OTP}`,
-        err: ""
-    });
-}
+  // const greenwebsms = new URLSearchParams();
+  // greenwebsms.append('token', '05fa33c4cb50c35f4a258e85ccf50509');
+  // greenwebsms.append('to', `${mobile}`);
+  // greenwebsms.append('message', `verification code ${OTP}`);
+  // axios.post('http://api.greenweb.com.bd/api.php', greenwebsms).then((resp) => {
+  //     console.log(resp.data)
+  // })
+
+  const otp = new Otp({ mobile: mobile, otp: OTP });
+  const salt = await bcrypt.genSalt(10);
+  otp.otp = await bcrypt.hash(otp.otp, salt);
+  const result = await otp.save();
+  console.log(OTP);
+  return res.status(200).send({
+    status: success,
+    message: `OTP sent successfully ${OTP}`,
+    err: "",
+  });
+};
 
 module.exports.verifyOtp = async (req, res) => {
-    const { mobile, password, recommendation_code, otp, mode } = req.body;
-    function errorMsg(err) {
-        return res.status(400).json({
-            status: error,
-            message: "",
-            err: err
-        });
-    }
-
-    if (!otp) return errorMsg("otp is required");
-    if (!password) return errorMsg("password is required");
-
-    if (!mode) return errorMsg("mode is required");
-    else if (!["new user", "reset password"].includes(mode)) return errorMsg("invalid mode");
-
-    const otpHolder = await Otp.find({
-        mobile: mobile
+  const { mobile, password, recommendation_code, otp, mode } = req.body;
+  function errorMsg(err) {
+    return res.status(400).json({
+      status: error,
+      message: "",
+      err: err,
     });
-    if (otpHolder.length === 0) return errorMsg("Otp expired");
+  }
 
-    const rightOtpFind = otpHolder[otpHolder.length - 1];
-    const validUser = await bcrypt.compare(otp, rightOtpFind.otp);
+  if (!otp) return errorMsg("otp is required");
+  if (!password) return errorMsg("password is required");
 
-    async function updateUser({ newUser, message, err }) {
-        if (rightOtpFind.mobile === mobile && validUser) {
-            let token;
-            let result;
-            if (mode === "new user") {
-                const user = new User(newUser);
-                const salt = await bcrypt.genSalt(10);
-                user.password = await bcrypt.hash(user.password, salt);
-                token = user.generateJWT();
-                result = await user.save();
+  if (!mode) return errorMsg("mode is required");
+  else if (!["new user", "reset password"].includes(mode))
+    return errorMsg("invalid mode");
 
-            }
-            else if (mode === "reset password") {
-                const salt = await bcrypt.genSalt(10);
-                let newPassword = await bcrypt.hash(password, salt);
-                result = await User.updateOne(
-                    { _id: newUser._id },
-                    { password: newPassword }
-                );
-                result = {};
-            }
-            const otpDelete = await Otp.deleteMany({
-                mobile: rightOtpFind.mobile
-            });
+  const otpHolder = await Otp.find({
+    mobile: mobile,
+  });
+  if (otpHolder.length === 0) return errorMsg("Otp expired");
 
-            return res.status(200).send({
-                status: success,
-                message: message,
-                token: token,
-                data: result,
-                err: ""
-            })
-        }
-        else {
-            return errorMsg(err);
-        }
+  const rightOtpFind = otpHolder[otpHolder.length - 1];
+  const validUser = await bcrypt.compare(otp, rightOtpFind.otp);
+
+  async function updateUser({ newUser, message, err }) {
+    if (rightOtpFind.mobile === mobile && validUser) {
+      let token;
+      let result;
+      if (mode === "new user") {
+        const user = new User(newUser);
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+        token = user.generateJWT();
+        result = await user.save();
+      } else if (mode === "reset password") {
+        const salt = await bcrypt.genSalt(10);
+        let newPassword = await bcrypt.hash(password, salt);
+        result = await User.updateOne(
+          { _id: newUser._id },
+          { password: newPassword }
+        );
+        result = {};
+      }
+      const otpDelete = await Otp.deleteMany({
+        mobile: rightOtpFind.mobile,
+      });
+
+      return res.status(200).send({
+        status: success,
+        message: message,
+        token: token,
+        data: result,
+        err: "",
+      });
+    } else {
+      return errorMsg(err);
     }
+  }
 
-    if (mode === 'new user') {
-        if (!mobile) return errorMsg("mobile is required");
-        if (!recommendation_code) return errorMsg("recommendation_code is required");
+  if (mode === "new user") {
+    if (!mobile) return errorMsg("mobile is required");
+    if (!recommendation_code)
+      return errorMsg("recommendation_code is required");
 
-        let validreferal = await User.findOne({
-            user_code: recommendation_code
-        });
-        if (!validreferal) return errorMsg("invalid recommendation code");
+    let validreferal = await User.findOne({
+      userId: recommendation_code,
+    });
+    if (!validreferal) return errorMsg("invalid recommendation code");
 
-        updateUser({
-            newUser: { mobile: mobile, password: password, recommendation_code: recommendation_code },
-            message: 'user registered successfully',
-            err: 'invalid otp or mobile'
-        })
-
-    }
-    else if (mode === "reset password") {
-        const newUser = await User.findOne({
-            mobile: mobile
-        })
-        updateUser({
-            newUser: newUser,
-            message: 'password updated',
-            err: 'invalid otp'
-        })
-    }
-    else {
-        return errorMsg("something wrong happened");
-    }
-
-}
+    updateUser({
+      newUser: {
+        mobile: mobile,
+        password: password,
+        recommendation_code: recommendation_code,
+      },
+      message: "user registered successfully",
+      err: "invalid otp or mobile",
+    });
+  } else if (mode === "reset password") {
+    const newUser = await User.findOne({
+      mobile: mobile,
+    });
+    updateUser({
+      newUser: newUser,
+      message: "password updated",
+      err: "invalid otp",
+    });
+  } else {
+    return errorMsg("something wrong happened");
+  }
+};

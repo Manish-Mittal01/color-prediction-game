@@ -1,22 +1,33 @@
 const { Schema, model } = require("mongoose");
 
-
-const periodSchema = Schema({
+const periodSchema = Schema(
+  {
     periodName: {
-        type: String
+      type: String,
     },
-    period: {
-        type: Number
+    periodId: {
+      type: Number,
     },
-    price: {
-        type: Number
+    startTime: {
+      type: Number,
     },
-    number: {
-        type: Number
+    expiredAt: {
+      type: Number,
     },
-    result: {
-        type: String
-    }
-}, { versionKey: false });
+    isResultByAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    resultNumber: {
+      type: Number,
+      default: null,
+    },
+    resultColor: {
+      type: String,
+      default: null,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-module.exports = model('periods', periodSchema)
+module.exports = model("periods", periodSchema);

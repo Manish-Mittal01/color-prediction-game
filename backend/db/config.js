@@ -1,22 +1,13 @@
 const mongoose = require("mongoose");
-require("dotenv/config");
-const app = require('../app');
-const periodTimer = require("../user/controllers/periodTimerController");
+const { Config } = require("../config");
 
-mongoose.connect(process.env.DB_URL,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    },
-    err => {
-        if (err) console.log(err, "Connection failed");
-        console.log('Connected to mongodb')
-    }
-);
+mongoose.set("strictQuery", false);
 
-
-const port = process.env.PORT || 3000
-app.listen(port, () => {
-    console.log(`app is running on ${port}`);
-    periodTimer();
-});
+module.exports.connectDatabase = async () => {
+  console.log("Connecting to Database ...");
+  mongoose.connect(Config.DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  return mongoose.connection;
+};
