@@ -43,10 +43,10 @@ class PeriodService {
     const data = {
       startTime: periods[0].startTime,
       expiredAt: periods[0].expiredAt,
-      parity: this.makeResponseObject(periods[0]),
-      sapre: this.makeResponseObject(periods[1]),
-      bcone: this.makeResponseObject(periods[2]),
-      emred: this.makeResponseObject(periods[3]),
+      Parity: this.makeResponseObject(periods[0]),
+      Sapre: this.makeResponseObject(periods[1]),
+      Bcone: this.makeResponseObject(periods[2]),
+      Emred: this.makeResponseObject(periods[3]),
     };
     ResponseService.success(res, "Active Period", data);
   }
