@@ -1,6 +1,7 @@
 const { periodNames } = require("../../common/Constants");
 const PeriodModel = require("../Models/PeriodModel");
 const { ResponseService } = require("../../common/responseService");
+const { SessionController } = require("../controllers/sessionController");
 
 class PeriodService {
   /**This method will be used to calculate result after period is finished*/
@@ -29,23 +30,33 @@ class PeriodService {
     return [1, 2, 3, 4].map((e) => `${time}${e}`).map((e) => parseInt(e));
   }
 
-  static async createNewPeriods(time) {
+  static createNewPeriods(time) {
     const periodIds = this.getPeriodIds(time);
+    const periods = [];
 
     periodIds.forEach(async (id, index) => {
-      PeriodModel(this.makePeriodObject(periodNames[index], id, time)).save();
+      const period = PeriodModel(
+        this.makePeriodObject(periodNames[index], id, time)
+      );
+      period.save();
+      periods.push(period);
     });
+    return periods;
   }
 
-  static async getAllPeriods(time) {
+  static async getAllPeriods() {
     const periods = await PeriodModel.find();
-    // console.log(periods.length);
     return periods;
   }
 
   static async getCurrentSession(req, res) {
-    const periods = await PeriodModel.find().limit(4).sort({ _id: -1 });
-    periods.reverse();
+    let periods;
+    if (SessionController.currentSession !== undefined) {
+      periods = SessionController.currentSession;
+    } else {
+      periods = await PeriodModel.find().limit(4).sort({ _id: -1 });
+      periods.reverse();
+    }
     const data = {
       startTime: periods[0].startTime,
       expiredAt: periods[0].expiredAt,

@@ -20,9 +20,6 @@ router.route("/referals").post(refered);
 router.route("/userBank").post(bankDetails);
 // router.route("/recharge").post(recharge);
 // router.route("/getBets").post(getBets);
-router.route("/sendOtp").post(sendOtp);
-router.route("/sendOtp/verifyOtp").post(verifyOtp);
-router.route("/login").post(login);
 router.route("/withdrawrequest").post(withdraws);
 router.route("/depositrequest").post(deposits);
 

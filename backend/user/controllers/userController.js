@@ -118,13 +118,13 @@ module.exports.verifyOtp = async (req, res) => {
 
   if (mode === "new user") {
     if (!mobile) return errorMsg("mobile is required");
-    if (!recommendation_code)
-      return errorMsg("recommendation_code is required");
+    // if (!recommendation_code)
+    //   return errorMsg("recommendation_code is required");
 
-    let validreferal = await User.findOne({
-      userId: recommendation_code,
-    });
-    if (!validreferal) return errorMsg("invalid recommendation code");
+    // let validreferal = await User.findOne({
+    //   userId: recommendation_code,
+    // });
+    // if (!validreferal) return errorMsg("invalid recommendation code");
 
     updateUser({
       newUser: {

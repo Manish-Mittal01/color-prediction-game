@@ -2,7 +2,7 @@
 const app = require("./app");
 const { Config } = require("./config");
 const { connectDatabase } = require("./db/config");
-const { SessionController } = require("./user/controllers/sessionController");
+const { PeriodController } = require("./user/controllers/periodController");
 
 const main = async () => {
   await connectDatabase().then((db) => {
@@ -15,7 +15,7 @@ const main = async () => {
       console.info("Connected to database");
       app.listen(Config.port, () => {
         console.log(`App is running on ${Config.port}`);
-        SessionController.handleSession();
+        PeriodController.handlePeriod();
       });
     });
   });
