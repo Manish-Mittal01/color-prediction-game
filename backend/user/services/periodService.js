@@ -12,7 +12,16 @@ class PeriodService {
       periodName: periodname,
       periodId: periodId,
       startTime: time,
-      expireAt: time + 3 * 60 * 1000,
+      expiredAt: time + 3 * 60 * 1000,
+    };
+  }
+
+  static makeResponseObject(model) {
+    return {
+      id: model._id,
+      periodName: model.periodName,
+      periodId: model.periodId,
+      createdAt: model.createdAt,
     };
   }
 
@@ -30,7 +39,16 @@ class PeriodService {
 
   static async getCurrentSession(req, res) {
     const periods = await PeriodModel.find().limit(4).sort({ _id: -1 });
-    ResponseService.success(res, "Active Period", periods);
+    periods.reverse();
+    const data = {
+      startTime: periods[0].startTime,
+      expiredAt: periods[0].expiredAt,
+      parity: this.makeResponseObject(periods[0]),
+      sapre: this.makeResponseObject(periods[1]),
+      bcone: this.makeResponseObject(periods[2]),
+      emred: this.makeResponseObject(periods[3]),
+    };
+    ResponseService.success(res, "Active Period", data);
   }
 }
 

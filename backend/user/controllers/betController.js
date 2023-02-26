@@ -6,7 +6,7 @@ const { BetServices } = require("../services/betServices");
 class BetController {
   static getBets = async (req, res) => BetServices.getBets(req, res);
 
-  static makeBet = async (req, req) => BetServices.makeBet(req, res);
+  static makeBet = async (req, res) => BetServices.makeBet(req, res);
 }
 
 module.exports.BetController = BetController;
