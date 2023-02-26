@@ -8,10 +8,6 @@ const userSchema = Schema(
       type: String,
       default: shortid.generate(),
     },
-    userName: {
-      type: String,
-      required: true,
-    },
     mobile: {
       type: String,
       required: true,

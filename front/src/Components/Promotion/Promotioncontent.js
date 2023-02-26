@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Promotion.css'
 import { MDBDataTable } from 'mdbreact';
 import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
+import { Table } from 'react-bootstrap';
+import Pagination from '../Win/Pagination';
 
 
 const Promotion_content = () => {
-    const [user, setUser] = useState()
+    const [user, setUser] = useState();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage, setPostsPerPage] = useState(20);
     const navigate = useNavigate();
+    const referalLink = `https://domain.com//#/register?r_code=${user}`
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem("user"));
@@ -71,6 +76,10 @@ const Promotion_content = () => {
         ]
     };
 
+    const lastPostIndex = currentPage * postsPerPage;
+    const firstPostIndex = lastPostIndex - postsPerPage;
+    // let currentPosts = history.previousResults.slice(firstPostIndex, lastPostIndex);
+
     return (
         <>
             <div className="container">
@@ -92,23 +101,57 @@ const Promotion_content = () => {
                             </div>
                             <div className="bot_list">
                                 <p className="titles">My Promotion Link</p>
-                                <p onClick={() => navigate("/register")} className="answer heights" id="link"> https://domain.com//#/register?r_code={user}</p>
+                                <p onClick={() => navigate("/register")} className="answer" style={{ color: 'blue', cursor: 'pointer' }} id="link"> {referalLink}</p>
                             </div>
                         </div>
                         <div className="openlink">
-                            <button className="tag-read ripplegrey"> Copy Link </button>
+                            <button
+                                onClick={() => navigator.clipboard.writeText(referalLink)}
+                                className="tag-read ripplegrey"> Copy Link </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className='table_cus_5d'>
+
+            <Table style={{ textAlign: 'center', marginBottom: 60 }} className='' responsive>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Phone</th>
+                        <th>Water reward</th>
+                        <th>First reward</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        // (currentPosts && currentPosts?.length > 0) &&
+                        data.rows.map((item, index) => (
+                            <tr key={item.ID}>
+                                <td>{item.ID}</td>
+                                <td>{item.Phone}</td>
+                                <td className='c_code'>{item.Water_reward}</td>
+                                <td className='c_code'>{item.First_reward}</td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </Table>
+
+            {/* <div className='table_cus_5d'>
                 <MDBDataTable
                     striped
                     bordered
                     small
                     data={data}
                 />
-            </div>
+            </div> */}
+
+            <Pagination
+                // totalPosts={records.length}
+                postsPerPage={postsPerPage}
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+            />
         </>
     )
 }

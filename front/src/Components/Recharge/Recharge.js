@@ -26,7 +26,7 @@ const Recharge = () => {
         <>
             <div className='nav_login'>
                 <div className='sections_login'>
-                    <div> <span className='nav_icon'><BsArrowLeft /></span><span className='nav_path'>Recharge</span></div>
+                    <div style={{ marginLeft: 14 }}><span className='nav_path'>Recharge</span></div>
                     <div className='d_d'> <span ><VscThreeBars /></span></div>
                 </div>
             </div>
@@ -47,7 +47,7 @@ const Recharge = () => {
             </div>
 
             <div id="paybox" className="amount_list">
-                <button id="1" onClick={() => { setAmount(200) }} className="choose_active"> ₹ <span >200</span>  </button>
+                <button id="1" onClick={() => { setAmount(200) }}> ₹ <span >200</span></button>
                 <button id="2" onClick={() => { setAmount(500) }}> ₹ <span >500</span></button>
                 <button id="3" onClick={() => { setAmount(2000) }}> ₹ <span >2000</span></button>
                 <button id="4" onClick={() => { setAmount(5000) }}> ₹ <span >5000</span></button>
@@ -84,6 +84,8 @@ export const SubmitRechargeRequest = () => {
     const [transactionId, setTransactionId] = useState();
     const [err, setErr] = useState();
     const amount = useLocation().state.amount;
+
+    const upi = "mrginfotech@upi";
 
     const sendDepositRequest = () => {
         const user = JSON.parse(localStorage.getItem("user"))
@@ -159,11 +161,12 @@ export const SubmitRechargeRequest = () => {
                                     Pay to UPI: <br />
                                     <span id="id"
                                         style={{ color: "#ff0000" }}
-                                    >mrginfotech@upi</span>
+                                    >{upi}</span>
                                 </div>
-                                <a className="btn-copy" data-clipboard-text="mrginfotech@upi" onclick="copyToClipboard()"
+                                <p className="btn-copy" data-clipboard-text="mrginfotech@upi"
                                     style={{ textAlign: 'center', width: 60, fontSize: 16 }}
-                                >copy</a>
+                                    onClick={() => { navigator.clipboard.writeText(upi) }}
+                                >copy</p>
                             </div>
                             <div className="upi-payment-step">
                                 <span

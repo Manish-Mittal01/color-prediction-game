@@ -13578,12 +13578,12 @@ span.nav_path {
   padding: 15px 0;
 }
 
-p:not(.level-2) {
+/* p:not(.level-2) {
   font-size: 16px;
   color: #528FF0;
   font-weight: 600;
   margin-bottom: 4px;
-}
+} */
 
 .amount-title {
   text-align: center;
@@ -13729,4 +13729,28 @@ p:not(.level-2) {
   max-width: 320px;
   height: auto;
   border: 2px solid #528FF0;
+}
+
+.numbnerBtn {
+  border: none;
+  padding: 5px 15px;
+  box-shadow: 1px 1px 1px 1px lightgrey;
+}
+
+.betNumberWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-block: 20px;
+}
+
+.acticeTab {
+  background-color: lightgray;
+}
+
+.disabled {
+  cursor: not-allowed;
+  background: lightgray !important;
+  border: none;
+  outline: none;
+  font-weight: bold;
 }

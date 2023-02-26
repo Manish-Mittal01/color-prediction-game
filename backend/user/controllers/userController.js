@@ -125,7 +125,6 @@ module.exports.verifyOtp = async (req, res) => {
     //   userId: recommendation_code,
     // });
     // if (!validreferal) return errorMsg("invalid recommendation code");
-
     updateUser({
       newUser: {
         mobile: mobile,

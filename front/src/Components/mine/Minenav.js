@@ -3,6 +3,7 @@ import { IoNotifications } from "react-icons/io5";
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import jwt from 'jwt-decode'
+import { useNavigate } from 'react-router-dom';
 
 const Minenav = () => {
     const [show, setShow] = useState(false);
@@ -10,6 +11,7 @@ const Minenav = () => {
         user: "",
         mobile: ""
     });
+    const navigate = useNavigate()
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem("user"));
@@ -51,7 +53,7 @@ const Minenav = () => {
                         <div className="top_item">
                             <div>₹ 652</div>
                             Balance
-                            <button className="one_btn ripple"> Recharge </button>
+                            <button onClick={() => navigate("/recharge")} className="one_btn ripple"> Recharge </button>
                         </div>
                         <div className="top_item"><div>
                             ₹ 3900</div> Commission
