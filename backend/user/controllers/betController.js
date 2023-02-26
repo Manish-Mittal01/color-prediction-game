@@ -1,5 +1,5 @@
 const Bet = require("../Models/betModel");
-const { success, error } = require("../common/Constants").Status;
+const { success, error } = require("../../common/Constants").Status;
 const User = require("../Models/UserModel");
 const { BetServices } = require("../services/betServices");
 

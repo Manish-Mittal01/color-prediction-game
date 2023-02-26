@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 
 const User = require("../Models/UserModel");
 const Otp = require("../Models/OtpModel");
-const { success, error } = require("../common/Constants").Status;
+const { success, error } = require("../../common/Constants").Status;
 
 module.exports.sendOtp = async (req, res) => {
   const { mobile, mode } = req.body;

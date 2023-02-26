@@ -1,6 +1,6 @@
-const { periodNames } = require("../common/Constants");
+const { periodNames } = require("../../common/Constants");
 const PeriodModel = require("../Models/PeriodModel");
-const { ResponseService } = require("./responseService");
+const { ResponseService } = require("../../common/responseService");
 
 class PeriodService {
   /**This method will be used to calculate result after period is finished*/
@@ -35,6 +35,12 @@ class PeriodService {
     periodIds.forEach(async (id, index) => {
       PeriodModel(this.makePeriodObject(periodNames[index], id, time)).save();
     });
+  }
+
+  static async getAllPeriods(time) {
+    const periods = await PeriodModel.find();
+    // console.log(periods.length);
+    return periods;
   }
 
   static async getCurrentSession(req, res) {

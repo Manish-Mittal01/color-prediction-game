@@ -1,6 +1,6 @@
 const Period = require("../Models/PeriodModel");
-const { success, error } = require("../common/Constants").Status;
-const { periodNames: periods } = require("../common/Constants");
+const { success, error } = require("../../common/Constants").Status;
+const { periodNames: periods } = require("../../common/Constants");
 const Bet = require("../Models/betModel");
 
 const { PeriodService } = require("../services/periodService");
@@ -11,6 +11,8 @@ class PeriodController {
 
   static calculatePeriodResult = async (time) =>
     PeriodService.calculatePeriodResult(time);
+
+  static getAllPeriods = async (time) => PeriodService.getAllPeriods(time);
 
   static getCurrentSession = async (req, res) =>
     PeriodService.getCurrentSession(req, res);

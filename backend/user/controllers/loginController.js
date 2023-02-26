@@ -1,8 +1,8 @@
 const User = require("../Models/UserModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { StatusCode } = require("../common/Constants");
-const { success, error } = require("../common/Constants").Status;
+const { StatusCode } = require("../../common/Constants");
+const { success, error } = require("../../common/Constants").Status;
 
 module.exports.login = async (req, res) => {
   const { mobile, password } = req.body;

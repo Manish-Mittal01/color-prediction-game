@@ -1,4 +1,4 @@
-const { success, error } = require("../common/Constants").Status;
+const { success, error } = require("../../common/Constants").Status;
 const User = require("../Models/UserModel");
 
 module.exports.refered = async (req, res) => {

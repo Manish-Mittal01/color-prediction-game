@@ -1,4 +1,4 @@
-const { success, error } = require("../common/Constants").Status;
+const { success, error } = require("../../common/Constants").Status;
 const BankDetails = require("../Models/bankDetailsModel");
 const Otp = require("../Models/OtpModel");
 const User = require("../Models/UserModel");

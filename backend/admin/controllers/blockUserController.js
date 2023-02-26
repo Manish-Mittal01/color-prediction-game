@@ -1,4 +1,4 @@
-const { success, error } = require("../../user/common/Constants").Status;
+const { success, error } = require("../../common/Constants").Status;
 const User = require("../../user/Models/UserModel");
 
 module.exports.blockUser = async (req, res) => {

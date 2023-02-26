@@ -1,4 +1,4 @@
-const { success, error } = require("../common/Constants").Status;
+const { success, error } = require("../../common/Constants").Status;
 const Bet = require("../Models/betModel");
 
 module.exports.orders = async (req, res) => {

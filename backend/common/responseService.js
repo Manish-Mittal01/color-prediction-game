@@ -1,4 +1,4 @@
-const { Status } = require("../common/Constants");
+const { Status } = require("./Constants");
 
 class ResponseService {
   static success(res, message, data) {

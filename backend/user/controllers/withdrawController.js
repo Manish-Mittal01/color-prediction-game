@@ -1,4 +1,4 @@
-const { success, error } = require("../common/Constants").Status;
+const { success, error } = require("../../common/Constants").Status;
 const Withdrwas = require("../Models/withdrawModel");
 
 module.exports.withdraws = async (req, res) => {

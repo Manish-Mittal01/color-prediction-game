@@ -1,8 +1,8 @@
-const { StatusCode } = require("../common/Constants");
+const { StatusCode } = require("../../common/Constants");
 const Bet = require("../Models/betModel");
-const { success, error } = require("../common/Constants").Status;
+const { success, error } = require("../../common/Constants").Status;
 const User = require("../Models/UserModel");
-const { ResponseService } = require("./responseService");
+const { ResponseService } = require("../../common/responseService");
 
 class BetServices {
   static async getBets(req, res) {
