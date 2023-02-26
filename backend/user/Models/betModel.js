@@ -22,6 +22,10 @@ const betSchema = Schema(
       type: String || Number,
       required: true,
     },
+    didWon: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true, versionKey: false }
 );

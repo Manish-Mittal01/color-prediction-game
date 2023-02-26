@@ -47,8 +47,8 @@ class PeriodController {
       }
     }
 
-    const calculateTime = startTime + (2 * 60 + 30) * 1000; // This will give startTime + 2:30 mins
-    const expireTime = calculateTime + 30 * 1000; // This will give expire time - startTime + 3:00 mins
+    const calculateTime = startTime + (2 * 60 + 40) * 1000; // This will give startTime + 2:30 mins
+    const expireTime = calculateTime + 20 * 1000; // This will give expire time - startTime + 3:00 mins
 
     if (hasSessionEnded) {
       this.createNewPeriods(startTime);
@@ -165,15 +165,15 @@ class PeriodController {
 //     }
 //     let redNumbers = [1, 3, 7, 9];
 //     let greenNumbers = [2, 4, 6, 8];
-//     let purpleNumbers = [0, 5];
+//     let voiletNumbers = [0, 5];
 //     let redAmount = await getAmount("red", redNumbers);
 //     let greenAmount = await getAmount("green", greenNumbers);
-//     let purpleAmount = await getAmount("purple", purpleNumbers);
-//     let amounts = [redAmount, greenAmount, purpleAmount];
+//     let voiletAmount = await getAmount("voilet", voiletNumbers);
+//     let amounts = [redAmount, greenAmount, voiletAmount];
 //     let minAmount = amounts.find(
-//       (value) => value === Math.min(redAmount, greenAmount, purpleAmount)
+//       (value) => value === Math.min(redAmount, greenAmount, voiletAmount)
 //     );
-//     let colors = ["red", "green", "purple"];
+//     let colors = ["red", "green", "voilet"];
 //     let expectedColor =
 //       minAmount === Math.min()
 //         ? colors[Math.floor(Math.random() * colors.length)]
@@ -181,7 +181,7 @@ class PeriodController {
 //     let expectedNumber = {
 //       red: redNumbers,
 //       green: greenNumbers,
-//       purple: purpleNumbers,
+//       voilet: voiletNumbers,
 //     };
 //     return {
 //       expectedNumber,
