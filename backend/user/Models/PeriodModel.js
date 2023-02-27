@@ -16,6 +16,7 @@ const periodSchema = Schema(
     },
     price: {
       type: Number,
+      default: null,
     },
     isResultByAdmin: {
       type: Boolean,

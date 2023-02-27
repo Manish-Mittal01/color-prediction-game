@@ -38,7 +38,7 @@ class BetServices {
         period = await PeriodModel.findOne({ periodId: bet.periodId });
         periodMap[bet.periodId] = period;
       }
-      bets.push(makeResponseObject(bet, period));
+      bets.push(makeResponseObject({ betModel: bet, periodModel: period }));
     });
 
     ResponseService.success(res, "Bets Found", bets);
