@@ -202,13 +202,13 @@ class PeriodService {
   }
 
   static async getHistory(req, res) {
-    const result = await PeriodModel.find()
+    const periods = await PeriodModel.find()
       .limit(200 * 4)
       .sort({ _id: -1 });
 
-    console.log(result);
+    console.log(periods);
 
-    if (result.length == 0) {
+    if (periods.length == 0) {
       ResponseService.success(res, "No Periods Found", {});
       return;
     }

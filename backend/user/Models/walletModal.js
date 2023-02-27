@@ -9,7 +9,7 @@ const walletSchema = Schema(
     },
     walletId: {
       type: String,
-      required: shortid.generate(),
+      default: shortid.generate(),
     },
     totalAmount: {
       type: Number,
