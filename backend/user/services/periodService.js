@@ -3,6 +3,7 @@ const {
   StatusCode,
   ColorNumbers,
 } = require("../../common/Constants");
+const { Utility } = require("../../common/utility");
 const PeriodModel = require("../Models/PeriodModel");
 const { ResponseService } = require("../../common/responseService");
 const { SessionController } = require("../controllers/sessionController");
@@ -10,6 +11,30 @@ const { WalletController } = require("../controllers/walletController");
 const Bet = require("../Models/betModel");
 
 class PeriodService {
+  static async _updatePeriod({ periodId, resultColor }) {
+    const minPrice = 41123;
+    const maxPrice = 49152;
+    const price = Math.floor(
+      Math.random() * (maxPrice - minPrice + 1) + minPrice
+    );
+    let resultNumber;
+    if (resultColor === "red") {
+      resultNumber = Utility.getRandomValue(ColorNumbers.red);
+    } else if (resultColor === "green") {
+      resultNumber = Utility.getRandomValue(ColorNumbers.green);
+    } else if (resultColor === "voilet") {
+      resultNumber = Utility.getRandomValue(ColorNumbers.voilet);
+    }
+    const period = PeriodModel.updateOne(
+      { periodId: periodId },
+      {
+        price: price,
+        resultColor: resultColor,
+        resultNumber: resultNumber,
+      }
+    );
+  }
+
   /**This method will be used to calculate result after period is finished*/
   static async calculatePeriodResult() {
     // 1. Get Current Period
@@ -34,19 +59,26 @@ class PeriodService {
         periodId: periods[index].periodId,
       });
       periodsList[index] = [...periodsList[index], ...result];
-      console.log(periodsList[index]);
     });
 
     // 3. Calculating winning color and its respective number
     // This loop is on list of periods
     periodsList.forEach((period, i) => {
-      //This loop is on list of bets on each period
+      if (period.length == 0) {
+        const color = Utility.getRandomValue(["red", "green", "voilet"]);
+        this._updatePeriod({
+          periodId: periods[i].periodId,
+          resultColor: color,
+        });
+      }
+
       const redList = [];
       const voiletList = [];
       const greenList = [];
       let redAmount = 0;
       let voiletAmount = 0;
       let greenAmount = 0;
+      //This loop is on list of bets on each period
       period.forEach((bet, j) => {
         // This means prediction is a color
         if (isNaN(bet.prediciton)) {
@@ -86,12 +118,15 @@ class PeriodService {
         let winningList;
 
         if (redAmount <= greenAmount && redAmount <= voiletAmount) {
+          this._updatePeriod({ periodId: periods[i], resultColor: "red" });
           winningList = redList;
           winUpdateMultiple = 2;
         } else if (greenAmount <= redAmount && greenAmount <= voiletAmount) {
+          this._updatePeriod({ periodId: periods[i], resultColor: "green" });
           winningList = greenList;
           winUpdateMultiple = 2;
         } else if (voiletAmount <= redAmount && voiletAmount <= greenAmount) {
+          this._updatePeriod({ periodId: periods[i], resultColor: "voilet" });
           winningList = voiletList;
           winUpdateMultiple = 4.5;
         }
@@ -202,7 +237,6 @@ class PeriodService {
         startTime: model.startTime,
         expiredAt: model.expiredAt,
       };
-      console.log(obj);
       return obj;
     }
 

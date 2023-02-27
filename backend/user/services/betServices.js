@@ -3,6 +3,7 @@ const Bet = require("../Models/betModel");
 const { success, error } = require("../../common/Constants").Status;
 const User = require("../Models/UserModel");
 const { ResponseService } = require("../../common/responseService");
+const PeriodModel = require("../Models/PeriodModel");
 
 class BetServices {
   static async getBets(req, res) {
@@ -17,8 +18,30 @@ class BetServices {
       });
       return;
     }
+    function makeResponseObject({ betModel, periodModel }) {
+      return {
+        ...betModel,
+        price: periodModel.price,
+        resultColor: periodModel.resultColor,
+        resultNumber: periodModel.resultNumber,
+      };
+    }
 
-    ResponseService.success(res, "Bets Found", results);
+    const periodMap = {};
+    const bets = [];
+
+    results.forEach(async (bet, index) => {
+      let period;
+      if (bet.periodId in periodMap) {
+        period = periodMap[bet.periodId];
+      } else {
+        period = await PeriodModel.findOne({ periodId: bet.periodId });
+        periodMap[bet.periodId] = period;
+      }
+      bets.push(makeResponseObject(bet, period));
+    });
+
+    ResponseService.success(res, "Bets Found", bets);
   }
 
   static async makeBet(req, res) {
