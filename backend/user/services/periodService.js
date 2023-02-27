@@ -83,32 +83,32 @@ class PeriodService {
         // This means prediction is a color
         if (isNaN(bet.prediciton)) {
           if (bet.prediciton === "red") {
-            redAmount += bet.amount;
+            redAmount += bet.betAmount;
             redList.push(bet);
           } else if (bet.prediciton === "green") {
-            greenAmount += bet.amount;
+            greenAmount += bet.betAmount;
             greenList.push(bet);
           } else if (bet.prediciton === "voilet") {
-            voiletAmount += bet.amount;
+            voiletAmount += bet.betAmount;
             voiletList.push(bet);
           }
         }
         // This means prediction is a number
         else {
           if (ColorNumbers.red.includes(Number(bet.prediciton))) {
-            redAmount += bet.amount;
+            redAmount += bet.betAmount;
             redList.push(bet);
           } else if (ColorNumbers.green.includes(Number(bet.prediciton))) {
-            greenAmount += bet.amount;
+            greenAmount += bet.betAmount;
             greenList.push(bet);
           } else if (ColorNumbers.voilet.includes(Number(bet.prediciton))) {
-            voiletAmount += bet.amount;
+            voiletAmount += bet.betAmount;
             voiletList.push(bet);
             if (Number(bet.prediciton) === 0) {
-              redAmount += bet.amount;
+              redAmount += bet.betAmount;
               redList.push(bet);
             } else {
-              greenAmount += bet.amount;
+              greenAmount += bet.betAmount;
               greenList.push(bet);
             }
           }
@@ -131,16 +131,19 @@ class PeriodService {
           winUpdateMultiple = 4.5;
         }
 
-        winningList.forEach((winner) => {
-          Bet.updateMany({ _id: winner._id }, { didWon: true });
+        winningList.forEach((winnerBet) => {
           let amount;
           if (isNaN(bet.prediciton)) {
-            amount = winner.amount * 0.95 * winUpdateMultiple;
+            amount = winnerBet.betAmount * winUpdateMultiple;
           } else {
-            amount = winner.amount * 0.95 * 9;
+            amount = winnerBet.betAmount * 9;
           }
+          Bet.updateOne(
+            { betId: winnerBet.betId },
+            { didWon: true, resultAmount: amount }
+          );
           WalletController.updateWalletWinningAmount({
-            userId: winner.userId,
+            userId: winnerBet.userId,
             amount: amount,
           });
         });

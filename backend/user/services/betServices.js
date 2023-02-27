@@ -41,7 +41,7 @@ class BetServices {
       bets.push(makeResponseObject({ betModel: bet, periodModel: period }));
     });
 
-    ResponseService.success(res, "Bets Found", bets);
+    ResponseService.success(res, `${bets.length} Bet(s) Found`, bets);
   }
 
   static async makeBet(req, res) {
@@ -50,7 +50,7 @@ class BetServices {
       ResponseService.failed(res, err, code ?? StatusCode.badRequest);
     }
     if (!prediction) return errorMsg("Prediction is required");
-    if (!amount) return errorMsg("Amount is required");
+    if (!amount) return errorMsg("Bet Amount is required");
     if (!userId) return errorMsg("userId is required");
     if (!periodId) return errorMsg("periodId is required");
     if (!periodName) return errorMsg("periodName is required");
@@ -63,13 +63,14 @@ class BetServices {
 
     let result = await new Bet({
       prediction: prediction,
-      amount: amount,
+      totalAmount: amount,
+      betAmount: amount * 0.95, // deducting 5% from total amount
       userId: userId,
       periodId: periodId,
       periodName: periodName,
     }).save();
 
-    return ResponseService.success(res, "order success", result);
+    return ResponseService.success(res, "Bet placed successfully", result);
   }
 }
 

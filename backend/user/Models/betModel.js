@@ -14,9 +14,17 @@ const betSchema = Schema(
       type: String,
       required: true,
     },
-    amount: {
+    totalAmount: {
       type: Number,
       required: true,
+    },
+    betAmount: {
+      type: Number,
+      required: true,
+    },
+    resultAmount: {
+      type: Number,
+      default: 0,
     },
     prediction: {
       type: String || Number,
