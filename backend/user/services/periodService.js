@@ -25,7 +25,7 @@ class PeriodService {
     } else if (resultColor === "voilet") {
       resultNumber = Utility.getRandomValue(ColorNumbers.voilet);
     }
-    const period = PeriodModel.updateOne(
+    const period = await PeriodModel.updateOne(
       { periodId: periodId },
       {
         price: price,
@@ -33,19 +33,13 @@ class PeriodService {
         resultNumber: resultNumber,
       }
     );
+    console.log(`Updated Period\n${period}`);
   }
 
   /**This method will be used to calculate result after period is finished*/
   static async calculatePeriodResult() {
     // 1. Get Current Period
-    let periods = [];
-    if (SessionController.currentSession !== undefined) {
-      periods = SessionController.currentSession;
-    } else {
-      periods = await PeriodModel.find().limit(4).sort({ _id: -1 });
-      periods.reverse();
-      SessionController.currentSession = periods;
-    }
+    const periods = await SessionController.getCurrentSession();
 
     // 2. Fetch Data of all bets of current period
     const parity = [];
@@ -60,11 +54,13 @@ class PeriodService {
       });
       periodsList[index] = [...periodsList[index], ...result];
     });
+    console.log(`After Finding Bets\n${periodsList}`);
 
     // 3. Calculating winning color and its respective number
     // This loop is on list of periods
-    periodsList.forEach((period, i) => {
-      if (period.length == 0) {
+    periodsList.forEach((periodBets, i) => {
+      if (periodBets.length == 0) {
+        console.log(`------ ${periodNames[i]} is Empty`);
         const color = Utility.getRandomValue(["red", "green", "voilet"]);
         this._updatePeriod({
           periodId: periods[i].periodId,
@@ -79,7 +75,7 @@ class PeriodService {
       let voiletAmount = 0;
       let greenAmount = 0;
       //This loop is on list of bets on each period
-      period.forEach((bet, j) => {
+      periodBets.forEach((bet, j) => {
         // This means prediction is a color
         if (isNaN(bet.prediciton)) {
           if (bet.prediciton === "red") {
@@ -220,14 +216,7 @@ class PeriodService {
     console.log(periods);
 
     if (periods.length == 0) {
-      ResponseService.success(
-        res,
-        "No Periods Found",
-        {},
-        {
-          code: StatusCode.noData,
-        }
-      );
+      ResponseService.success(res, "No Periods Found", {});
       return;
     }
 

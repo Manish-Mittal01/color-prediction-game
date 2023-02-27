@@ -4,6 +4,7 @@ const { success, error } = require("../../common/Constants").Status;
 const User = require("../Models/UserModel");
 const { ResponseService } = require("../../common/responseService");
 const PeriodModel = require("../Models/PeriodModel");
+const { SessionController } = require("../controllers/sessionController");
 
 class BetServices {
   static async getBets(req, res) {
@@ -13,11 +14,27 @@ class BetServices {
       .sort({ _id: -1 });
 
     if (results.length == 0) {
-      ResponseService.success(res, "No Bets Found", results, {
-        code: StatusCode.success,
-      });
+      ResponseService.success(res, "No Bets Found", results);
       return;
     }
+
+    const periods = await SessionController.getCurrentSession();
+    const periodIds = periods.map((e) => e.periodId);
+
+    const allBets = results;
+
+    results.forEach((bet) => {
+      if (bet.periodId in periodIds) {
+        const i = allBets.indexOf(bet);
+        allBets.splice(i, 1);
+      }
+    });
+
+    if (allBets.length == 0) {
+      ResponseService.success(res, "No Bets Found", allBets);
+      return;
+    }
+
     function makeResponseObject({ betModel, periodModel }) {
       return {
         ...betModel,
@@ -30,7 +47,7 @@ class BetServices {
     const periodMap = {};
     const bets = [];
 
-    results.forEach(async (bet, index) => {
+    allBets.forEach(async (bet) => {
       let period;
       if (bet.periodId in periodMap) {
         period = periodMap[bet.periodId];

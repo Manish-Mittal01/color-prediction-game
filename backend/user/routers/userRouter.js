@@ -1,7 +1,11 @@
 const router = require("express").Router();
 // const { recharge } = require("../controllers/rechargeModel");
 const { refered } = require("../controllers/refered");
-const { sendOtp, verifyOtp } = require("../controllers/userController");
+const {
+  sendOtp,
+  verifyOtp,
+  UserController,
+} = require("../controllers/userController");
 const { bankDetails } = require("../controllers/bankController");
 const { deposits } = require("../controllers/depositsController");
 // const { getBets } = require("../controllers/getBets");
@@ -10,6 +14,7 @@ const { login } = require("../controllers/loginController");
 // const { periods, periodResult } = require("../controllers/periodController");
 const { withdraws } = require("../controllers/withdrawController");
 
+router.route("/all").get(UserController.getAllUsers);
 router.route("/sendOtp").post(sendOtp);
 router.route("/sendOtp/verifyOtp").post(verifyOtp);
 router.route("/login").post(login);
