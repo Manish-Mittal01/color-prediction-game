@@ -1,7 +1,23 @@
+const walletModal = require("../Models/walletModal");
+
 class WalletService {
-  /** TODO: Function yet to implement */
+  static async createWallet(userId) {
+    const wallet = await walletModal({ userId: userId }).save();
+  }
+
   static async updateWalletWinningAmount({ userId, amount }) {
-    //TODO: implement this function
+    const wallet = await walletModal.findOne({ userId: userId });
+
+    const withdrawableAmount = wallet.withdrawableAmount + amount;
+    const totalAmount = wallet.totalAmount + amount;
+
+    await walletModal.updateOne(
+      { userId: userId },
+      {
+        totalAmount: totalAmount,
+        withdrawableAmount: withdrawableAmount,
+      }
+    );
   }
 }
 

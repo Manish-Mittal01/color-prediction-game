@@ -22,3 +22,8 @@ module.exports.ColorNumbers = {
   green: [2, 4, 6, 8],
   voilet: [0, 5],
 };
+
+module.exports.TransactionType = {
+  deposit: "deposit",
+  withdraw: "withdraw",
+};

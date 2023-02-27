@@ -13,6 +13,9 @@ const { orders } = require("../controllers/getOrders");
 const { login } = require("../controllers/loginController");
 // const { periods, periodResult } = require("../controllers/periodController");
 const { withdraws } = require("../controllers/withdrawController");
+const {
+  TransactionController,
+} = require("../controllers/transactionController");
 
 router.route("/all").get(UserController.getAllUsers);
 router.route("/sendOtp").post(sendOtp);
@@ -25,7 +28,7 @@ router.route("/referals").post(refered);
 router.route("/userBank").post(bankDetails);
 // router.route("/recharge").post(recharge);
 // router.route("/getBets").post(getBets);
-router.route("/withdrawrequest").post(withdraws);
-router.route("/depositrequest").post(deposits);
+router.route("/withdraw").post(TransactionController.requestWithdrawl);
+router.route("/deposit").post(TransactionController.requestDeposit);
 
 module.exports = router;

@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const User = require("../Models/UserModel");
 const Otp = require("../Models/OtpModel");
 const { UserServices } = require("../services/userServices");
+const { WalletController } = require("./walletController");
 const { success, error } = require("../../common/Constants").Status;
 
 class UserController {
@@ -96,6 +97,7 @@ module.exports.verifyOtp = async (req, res) => {
         user.password = await bcrypt.hash(user.password, salt);
         token = user.generateJWT();
         result = await user.save();
+        WalletController.createWallet(result.userId);
       } else if (mode === "reset password") {
         const salt = await bcrypt.genSalt(10);
         let newPassword = await bcrypt.hash(password, salt);

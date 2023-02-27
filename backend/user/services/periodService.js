@@ -127,7 +127,7 @@ class PeriodService {
           winUpdateMultiple = 4.5;
         }
 
-        winningList.forEach((winnerBet) => {
+        winningList.forEach(async (winnerBet) => {
           let amount;
           if (isNaN(bet.prediciton)) {
             amount = winnerBet.betAmount * winUpdateMultiple;
@@ -138,7 +138,7 @@ class PeriodService {
             { betId: winnerBet.betId },
             { didWon: true, resultAmount: amount }
           );
-          WalletController.updateWalletWinningAmount({
+          await WalletController.updateWalletWinningAmount({
             userId: winnerBet.userId,
             amount: amount,
           });
@@ -189,14 +189,7 @@ class PeriodService {
         createdAt: model.createdAt,
       };
     }
-    let periods;
-    if (SessionController.currentSession !== undefined) {
-      periods = SessionController.currentSession;
-    } else {
-      periods = await PeriodModel.find().limit(4).sort({ _id: -1 });
-      periods.reverse();
-      SessionController.currentSession = periods;
-    }
+    const periods = SessionController.currentSession;
     const data = {
       startTime: periods[0].startTime,
       expiredAt: periods[0].expiredAt,
@@ -209,13 +202,13 @@ class PeriodService {
   }
 
   static async getHistory(req, res) {
-    const periods = await PeriodModel.find()
+    const result = await PeriodModel.find()
       .limit(200 * 4)
       .sort({ _id: -1 });
 
-    console.log(periods);
+    console.log(result);
 
-    if (periods.length == 0) {
+    if (result.length == 0) {
       ResponseService.success(res, "No Periods Found", {});
       return;
     }
