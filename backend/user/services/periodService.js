@@ -189,7 +189,7 @@ class PeriodService {
         createdAt: model.createdAt,
       };
     }
-    const periods = SessionController.currentSession;
+    const periods = await SessionController.getCurrentSession();
     const data = {
       startTime: periods[0].startTime,
       expiredAt: periods[0].expiredAt,

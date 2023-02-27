@@ -50,6 +50,9 @@ class TransactionService {
   static async requestWithdrawl(req, res) {
     const { userId, amount } = req.body;
 
+    if (!amount) { ResponseService.failed(res, "amount is required", StatusCode.badRequest); return; }
+
+
     const withdrawableAmount = amount * 0.95;
     const wallet = await walletModal.findOne({ userId: userId });
 
