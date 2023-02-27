@@ -3,3 +3,5 @@ class Utility {
     return list[Math.floor(Math.random() * list.length)];
   }
 }
+
+module.exports.Utility = Utility;
