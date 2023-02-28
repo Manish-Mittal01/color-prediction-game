@@ -19,9 +19,17 @@ const walletSchema = Schema(
       type: Number,
       default: 0,
     },
-    referalAmount: {
+    referralAmount: {
       type: Number,
       default: 0,
+    },
+    notAllowedAmount: {
+      type: Number,
+      default: 0,
+    },
+    isFirstDeposit: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }

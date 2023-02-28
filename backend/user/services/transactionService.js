@@ -1,6 +1,8 @@
 const { StatusCode, TransactionType } = require("../../common/Constants");
+const bcrypt = require("bcrypt");
 const { ResponseService } = require("../../common/responseService");
 const TransactionModel = require("../Models/transactionModel");
+const UserModel = require("../Models/UserModel");
 const walletModal = require("../Models/walletModal");
 
 class TransactionService {
@@ -10,11 +12,12 @@ class TransactionService {
     amount,
     transactionType,
   }) {
-    if (!userId || !amount) {
+    if (!userId || !amount || !transactionType) {
       const missingFields = [];
 
       if (!userId) missingFields.push("userId is required");
       if (!amount) missingFields.push("amount is required");
+      if (!transactionType) missingFields.push("transactionType is required");
       ResponseService.failed(res, missingFields, StatusCode.badRequest);
       return null;
     }
@@ -48,7 +51,43 @@ class TransactionService {
   }
 
   static async requestWithdrawl(req, res) {
-    const { userId, amount } = req.body;
+    const { userId, amount, mobile, password } = req.body;
+
+    if (!userId || !amount || !mobile || !password) {
+      const missingFields = [];
+
+      if (!userId) missingFields.push("userId is required");
+      if (!amount) missingFields.push("amount is required");
+      if (!mobile) missingFields.push("mobile is required");
+      if (!password) missingFields.push("password is required");
+      ResponseService.failed(res, missingFields, StatusCode.badRequest);
+      return;
+    }
+
+    const user = await UserModel.findOne({ userId: userId });
+
+    if (!user) {
+      ResponseService.failed(res, "User Not found", StatusCode.notFound);
+      return;
+    }
+    if (user.status === "blocked") {
+      ResponseService.failed(res, "User is blocked", StatusCode.forbidden);
+      return;
+    }
+
+    const isPasswordCorrect = await await bcrypt.compare(
+      password,
+      user.password
+    );
+
+    if (!isPasswordCorrect || !(mobile == user.mobile)) {
+      ResponseService.failed(
+        res,
+        "User Details doesn't match",
+        StatusCode.unauthorized
+      );
+      return;
+    }
 
     if (!amount) { ResponseService.failed(res, "amount is required", StatusCode.badRequest); return; }
 
@@ -90,6 +129,26 @@ class TransactionService {
       "Withdraw request created successfully",
       transaction
     );
+  }
+
+  static async getTransactions(req, res) {
+    const { userId } = req.query;
+
+    if (!userId) {
+      ResponseService.failed(res, "userId is required", StatusCode.badRequest);
+      return;
+    }
+
+    const user = await UserModel.findOne({ userId: userId });
+
+    if (!user) {
+      ResponseService.failed(res, "User not found", StatusCode.notFound);
+      return;
+    }
+
+    const transactions = await TransactionModel.find({ userId: userId });
+
+    ResponseService.success(res, "Transactions found", transactions);
   }
 }
 
