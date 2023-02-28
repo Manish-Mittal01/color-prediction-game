@@ -89,9 +89,6 @@ class TransactionService {
       return;
     }
 
-    if (!amount) { ResponseService.failed(res, "amount is required", StatusCode.badRequest); return; }
-
-
     const withdrawableAmount = amount * 0.95;
     const wallet = await walletModal.findOne({ userId: userId });
 
