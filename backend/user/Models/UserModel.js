@@ -16,7 +16,7 @@ const userSchema = Schema(
       type: String,
       required: true,
     },
-    recommendation_code: String,
+    referralCode: String,
     status: {
       type: String,
       default: "active",

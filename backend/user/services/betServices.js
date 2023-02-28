@@ -9,26 +9,9 @@ const { SessionController } = require("../controllers/sessionController");
 class BetServices {
   static async getBets(req, res) {
     const userId = req.query.userId;
-    const results = await Bet.find({ userId: userId })
+    const allBets = await Bet.find({ userId: userId })
       .limit(100)
       .sort({ _id: -1 });
-
-    if (results.length == 0) {
-      ResponseService.success(res, "No Bets Found", results);
-      return;
-    }
-
-    const periods = await SessionController.getCurrentSession();
-    const periodIds = periods.map((e) => e.periodId);
-
-    const allBets = results;
-
-    results.forEach((bet) => {
-      if (bet.periodId in periodIds) {
-        const i = allBets.indexOf(bet);
-        allBets.splice(i, 1);
-      }
-    });
 
     if (allBets.length == 0) {
       ResponseService.success(res, "No Bets Found", allBets);
@@ -78,6 +61,7 @@ class BetServices {
     if (!validUser)
       return errorMsg("User does not exists!", StatusCode.notFound);
 
+    // TODO: update wallet amount here and add conditions for notAllowedAmount and referralAmount
     let result = await new Bet({
       prediction: prediction,
       totalAmount: amount,

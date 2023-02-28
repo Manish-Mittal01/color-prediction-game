@@ -11,6 +11,8 @@ const { success, error } = require("../../common/Constants").Status;
 
 class UserController {
   static getAllUsers = async (req, res) => UserServices.getAllUsers(req, res);
+
+  static getWallet = async (req, res) => UserServices.getWallet(req, res);
 }
 
 module.exports.sendOtp = async (req, res) => {
@@ -63,7 +65,7 @@ module.exports.sendOtp = async (req, res) => {
 };
 
 module.exports.verifyOtp = async (req, res) => {
-  const { mobile, password, recommendation_code, otp, mode } = req.body;
+  const { mobile, password, referralCode, otp, mode } = req.body;
   function errorMsg(err) {
     return res.status(400).json({
       status: error,
@@ -125,18 +127,18 @@ module.exports.verifyOtp = async (req, res) => {
 
   if (mode === "new user") {
     if (!mobile) return errorMsg("mobile is required");
-    // if (!recommendation_code)
-    //   return errorMsg("recommendation_code is required");
+    // if (!referralCode)
+    //   return errorMsg("referralCode is required");
 
     // let validreferal = await User.findOne({
-    //   userId: recommendation_code,
+    //   userId: referralCode,
     // });
     // if (!validreferal) return errorMsg("invalid recommendation code");
     updateUser({
       newUser: {
         mobile: mobile,
         password: password,
-        recommendation_code: recommendation_code,
+        referralCode: referralCode,
       },
       message: "user registered successfully",
       err: "invalid otp or mobile",

@@ -29,7 +29,7 @@ module.exports.login = async (req, res) => {
       {
         userId: user.userId,
         mobile: user.mobile,
-        recommendation_code: user.recommendation_code,
+        referralCode: user.referralCode,
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "7d" }
