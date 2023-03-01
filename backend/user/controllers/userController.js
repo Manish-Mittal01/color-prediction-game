@@ -7,12 +7,18 @@ const User = require("../Models/UserModel");
 const Otp = require("../Models/OtpModel");
 const { UserServices } = require("../services/userServices");
 const { WalletController } = require("./walletController");
+const UserModel = require("../Models/UserModel");
+const { ResponseService } = require("../../common/responseService");
+const { StatusCode } = require("../../common/Constants");
 const { success, error } = require("../../common/Constants").Status;
 
 class UserController {
   static getAllUsers = async (req, res) => UserServices.getAllUsers(req, res);
 
   static getWallet = async (req, res) => UserServices.getWallet(req, res);
+
+  static handleReferralCode = async (userId, referralCode) =>
+    UserServices.handleReferralCode(userId, referralCode);
 }
 
 module.exports.sendOtp = async (req, res) => {
@@ -100,6 +106,9 @@ module.exports.verifyOtp = async (req, res) => {
         token = user.generateJWT();
         result = await user.save();
         WalletController.createWallet(result.userId);
+        if (referralCode) {
+          UserController.handleReferralCode(user.userId, referralCode);
+        }
       } else if (mode === "reset password") {
         const salt = await bcrypt.genSalt(10);
         let newPassword = await bcrypt.hash(password, salt);
@@ -127,6 +136,18 @@ module.exports.verifyOtp = async (req, res) => {
 
   if (mode === "new user") {
     if (!mobile) return errorMsg("mobile is required");
+
+    if (referralCode) {
+      const users = await UserModel.find();
+      const userIds = users.map((e) => e.userId);
+      if (!userIds.includes(referralCode)) {
+        return ResponseService.failed(
+          res,
+          "Invalid Referral Code",
+          StatusCode.forbidden
+        );
+      }
+    }
     // if (!referralCode)
     //   return errorMsg("referralCode is required");
 

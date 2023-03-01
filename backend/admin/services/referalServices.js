@@ -35,60 +35,51 @@ class ReferralService {
     referralLevel.forEach((refer) => {
       if (refer.level == 1) {
         referralModel.findOne({ userId: refer.userId }).then((referral) => {
-          if (!referral) {
-            referralModel({
-              userId: refer.userId,
-              level1: [{ referrarId: userId, amount: refer.amount }],
-            }).save();
-          } else {
-            referralModel.updateOne(
-              { userId: referral.userId },
-              {
-                level1: referral.level1.push({
-                  referrarId: userId,
-                  amount: refer.amount,
-                }),
-              }
-            );
-          }
+          const referrals = referral.level1;
+          const referredUser = referrals.find((e) => e.referrarId == userId);
+          var index = referrals.indexOf(referredUser);
+          referrals.splice(index, 1);
+          referredUser.amount = refer.amount;
+          referrals.splice(index, 0, referredUser);
+
+          referralModel.updateOne(
+            { userId: referral.userId },
+            {
+              level1: referrals,
+            }
+          );
         });
       } else if (refer.level == 2) {
         referralModel.findOne({ userId: refer.userId }).then((referral) => {
-          if (!referral) {
-            referralModel({
-              userId: refer.userId,
-              level2: [{ referrarId: userId, amount: refer.amount }],
-            }).save();
-          } else {
-            referralModel.updateOne(
-              { userId: referral.userId },
-              {
-                level2: referral.level2.push({
-                  referrarId: userId,
-                  amount: refer.amount,
-                }),
-              }
-            );
-          }
+          const referrals = referral.level2;
+          const referredUser = referrals.find((e) => e.referrarId == userId);
+          var index = referrals.indexOf(referredUser);
+          referrals.splice(index, 1);
+          referredUser.amount = refer.amount;
+          referrals.splice(index, 0, referredUser);
+
+          referralModel.updateOne(
+            { userId: referral.userId },
+            {
+              level2: referrals,
+            }
+          );
         });
       } else if (refer.level == 3) {
         referralModel.findOne({ userId: refer.userId }).then((referral) => {
-          if (!referral) {
-            referralModel({
-              userId: refer.userId,
-              level3: [{ referrarId: userId, amount: refer.amount }],
-            }).save();
-          } else {
-            referralModel.updateOne(
-              { userId: referral.userId },
-              {
-                level3: referral.level3.push({
-                  referrarId: userId,
-                  amount: refer.amount,
-                }),
-              }
-            );
-          }
+          const referrals = referral.level3;
+          const referredUser = referrals.find((e) => e.referrarId == userId);
+          var index = referrals.indexOf(referredUser);
+          referrals.splice(index, 1);
+          referredUser.amount = refer.amount;
+          referrals.splice(index, 0, referredUser);
+
+          referralModel.updateOne(
+            { userId: referral.userId },
+            {
+              level3: referrals,
+            }
+          );
         });
       }
     });

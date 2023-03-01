@@ -30,10 +30,30 @@ class ReferralService {
       return;
     }
 
+    const level1Amount = referrar.level1
+      .map((e) => e.amount)
+      .reduce((a, b) => a + b, 0);
+    const level2Amount = referrar.level2
+      .map((e) => e.amount)
+      .reduce((a, b) => a + b, 0);
+    const level3Amount = referrar.level3
+      .map((e) => e.amount)
+      .reduce((a, b) => a + b, 0);
+
     ResponseService.success(res, "Referrals found", {
-      level1: referrar.level1,
-      level2: referrar.level2,
-      level3: referrar.level3,
+      totalReferralAmount: level1Amount + level2Amount + level3Amount,
+      level1: {
+        totalAmount: level1Amount,
+        referrals: referrar.level1,
+      },
+      level2: {
+        totalAmount: level2Amount,
+        referrals: referrar.level2,
+      },
+      level3: {
+        totalAmount: level3Amount,
+        referrals: referrar.level3,
+      },
     });
     return;
   }
