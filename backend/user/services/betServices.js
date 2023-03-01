@@ -20,7 +20,14 @@ class BetServices {
 
     function makeResponseObject({ betModel, periodModel }) {
       return {
-        ...betModel,
+        periodName: betModel.periodName,
+        periodId: betModel.periodId,
+        userId: betModel.userId,
+        totalAmount: betModel.totalAmount,
+        betAmount: betModel.betAmount,
+        resultAmount: betModel.resultAmount,
+        prediction: betModel.prediction,
+        didWon: betModel.didWon,
         price: periodModel.price,
         resultColor: periodModel.resultColor,
         resultNumber: periodModel.resultNumber,
@@ -30,16 +37,21 @@ class BetServices {
     const periodMap = {};
     const bets = [];
 
-    allBets.forEach(async (bet) => {
-      let period;
-      if (bet.periodId in periodMap) {
-        period = periodMap[bet.periodId];
-      } else {
-        period = await PeriodModel.findOne({ periodId: bet.periodId });
-        periodMap[bet.periodId] = period;
+    async function makeResponse() {
+      for (let index in allBets) {
+        let period;
+        const bet = allBets[index];
+        if (bet.periodId in periodMap) {
+          period = periodMap[bet.periodId];
+        } else {
+          period = await PeriodModel.findOne({ periodId: bet.periodId });
+          periodMap[bet.periodId] = period;
+        }
+        bets.push(makeResponseObject({ betModel: bet, periodModel: period }));
       }
-      bets.push(makeResponseObject({ betModel: bet, periodModel: period }));
-    });
+    }
+
+    await makeResponse();
 
     ResponseService.success(res, `${bets.length} Bet(s) Found`, bets);
   }
