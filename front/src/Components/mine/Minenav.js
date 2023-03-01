@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import jwt from 'jwt-decode'
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux'
+
 
 const Minenav = () => {
     const [show, setShow] = useState(false);
@@ -11,14 +13,16 @@ const Minenav = () => {
         user: "",
         mobile: ""
     });
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const states = useSelector((state) => state.getData);
+
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem("user"));
         if (user) {
             const userData = jwt(user.token);
             setUser({
-                user: userData.user_code,
+                user: userData.userId,
                 mobile: userData.mobile
             });
         }
@@ -51,12 +55,12 @@ const Minenav = () => {
                 <div className='nav_2'>
                     <div className="mine_top_items">
                         <div className="top_item">
-                            <div>₹ 652</div>
+                            <div>₹ {states.totalAmount} </div>
                             Balance
                             <button onClick={() => navigate("/recharge")} className="one_btn ripple"> Recharge </button>
                         </div>
                         <div className="top_item"><div>
-                            ₹ 3900</div> Commission
+                            ₹ {states.referralAmount}</div> Commission
                             <button className="one_btn ripple">See</button>
                         </div><div className="top_item"><div>₹ 2382</div>
                             Interest

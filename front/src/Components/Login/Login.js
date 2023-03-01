@@ -5,6 +5,9 @@ import { BsFillKeyFill } from "react-icons/bs";
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../axios/axios';
+import jwt from 'jwt-decode';
+import { useDispatch } from 'react-redux'
+import { updateWallet } from '../../store/actions/walletDetails';
 
 const Login = () => {
     const [userDetails, setUserDetails] = useState({
@@ -12,7 +15,9 @@ const Login = () => {
         password: ""
     });
     const [err, setErr] = useState("");
-    const [user, setUser] = useState("")
+    const [user, setUser] = useState("");
+
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     async function login() {
@@ -26,10 +31,25 @@ const Login = () => {
                 localStorage.setItem("authToken", JSON.stringify(user));
                 localStorage.setItem("user", JSON.stringify(resp.data));
                 navigate("/win");
+                userWallet(jwt(resp.data.token).userId)
             })
             .catch(err => {
-                setErr(err.response.data.err);
+                setErr(err.response.data.message);
             })
+    }
+
+    function userWallet(userId) {
+        axios.get(`user/wallet?userId=${userId}`)
+            .then(resp => {
+                let data = resp.data.data
+                let walletDetails = {
+                    totalAmount: data.totalAmount,
+                    referralAmount: data.referralAmount,
+                    withdrawableAmount: data.withdrawableAmount
+                }
+                dispatch(updateWallet(walletDetails))
+            })
+            .catch(err => console.log(err))
     }
 
     return (
@@ -69,7 +89,9 @@ const Login = () => {
                             }}
                         />
                     </div>
-                    <p className='err' >{err && err}</p>
+                    <p className='err' >
+                        {err && err}
+                    </p>
                     <div className="input_box_btn">
                         <button onClick={() => login()} className="login_btn ripple">Login</button>
                     </div>

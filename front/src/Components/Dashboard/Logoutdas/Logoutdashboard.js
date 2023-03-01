@@ -1,11 +1,14 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import './Logoutcss.css'
+import './Logoutcss.css';
+
 const Logoutdashboard = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   function logout() {
     navigate("/login");
-    localStorage.removeItem("authToken")
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user")
   }
   return (
     <>

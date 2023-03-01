@@ -13754,3 +13754,40 @@ span.nav_path {
   outline: none;
   font-weight: bold;
 }
+
+.kd_t5 {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+  margin-left: 1%;
+}
+
+.res_text {
+  font-size: 16px;
+}
+
+.results {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statusDetails {
+  width: 50%;
+}
+
+.signin:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.withdrawBtn {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+@media (max-width: 800px) {
+  .statusDetails {
+    width: 100%;
+  }
+}

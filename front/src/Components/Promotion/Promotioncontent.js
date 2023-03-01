@@ -1,24 +1,37 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Promotion.css'
-import { MDBDataTable } from 'mdbreact';
 import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import Pagination from '../Win/Pagination';
-
+import { useSelector } from 'react-redux';
+import axios from '../../axios/axios'
 
 const Promotion_content = () => {
     const [user, setUser] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage, setPostsPerPage] = useState(20);
+    const [referrals, setReferrals] = useState({})
+
+    const states = useSelector((state) => state.getData)
     const navigate = useNavigate();
     const referalLink = `https://domain.com//#/register?r_code=${user}`
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem("user"));
         let userData = jwt(user.token);
-        setUser(userData.user_code)
-    }, [])
+        setUser(userData.userId);
+
+        axios.get(`user/referrals?userId=${userData.userId}`)
+            .then(resp => {
+                console.log(resp.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, []);
+
+
     const data = {
         columns: [
             {
@@ -83,7 +96,7 @@ const Promotion_content = () => {
     return (
         <>
             <div className="container">
-                <div className="headline"> Bonus:₹ <span >9253.71</span></div>
+                <div className="headline"> Bonus:₹ <span >{states.referralAmount}</span></div>
             </div>
 
             <div className="level_box">
@@ -93,7 +106,7 @@ const Promotion_content = () => {
                             <ol> Total People </ol>
                             <ol className="two_ol">456</ol>
                         </li><li><ol> Contribution </ol>
-                                <ol className="two_ol"> ₹ 236584.2</ol>
+                                <ol className="two_ol"> ₹ {states.referralAmount}</ol>
                             </li></ul><div className="layout_bot">
                             <div className="bot_list">
                                 <p className="titles">My Promotion Code</p>
@@ -101,12 +114,15 @@ const Promotion_content = () => {
                             </div>
                             <div className="bot_list">
                                 <p className="titles">My Promotion Link</p>
-                                <p onClick={() => navigate("/register")} className="answer" style={{ color: 'blue', cursor: 'pointer' }} id="link"> {referalLink}</p>
+                                <p onClick={() => navigate("/register", { state: { recommendation_code: user } })} className="answer" style={{ color: 'blue', cursor: 'pointer' }} id="link"> {referalLink}</p>
                             </div>
                         </div>
                         <div className="openlink">
                             <button
-                                onClick={() => navigator.clipboard.writeText(referalLink)}
+                                onClick={() => {
+                                    navigator.clipboard.writeText(referalLink)
+                                    alert("link copied to clipboard")
+                                }}
                                 className="tag-read ripplegrey"> Copy Link </button>
                         </div>
                     </div>
@@ -136,15 +152,6 @@ const Promotion_content = () => {
                     }
                 </tbody>
             </Table>
-
-            {/* <div className='table_cus_5d'>
-                <MDBDataTable
-                    striped
-                    bordered
-                    small
-                    data={data}
-                />
-            </div> */}
 
             <Pagination
                 // totalPosts={records.length}

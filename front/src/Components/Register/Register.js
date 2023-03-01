@@ -5,6 +5,7 @@ import './Register.css'
 import { SiGooglemessages } from "react-icons/si";
 import { AiFillAccountBook } from 'react-icons/ai';
 import axios from '../../axios/axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const getOtp = ({ user, setErr, setOtpBtn, mode }) => {
     if (user.mobile.length === 0) {
@@ -28,7 +29,7 @@ export const getOtp = ({ user, setErr, setOtpBtn, mode }) => {
         })
 }
 
-export function verifyOtp({ user, setErr, setOtpBtn, mode }) {
+export function verifyOtp({ user, setErr, setOtpBtn, mode, navigate }) {
     setOtpBtn(0);
 
     const newUser = {
@@ -43,6 +44,7 @@ export function verifyOtp({ user, setErr, setOtpBtn, mode }) {
             console.log(resp.data);
             setErr("");
             setOtpBtn("");
+            navigate("/login")
         })
         .catch(err => {
             console.log(err.response.data)
@@ -51,14 +53,17 @@ export function verifyOtp({ user, setErr, setOtpBtn, mode }) {
 }
 
 const Register = () => {
+    const recommendation_code = useLocation().state?.recommendation_code;
+    console.log(recommendation_code)
     const [user, setUser] = useState({
         mobile: '',
         otp: '',
         password: "",
-        recommendation_code: ""
+        recommendation_code: recommendation_code || ""
     });
     const [err, setErr] = useState();
     const [otpBtn, setOtpBtn] = useState();
+    const navigate = useNavigate()
 
 
     return (
@@ -80,7 +85,7 @@ const Register = () => {
                 </div>
                 {
                     (otpBtn === 1 && err) &&
-                    <p style={{ color: 'red', paddingLeft: 10 }} >{"*"}{err}</p>
+                    <p style={{ color: 'red', paddingLeft: 10 }} >{"*"}{err.err}</p>
                 }
                 <div className='d-flex'>
                     <div className='fild_input_1'>
@@ -123,6 +128,7 @@ const Register = () => {
                         type="text"
                         placeholder="Recommendation Code"
                         style={{ outline: 'none', border: "none" }}
+                        value={user.recommendation_code}
                         onChange={(e) => setUser({
                             ...user,
                             recommendation_code: e.target.value
@@ -134,7 +140,9 @@ const Register = () => {
                     <p className='err' >{err.err}</p>
                 }
                 <div className="input_box_btn">
-                    <button onClick={() => verifyOtp({ user, setErr, setOtpBtn, mode: "new user" })} className="login_btn ripple">Register</button>
+                    <button onClick={() => {
+                        verifyOtp({ user, setErr, setOtpBtn, mode: "new user", navigate })
+                    }} className="login_btn ripple">Register</button>
                 </div>
             </div>
 

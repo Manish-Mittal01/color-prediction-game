@@ -24,6 +24,12 @@ const Win = () => {
     Bcone: "",
     Emred: ""
   });
+  const [records, setRecords] = useState({
+    parityRecords: [],
+    sapreRecords: [],
+    bconRecords: [],
+    emredRecords: []
+  });
   const [err, setErr] = useState();
   const [tab, setTab] = useState("Parity");
   const [timer, setTimer] = useState(0);
@@ -31,11 +37,15 @@ const Win = () => {
   const [updateTimer, setUpdateTimer] = useState(false);
   const [betNumber, setBetNumber] = useState(1)
   const [amount, setAmount] = useState(10);
-  const [prediction, setPrediction] = useState(0);
-
-
+  const [prediction, setPrediction] = useState("");
+  const [periodHistory, setPeriodHistory] = useState({})
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
+  const [check, setCheck] = useState(false);
+
+  let user = JSON.parse(localStorage.getItem("user"))
+  let userData = user && jwt(user.token);
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -56,6 +66,14 @@ const Win = () => {
         setTimer(data.expiredAt - Date.now())
       })
       .catch(err => setErr(err));
+
+    axios.get("period/history")
+      .then(resp => {
+        setPeriodHistory(resp.data.data)
+      })
+      .catch(err => setErr(err.response.data.message));
+
+    getBets();
   }, [updateTimer]);
 
   useEffect(() => {
@@ -71,32 +89,55 @@ const Win = () => {
     return () => clearInterval(interval);
   }, [timer]);
 
+
+  async function getBets() {
+    await axios.get(`bet?userId=${userData.userId}`)
+      .then(resp => {
+        console.log("bet history", resp.data)
+        let parityRecords = resp.data.data.filter(item => item.periodName === "Parity")
+        let sapreRecords = resp.data.data.filter(item => item.periodName === "Sapre")
+        let bconRecords = resp.data.data.filter(item => item.periodName === "Bcone")
+        let emredRecords = resp.data.data.filter(item => item.periodName === "Emred")
+        setRecords({
+          Parity: parityRecords,
+          Sapre: sapreRecords,
+          Bcone: bconRecords,
+          Emred: emredRecords
+        })
+      })
+      .catch(err => setErr(err.response.data.message));
+  }
+
   function makeBet(prediction) {
     setShow(true);
     setPrediction(prediction)
   };
 
   async function confirmBet() {
-    const user = JSON.parse(localStorage.getItem("user"))
-    const userData = jwt(user.token)
-
     const betDetails = {
       prediction,
       amount: amount * betNumber,
-      user: userData.user_code,
-      period: periods[tab]?.periodId,
+      userId: userData.userId,
+      periodId: periods[tab]?.periodId,
       periodName: tab
     }
-    await axios.post("api/bet", betDetails)
-      .then(resp => {
-        console.log(resp.data)
-      })
-      .catch(err => console.log(err))
-    handleClose();
-  };
-  let disabled = time.min === 0 && time.sec < 30;
 
-  // console.log(periods)
+    await axios.post("bet", betDetails)
+      .then(resp => {
+        alert("order succes")
+      })
+      .catch(err => console.log(err));
+
+    setBetNumber(1);
+    setAmount(10);
+    setPrediction("")
+
+    handleClose();
+
+    getBets();
+  };
+
+  let disabled = time.min === 0 && time.sec < 30;
 
   return (
     <>
@@ -175,14 +216,14 @@ const Win = () => {
             <button className='numbnerBtn' onClick={() => setBetNumber(betNumber + 1)} ><BsPlus fontSize={20} /></button>
           </div>
 
-          <p className='title_dash'>Total contract money is 10</p>
-          <span className='wrap_checkbox' >  <Form.Check aria-label="option 1" /><span className="checkbox_cus">I agree <span onClick={() => setModalShow(true)} className="rule">PRESALE RULE</span></span></span>
+          <p className='title_dash'>Total contract money is {betNumber * amount}</p>
+          <span className='wrap_checkbox' >  <Form.Check onChange={() => setCheck(!check)} checked={check} aria-label="option 1" /><span className="checkbox_cus">I agree <span onClick={() => setModalShow(true)} className="rule">PRESALE RULE</span></span></span>
         </Modal.Body>
         <Modal.Footer>
           <Button closeButton onClick={handleClose} style={{ color: '#00897b', marginRight: "10px", fontSize: "" }}>
             CANCEL
           </Button>
-          <Button onClick={confirmBet} className='signin' style={{ color: '#00897b' }}  >
+          <Button onClick={confirmBet} className='signin' style={{ color: '#00897b' }} disabled={!check}  >
             Confirm Order
           </Button>
         </Modal.Footer>
@@ -192,15 +233,14 @@ const Win = () => {
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
-      {/*
+
       {
-        periods[tab] &&
-        <TableRecord history={periods[tab]} tab={tab} />
+        periodHistory[tab] &&
+        <TableRecord history={periodHistory[tab]} tab={tab} />
       }
       {
-        periods[tab] &&
-        <MyRecord tab={tab} />
-      } */}
+        <MyRecord tab={tab} records={records} />
+      }
 
     </>
   )

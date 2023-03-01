@@ -10,7 +10,7 @@ function TableRecord({ history, tab }) {
 
     const lastPostIndex = currentPage * postsPerPage;
     const firstPostIndex = lastPostIndex - postsPerPage;
-    let currentPosts = history.previousResults.slice(firstPostIndex, lastPostIndex);
+    let currentPosts = history.slice(firstPostIndex, lastPostIndex);
 
 
     return (
@@ -32,12 +32,12 @@ function TableRecord({ history, tab }) {
                     {
                         (currentPosts && currentPosts?.length > 0) &&
                         currentPosts.map((item, index) => (
-                            <tr key={item.period}>
-                                <td>{item.period}</td>
+                            <tr key={item.periodId}>
+                                <td>{item.periodId}</td>
                                 <td>{item.price}</td>
-                                <td className='c_code'>{item.number}</td>
+                                <td>{item.resultNumber}</td>
                                 <td>
-                                    <span className='c_red' style={{ color: item.result }}>
+                                    <span className='c_red' style={{ color: item.resultColor }}>
                                         <GoPrimitiveDot style={{ width: 20, height: 20 }} />
                                     </span>
                                 </td>
@@ -48,7 +48,7 @@ function TableRecord({ history, tab }) {
             </Table>
 
             <Pagination
-                totalPosts={history?.previousResults.length}
+                totalPosts={history.length}
                 postsPerPage={postsPerPage}
                 setCurrentPage={setCurrentPage}
                 currentPage={currentPage}

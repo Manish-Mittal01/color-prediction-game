@@ -1,0 +1,65 @@
+.container {
+    height: max-content;
+    width: 77px;
+    z-index: 1;
+    transition: 0.5s ease-in-out;
+    white-space: nowrap;
+    overflow-x: hidden;
+    background: #ffffff;
+    border: 1px solid #e8e8e8;
+    margin-left: 15px;
+    border-radius: 0;
+    position: absolute;
+    padding: 5px;
+    border-radius: 10px;
+    margin-block: 15px;
+    left: 0;
+    top: 0;
+}
+
+.expanded {
+    width: 200px;
+    /* overflow: auto; */
+}
+
+.expanded .label {
+    opacity: 1;
+}
+
+.option {
+    padding-inline: 20px;
+    padding-block: 7px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.icon {
+    height: 24px;
+}
+
+.label {
+    margin-left: 12px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: #333333;
+    width: 120px;
+    opacity: 0;
+}
+
+.option:hover {
+    background-color: rgb(237, 237, 237);
+}
+
+.option.optionSelected {
+    background-color: #f7f7f7 !important;
+    /* background-color: rgb(219, 219, 219) !important; */
+}
+
+.labelSelected {
+    color: #326eaa;
+    font-weight: 500;
+}

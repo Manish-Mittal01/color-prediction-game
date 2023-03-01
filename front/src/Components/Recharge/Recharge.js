@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { BsArrowLeft } from "react-icons/bs";
 import './Recharge.css'
 import card from '../../images/card.png';
 import { VscThreeBars } from "react-icons/vsc";
@@ -11,11 +10,15 @@ import small3 from '../../images/small3.png'
 import small4 from '../../images/small4.png'
 import small5 from '../../images/small5.png'
 import jwt from 'jwt-decode';
+import { useSelector } from 'react-redux'
+
 
 
 const Recharge = () => {
     const [amount, setAmount] = useState();
     const [err, setErr] = useState();
+
+    const states = useSelector((state) => state.getData)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,7 +34,7 @@ const Recharge = () => {
                 </div>
             </div>
             <div className='balance_av_text'>
-                <p>Balance:</p><span>₹ 200</span>
+                <p>Balance:</p><span>₹ {states.totalAmount}</span>
             </div>
             <div className="code_input_box">
                 <div className="code_input">
@@ -84,6 +87,7 @@ export const SubmitRechargeRequest = () => {
     const [transactionId, setTransactionId] = useState();
     const [err, setErr] = useState();
     const amount = useLocation().state.amount;
+    const navigate = useNavigate();
 
     const upi = "mrginfotech@upi";
 
@@ -92,13 +96,14 @@ export const SubmitRechargeRequest = () => {
         const userData = jwt(user.token);
 
         const request = {
-            user: userData.user_code,
+            userId: userData.userId,
             amount,
             transactionId
         }
-        axios.post("user/depositrequest", request)
+        axios.post("user/deposit", request)
             .then(resp => {
-                console.log(resp.data)
+                alert("request submitted successfully");
+                navigate("/mine");
             })
             .catch(err => console.log(err))
     }
