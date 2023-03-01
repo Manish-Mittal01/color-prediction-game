@@ -31,7 +31,6 @@ class ReferralService {
         referralLevel[index].amount = 0;
       }
     });
-    console.log(referralLevel);
     referralLevel.forEach((refer) => {
       if (refer.level == 1) {
         referralModel.findOne({ userId: refer.userId }).then((referral) => {

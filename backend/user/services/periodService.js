@@ -33,7 +33,6 @@ class PeriodService {
         resultNumber: resultNumber,
       }
     );
-    console.log(`Updated Period\n${period}`);
   }
 
   /**This method will be used to calculate result after period is finished*/
@@ -54,13 +53,11 @@ class PeriodService {
       });
       periodsList[index] = [...periodsList[index], ...result];
     });
-    console.log(`After Finding Bets\n${periodsList}`);
 
     // 3. Calculating winning color and its respective number
     // This loop is on list of periods
     periodsList.forEach((periodBets, i) => {
       if (periodBets.length == 0) {
-        console.log(`------ ${periodNames[i]} is Empty`);
         const color = Utility.getRandomValue(["red", "green", "voilet"]);
         this._updatePeriod({
           periodId: periods[i].periodId,
@@ -205,8 +202,6 @@ class PeriodService {
     const periods = await PeriodModel.find()
       .limit(200 * 4)
       .sort({ _id: -1 });
-
-    console.log(periods);
 
     if (periods.length == 0) {
       ResponseService.success(res, "No Periods Found", {});
