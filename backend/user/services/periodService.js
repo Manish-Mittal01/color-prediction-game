@@ -169,6 +169,7 @@ class PeriodService {
       period.save();
       periods.push(period);
     });
+    SessionController.currentSession = periods;
     return periods;
   }
 
