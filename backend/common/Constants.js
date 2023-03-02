@@ -27,3 +27,9 @@ module.exports.TransactionType = {
   deposit: "deposit",
   withdraw: "withdraw",
 };
+
+module.exports.TransactionStatus = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+};
