@@ -165,15 +165,15 @@ class PeriodController {
 //     }
 //     let redNumbers = [1, 3, 7, 9];
 //     let greenNumbers = [2, 4, 6, 8];
-//     let voiletNumbers = [0, 5];
+//     let violetNumbers = [0, 5];
 //     let redAmount = await getAmount("red", redNumbers);
 //     let greenAmount = await getAmount("green", greenNumbers);
-//     let voiletAmount = await getAmount("voilet", voiletNumbers);
-//     let amounts = [redAmount, greenAmount, voiletAmount];
+//     let violetAmount = await getAmount("violet", violetNumbers);
+//     let amounts = [redAmount, greenAmount, violetAmount];
 //     let minAmount = amounts.find(
-//       (value) => value === Math.min(redAmount, greenAmount, voiletAmount)
+//       (value) => value === Math.min(redAmount, greenAmount, violetAmount)
 //     );
-//     let colors = ["red", "green", "voilet"];
+//     let colors = ["red", "green", "violet"];
 //     let expectedColor =
 //       minAmount === Math.min()
 //         ? colors[Math.floor(Math.random() * colors.length)]
@@ -181,7 +181,7 @@ class PeriodController {
 //     let expectedNumber = {
 //       red: redNumbers,
 //       green: greenNumbers,
-//       voilet: voiletNumbers,
+//       violet: violetNumbers,
 //     };
 //     return {
 //       expectedNumber,

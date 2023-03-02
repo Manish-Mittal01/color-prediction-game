@@ -20,7 +20,7 @@ module.exports.StatusCode = {
 module.exports.ColorNumbers = {
   red: [1, 3, 7, 9],
   green: [2, 4, 6, 8],
-  voilet: [0, 5],
+  violet: [0, 5],
 };
 
 module.exports.TransactionType = {
