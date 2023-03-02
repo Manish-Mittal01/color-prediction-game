@@ -31,6 +31,7 @@ class BetServices {
         price: periodModel.price,
         resultColor: periodModel.resultColor,
         resultNumber: periodModel.resultNumber,
+        createdAt: betModel.createdAt,
       };
     }
 

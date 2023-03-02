@@ -30,6 +30,20 @@ class ReferralService {
       return;
     }
 
+    async function makeResponseList(referralList) {
+      const result = [];
+      for (let i in referralList) {
+        const _referral = referralList[i];
+        const user = await UserModel.findOne({ userId: _referral.referrarId });
+        result.push({
+          referrarId: _referral.referrarId,
+          amount: _referral.amount,
+          mobile: user.mobile,
+        });
+      }
+      return result;
+    }
+
     const level1Amount = referrar.level1
       .map((e) => e.amount)
       .reduce((a, b) => a + b, 0);
@@ -42,18 +56,11 @@ class ReferralService {
 
     ResponseService.success(res, "Referrals found", {
       totalReferralAmount: level1Amount + level2Amount + level3Amount,
-      level1: {
-        totalAmount: level1Amount,
-        referrals: referrar.level1,
-      },
-      level2: {
-        totalAmount: level2Amount,
-        referrals: referrar.level2,
-      },
-      level3: {
-        totalAmount: level3Amount,
-        referrals: referrar.level3,
-      },
+      totalContributionAmount:
+        level1Amount / 0.3 + level2Amount / 0.05 + level3Amount,
+      level1: await makeResponseList(referrar.level1),
+      level2: await makeResponseList(referrar.level2),
+      level3: await makeResponseList(referrar.level3),
     });
     return;
   }
