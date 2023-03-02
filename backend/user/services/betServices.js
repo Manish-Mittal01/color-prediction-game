@@ -6,10 +6,22 @@ const { ResponseService } = require("../../common/responseService");
 const PeriodModel = require("../Models/PeriodModel");
 const { SessionController } = require("../controllers/sessionController");
 const WalletModel = require("../Models/walletModal");
+const { UserController } = require("../controllers/userController");
 
 class BetServices {
   static async getBets(req, res) {
     const userId = req.query.userId;
+    const isActive = await UserController.checkUserActive(userId);
+
+    if (isActive == null) {
+      ResponseService.failed(res, "User not Found", StatusCode.notFound);
+      return;
+    }
+    if (!isActive) {
+      ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
+      return;
+    }
+
     const allBets = await Bet.find({ userId: userId })
       .limit(100)
       .sort({ _id: -1 });
@@ -72,11 +84,15 @@ class BetServices {
       return ResponseService.failed(res, errors, StatusCode.badRequest);
     }
 
-    const validUser = await User.findOne({
-      userId: userId,
-    });
-    if (!validUser) {
-      ResponseService.failed(res, "User does not exists!", StatusCode.notFound);
+    const isActive = await UserController.checkUserActive(userId);
+
+    if (isActive == null) {
+      ResponseService.failed(res, "User not Found", StatusCode.notFound);
+      return;
+    }
+    if (!isActive) {
+      ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
+      return;
     }
 
     const wallet = await WalletModel.findOne({ userId: userId });
@@ -89,6 +105,7 @@ class BetServices {
       );
     }
 
+    //TODO: uncomment this logic for wallet amount validation
     // if (wallet.totalAmount < amount) {
     //   return ResponseService.failed(
     //     res,

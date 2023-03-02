@@ -21,6 +21,18 @@ class TransactionService {
       ResponseService.failed(res, missingFields, StatusCode.badRequest);
       return null;
     }
+
+    const isActive = await UserController.checkUserActive(userId);
+
+    if (isActive == null) {
+      ResponseService.failed(res, "User not Found", StatusCode.notFound);
+      return null;
+    }
+    if (!isActive) {
+      ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
+      return null;
+    }
+
     const transaction = await TransactionModel({
       userId: userId,
       amount: amount,
@@ -50,7 +62,7 @@ class TransactionService {
     );
   }
 
-  static async requestWithdrawl(req, res) {
+  static async requestWithdraw(req, res) {
     const { userId, amount, mobile, password } = req.body;
 
     if (!userId || !amount || !mobile || !password) {
@@ -64,21 +76,18 @@ class TransactionService {
       return;
     }
 
-    const user = await UserModel.findOne({ userId: userId });
+    const isActive = await UserController.checkUserActive(userId);
 
-    if (!user) {
-      ResponseService.failed(res, "User Not found", StatusCode.notFound);
+    if (isActive == null) {
+      ResponseService.failed(res, "User not Found", StatusCode.notFound);
       return;
     }
-    if (user.status === "blocked") {
-      ResponseService.failed(res, "User is blocked", StatusCode.forbidden);
+    if (!isActive) {
+      ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
       return;
     }
 
-    const isPasswordCorrect = await await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect || !(mobile == user.mobile)) {
       ResponseService.failed(
@@ -136,10 +145,14 @@ class TransactionService {
       return;
     }
 
-    const user = await UserModel.findOne({ userId: userId });
+    const isActive = await UserController.checkUserActive(userId);
 
-    if (!user) {
-      ResponseService.failed(res, "User not found", StatusCode.notFound);
+    if (isActive == null) {
+      ResponseService.failed(res, "User not Found", StatusCode.notFound);
+      return;
+    }
+    if (!isActive) {
+      ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
       return;
     }
 

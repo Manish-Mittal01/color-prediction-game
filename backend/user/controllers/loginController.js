@@ -2,6 +2,7 @@ const User = require("../Models/UserModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { StatusCode } = require("../../common/Constants");
+const { UserController } = require("./userController");
 const { success, error } = require("../../common/Constants").Status;
 
 module.exports.login = async (req, res) => {
@@ -20,8 +21,16 @@ module.exports.login = async (req, res) => {
   const user = await User.findOne({
     mobile: mobile,
   });
-  if (!user) return errMsg("No user found", 404);
-  if (user.status === "blocked") return errMsg("User blocked", 403);
+  const isActive = await UserController.checkUserActive(userId);
+
+  if (isActive == null) {
+    ResponseService.failed(res, "User not Found", StatusCode.notFound);
+    return;
+  }
+  if (!isActive) {
+    ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
+    return;
+  }
 
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
   if (user.mobile === mobile && isPasswordCorrect) {

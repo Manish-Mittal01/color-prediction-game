@@ -13,6 +13,9 @@ const { StatusCode } = require("../../common/Constants");
 const { success, error } = require("../../common/Constants").Status;
 
 class UserController {
+  static checkUserActive = async (userId) =>
+    UserServices.checkUserActive(userId);
+
   static getAllUsers = async (req, res) => UserServices.getAllUsers(req, res);
 
   static getWallet = async (req, res) => UserServices.getWallet(req, res);

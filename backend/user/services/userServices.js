@@ -1,9 +1,22 @@
+const { LogService } = require("../../common/logService");
 const { ResponseService } = require("../../common/responseService");
 const referralModel = require("../Models/referralModel");
 const UserModel = require("../Models/UserModel");
 const walletModal = require("../Models/walletModal");
 
 class UserServices {
+  static async checkUserActive(userId) {
+    const user = await UserModel.findOne(userId);
+
+    if (!user) {
+      return null;
+    }
+    if (user.status == "active") {
+      return true;
+    }
+    return false;
+  }
+
   static async getAllUsers(req, res) {
     const result = await UserModel.find();
 
@@ -27,10 +40,14 @@ class UserServices {
       return;
     }
 
-    const user = await UserModel.findOne({ userId: userId });
+    const isActive = await UserController.checkUserActive(userId);
 
-    if (!user) {
-      ResponseService.failed(res, "User not found", StatusCode.notFound);
+    if (isActive == null) {
+      ResponseService.failed(res, "User not Found", StatusCode.notFound);
+      return;
+    }
+    if (!isActive) {
+      ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
       return;
     }
 
@@ -62,9 +79,10 @@ class UserServices {
         { userId: referralCode },
         {
           $push: {
-            "level1.$.items": userEntry,
+            level1: userEntry,
           },
-        }
+        },
+        (err, docs) => LogService.updateLog("Referral-Level2", err, docs)
       );
     }
 
@@ -81,9 +99,10 @@ class UserServices {
       { userId: user2.referralCode },
       {
         $push: {
-          "level2.$.items": userEntry,
+          level2: userEntry,
         },
-      }
+      },
+      (err, docs) => LogService.updateLog("Referral-Level2", err, docs)
     );
 
     const user3 = await UserModel.findOne({ userId: user2.referralCode });
@@ -99,9 +118,10 @@ class UserServices {
       { userId: user3.referralCode },
       {
         $push: {
-          "level3.$.items": userEntry,
+          level3: userEntry,
         },
-      }
+      },
+      (err, docs) => LogService.updateLog("Referral-Level2", err, docs)
     );
   }
 }

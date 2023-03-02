@@ -12,10 +12,14 @@ class ReferralService {
       return;
     }
 
-    const user = await UserModel.findOne({ userId: userId });
+    const isActive = await UserController.checkUserActive(userId);
 
-    if (!user) {
-      ResponseService.failed(res, "User not found", StatusCode.notFound);
+    if (isActive == null) {
+      ResponseService.failed(res, "User not Found", StatusCode.notFound);
+      return;
+    }
+    if (!isActive) {
+      ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
       return;
     }
 

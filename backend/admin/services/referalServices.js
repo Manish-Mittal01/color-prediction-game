@@ -24,7 +24,8 @@ class ReferralService {
     }
     await checkCode(user.referralCode, 1);
 
-    referralLevel.forEach((refer, index) => {
+    for (let index in referralLevel) {
+      const refer = referralLevel[index];
       if (refer.level == 1) {
         referralLevel[index].amount = amount * 0.3;
       } else if (refer.level == 2) {
@@ -32,7 +33,7 @@ class ReferralService {
       } else if (refer.level == 3) {
         referralLevel[index].amount = 0;
       }
-    });
+    }
 
     async function updateReferralTable() {
       referralLevel.forEach((refer) => {

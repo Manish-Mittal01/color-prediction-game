@@ -25,7 +25,7 @@ router.route("/getOrders").post(orders);
 router.route("/userBank").post(bankDetails);
 // router.route("/recharge").post(recharge);
 // router.route("/getBets").post(getBets);
-router.route("/withdraw").post(TransactionController.requestWithdrawl);
+router.route("/withdraw").post(TransactionController.requestWithdraw);
 router.route("/deposit").post(TransactionController.requestDeposit);
 router.route("/transactions").get(TransactionController.getTransactions);
 router.route("/referrals").get(ReferralController.getUserReferrals);
