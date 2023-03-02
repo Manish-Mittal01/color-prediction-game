@@ -74,7 +74,6 @@ const Win = () => {
       })
       .catch(err => setErr(err.response.data.message));
 
-    getBets();
   }, [updateTimer]);
 
   useEffect(() => {
@@ -89,6 +88,10 @@ const Win = () => {
 
     return () => clearInterval(interval);
   }, [timer]);
+
+  useEffect(() => {
+    getBets();
+  }, [])
 
 
   async function getBets() {
@@ -239,7 +242,7 @@ const Win = () => {
         <TableRecord history={periodHistory[tab]} tab={tab} />
       }
       {
-        <MyRecord tab={tab} records={records} />
+        <MyRecord tab={tab} records={records} periods={periods} />
       }
 
     </>

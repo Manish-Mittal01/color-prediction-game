@@ -21,7 +21,6 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 export default function NextPrediction() {
-
     const [value, setValue] = React.useState('1');
 
     const handleChange = (event, newValue) => {

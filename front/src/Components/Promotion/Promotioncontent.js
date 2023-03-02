@@ -12,7 +12,8 @@ const Promotion_content = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage, setPostsPerPage] = useState(20);
     const [referrals, setReferrals] = useState({});
-    const [referralLevel, setReferralLevel] = useState("level1")
+    const [referralLevel, setReferralLevel] = useState("level1");
+    const [totalReferrals, setTotalReferrals] = useState(0)
 
     const states = useSelector((state) => state.getData)
     const navigate = useNavigate();
@@ -25,8 +26,10 @@ const Promotion_content = () => {
 
         axios.get(`user/referrals?userId=${userData.userId}`)
             .then(resp => {
-                setReferrals(resp.data.data)
-                console.log(resp.data)
+                let data = resp.data.data
+                setReferrals(data);
+                setTotalReferrals(data.level1?.length + data?.level2.length + data?.level3.length)
+                console.log(data)
             })
             .catch(err => {
                 console.log(err)
@@ -37,6 +40,7 @@ const Promotion_content = () => {
     const lastPostIndex = currentPage * postsPerPage;
     const firstPostIndex = lastPostIndex - postsPerPage;
     // let currentPosts = history.previousResults.slice(firstPostIndex, lastPostIndex);
+
 
     return (
         <>
@@ -49,7 +53,7 @@ const Promotion_content = () => {
                     <div className="level_list">
                         <ul className="layout"><li>
                             <ol> Total People </ol>
-                            <ol className="two_ol">{referrals.level1.length + referrals.level2.length + referrals.level3.length}</ol>
+                            <ol className="two_ol">{totalReferrals}</ol>
                         </li><li><ol> Contribution </ol>
                                 <ol className="two_ol"> ₹ {referrals.totalContributionAmount}</ol>
                             </li></ul><div className="layout_bot">
@@ -105,7 +109,7 @@ const Promotion_content = () => {
             </Table>
 
             <Pagination
-                totalPosts={referrals[referralLevel].length}
+                totalPosts={referrals[referralLevel] && referrals[referralLevel]?.length}
                 postsPerPage={postsPerPage}
                 setCurrentPage={setCurrentPage}
                 currentPage={currentPage}

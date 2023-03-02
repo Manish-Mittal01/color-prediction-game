@@ -1,10 +1,9 @@
 import React, { memo, useEffect, useState } from "react";
 import { Accordion, Table } from "react-bootstrap";
 import { BsFillFileTextFill } from "react-icons/bs";
-import axios from "../../axios/axios";
 import Pagination from "./Pagination";
 
-const MyRecord = ({ tab, records }) => {
+const MyRecord = ({ tab, records, periods }) => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage, setPostsPerPage] = useState(20);
@@ -34,8 +33,8 @@ const MyRecord = ({ tab, records }) => {
                                             <Accordion.Header>
                                                 <div className="kd_t5">
                                                     <p className="res_text">{item.periodId}</p>
-                                                    <p style={{ color: item.didWon ? "green" : "red" }} className="res_text">{result}</p>
-                                                    <p style={{ color: item.didWon ? "green" : "red" }} className="res_text">{item.didWon ? "+" : "-"}{item.betAmount}</p>
+                                                    <p style={{ color: (item.didWon) ? "green" : "red" }} className="res_text">{item.periodId !== periods[tab].periodId && result}</p>
+                                                    <p style={{ color: (item.didWon) ? "green" : "red" }} className="res_text">{(item.periodId !== periods[tab].periodId && item.didWon) ? "+" : "-"}{item.periodId !== periods[tab].periodId && item.betAmount}</p>
                                                 </div>
                                             </Accordion.Header>
                                             <Accordion.Body style={{ padding: "10px 16px", boxShadow: "0px 1px 1px 1px lightGrey" }}>
@@ -67,7 +66,7 @@ const MyRecord = ({ tab, records }) => {
                                                     </p>
                                                     <p className="results" >
                                                         <span>Status</span>
-                                                        <span>{result}</span>
+                                                        <span>{item.periodId !== periods[tab].periodId && result}</span>
                                                     </p>
                                                     <p className="results" >
                                                         <span>Create Time</span>

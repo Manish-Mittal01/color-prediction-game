@@ -1,7 +1,20 @@
-import React from 'react'
+import jwt from 'jwt-decode'
+import React, { useEffect, useState } from 'react'
 import { BsArrowLeft } from 'react-icons/bs'
+import axios from '../../axios/axios'
 
 const Transactions = () => {
+    const [transactions, setTransactions] = useState([]);
+
+    const userId = localStorage.getItem("user") && jwt(JSON.parse(localStorage.getItem("user")).token).userId
+    useEffect(() => {
+        axios.get(`user/transactions?userId=${userId}`)
+            .then(resp => {
+                console.log(resp.data)
+            })
+            .catch(err => console.log(err))
+    }, [])
+
     return (
         <>
             <div className='nav_login'>
@@ -31,6 +44,35 @@ const Transactions = () => {
                     </ul>
                 </div>
             </div>
+
+            {/* <Table style={{ textAlign: 'center' }} className='' responsive>
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Price</th>
+                        <th>Number</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        (currentPosts && currentPosts?.length > 0) &&
+                        currentPosts.map((item, index) => (
+                            <tr key={item.periodId}>
+                                <td>{item.periodId}</td>
+                                <td>{item.price}</td>
+                                <td>{item.resultNumber}</td>
+                                <td>
+                                    <span className='c_red' style={{ color: item.resultColor }}>
+                                        <GoPrimitiveDot style={{ width: 20, height: 20 }} />
+                                    </span>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </Table> */}
+
         </>
     )
 }

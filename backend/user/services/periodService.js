@@ -25,6 +25,7 @@ class PeriodService {
     } else if (resultColor === "violet") {
       resultNumber = Utility.getRandomValue(ColorNumbers.violet);
     }
+    console.log(`[${periodId}]`, resultColor, resultNumber);
     const period = await PeriodModel.updateOne(
       { periodId: periodId },
       {
@@ -39,6 +40,7 @@ class PeriodService {
   static async calculatePeriodResult() {
     // 1. Get Current Period
     const periods = await SessionController.getCurrentSession();
+    periods.sort((a, b) => a.periodId - b.periodId)
 
     // 2. Fetch Data of all bets of current period
     const parity = [];
@@ -46,20 +48,26 @@ class PeriodService {
     const bcone = [];
     const emred = [];
     const periodsList = [parity, sapre, bcone, emred];
-    periodNames.forEach(async (name, index) => {
-      const result = await Bet.find({
-        periodName: name,
-        periodId: periods[index].periodId,
-      });
-      periodsList[index] = result;
-    });
+
+    async function makePeriodList() {
+      for (let index in periodNames) {
+        const name = periodNames[index];
+        const result = await Bet.find({
+          periodName: name,
+          periodId: periods[index].periodId,
+        });
+        periodsList.splice(index, 1, result)
+      }
+    }
+    await makePeriodList();
 
     // 3. Calculating winning color and its respective number
     // This loop is on list of periods
-    periodsList.forEach((periodBets, i) => {
+    periodsList.forEach(async (periodBets, i) => {
+      console.log(`\n======== [Index ${i}] ${periodBets.length} ==========`);
       if (periodBets.length == 0) {
         const color = Utility.getRandomValue(["red", "green", "violet"]);
-        this._updatePeriod({
+        return await this._updatePeriod({
           periodId: periods[i].periodId,
           resultColor: color,
         });
@@ -72,32 +80,36 @@ class PeriodService {
       let violetAmount = 0;
       let greenAmount = 0;
       //This loop is on list of bets on each period
-      periodBets.forEach((bet, j) => {
+      // periodBets.forEach((bet, j) => 
+      for (let bet of periodBets) {
         // This means prediction is a color
-        if (isNaN(bet.prediciton)) {
-          if (bet.prediciton === "red") {
+        console.log(periodBets.indexOf(bet));
+        if (isNaN(bet.prediction)) {
+          console.log(`${bet.prediction} Color`);
+          if (bet.prediction === "red") {
             redAmount += bet.betAmount;
             redList.push(bet);
-          } else if (bet.prediciton === "green") {
+          } else if (bet.prediction === "green") {
             greenAmount += bet.betAmount;
             greenList.push(bet);
-          } else if (bet.prediciton === "violet") {
+          } else if (bet.prediction === "violet") {
             violetAmount += bet.betAmount;
             violetList.push(bet);
           }
         }
         // This means prediction is a number
         else {
-          if (ColorNumbers.red.includes(Number(bet.prediciton))) {
+          console.log(`${bet.prediction} Number`);
+          if (ColorNumbers.red.includes(Number(bet.prediction))) {
             redAmount += bet.betAmount;
             redList.push(bet);
-          } else if (ColorNumbers.green.includes(Number(bet.prediciton))) {
+          } else if (ColorNumbers.green.includes(Number(bet.prediction))) {
             greenAmount += bet.betAmount;
             greenList.push(bet);
-          } else if (ColorNumbers.violet.includes(Number(bet.prediciton))) {
+          } else if (ColorNumbers.violet.includes(Number(bet.prediction))) {
             violetAmount += bet.betAmount;
             violetList.push(bet);
-            if (Number(bet.prediciton) === 0) {
+            if (Number(bet.prediction) === 0) {
               redAmount += bet.betAmount;
               redList.push(bet);
             } else {
@@ -106,41 +118,49 @@ class PeriodService {
             }
           }
         }
+      }
+      let winUpdateMultiple;
+      let winningList;
 
-        let winUpdateMultiple;
-        let winningList;
+      console.log("[Amount] - red", redAmount);
+      console.log("[Amount] - green", greenAmount);
+      console.log("[Amount] - violet", violetAmount);
 
-        if (redAmount <= greenAmount && redAmount <= violetAmount) {
-          this._updatePeriod({ periodId: periods[i], resultColor: "red" });
-          winningList = redList;
-          winUpdateMultiple = 2;
-        } else if (greenAmount <= redAmount && greenAmount <= violetAmount) {
-          this._updatePeriod({ periodId: periods[i], resultColor: "green" });
-          winningList = greenList;
-          winUpdateMultiple = 2;
-        } else if (violetAmount <= redAmount && violetAmount <= greenAmount) {
-          this._updatePeriod({ periodId: periods[i], resultColor: "violet" });
-          winningList = violetList;
-          winUpdateMultiple = 4.5;
+      if (redAmount <= greenAmount && redAmount <= violetAmount) {
+        console.log('--> Red List');
+        winningList = redList;
+        winUpdateMultiple = 2;
+        await this._updatePeriod({ periodId: periods[i].periodId, resultColor: "red" });
+      } else if (greenAmount <= redAmount && greenAmount <= violetAmount) {
+        console.log('--> Green List');
+        winningList = greenList;
+        winUpdateMultiple = 2;
+        await this._updatePeriod({ periodId: periods[i].periodId, resultColor: "green" });
+      } else if (violetAmount <= redAmount && violetAmount <= greenAmount) {
+        console.log('--> Violet List');
+        winningList = violetList;
+        winUpdateMultiple = 4.5;
+        await this._updatePeriod({ periodId: periods[i].periodId, resultColor: "violet" });
+      }
+
+      console.log('WINNING LIST', winningList);
+      winningList.forEach(async (winnerBet) => {
+        let amount;
+        if (isNaN(winnerBet.prediction)) {
+          amount = winnerBet.betAmount * winUpdateMultiple;
+        } else {
+          amount = winnerBet.betAmount * 9;
         }
-
-        winningList.forEach(async (winnerBet) => {
-          let amount;
-          if (isNaN(bet.prediciton)) {
-            amount = winnerBet.betAmount * winUpdateMultiple;
-          } else {
-            amount = winnerBet.betAmount * 9;
-          }
-          Bet.updateOne(
-            { betId: winnerBet.betId },
-            { didWon: true, resultAmount: amount }
-          );
-          await WalletController.updateWalletWinningAmount({
-            userId: winnerBet.userId,
-            amount: amount,
-          });
+        Bet.updateOne(
+          { betId: winnerBet.betId },
+          { didWon: true, resultAmount: amount }
+        );
+        await WalletController.updateWalletWinningAmount({
+          userId: winnerBet.userId,
+          amount: amount,
         });
       });
+      // }
     });
   }
 

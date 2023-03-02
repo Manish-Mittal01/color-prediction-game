@@ -38,13 +38,13 @@ const Recharge = () => {
             </div>
             <div className="code_input_box">
                 <div className="code_input">
-                    <img className src={card} alt="" />
+                    <img src={card} alt="" />
                     <input
                         value={amount}
                         onChange={(e) => {
                             setAmount(e.target.value)
                         }}
-                        className id="amount" type="number" placeholder="Enter or Select recharge amount"
+                        id="amount" type="number" placeholder="Enter or Select recharge amount"
                         style={{ outline: 'none' }} />
                 </div>
             </div>
