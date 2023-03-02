@@ -47,24 +47,23 @@ class UserServices {
   static async handleReferralCode(userId, referralCode) {
     const referral1 = await referralModel.findOne({ userId: referralCode });
 
+    const userEntry = {
+      referrarId: userId,
+      amount: 0,
+    };
+
     if (!referral1) {
       referralModel({
         userId: referralCode,
-        level1: [
-          {
-            referrarId: userId,
-            amount: 0,
-          },
-        ],
+        level1: [userEntry],
       }).save();
     } else {
       referralModel.updateOne(
         { userId: referralCode },
         {
-          level1: referral1.level1.push({
-            referrarId: userId,
-            amount: 0,
-          }),
+          $push: {
+            "level1.$.items": userEntry,
+          },
         }
       );
     }
@@ -78,16 +77,12 @@ class UserServices {
       userId: user2.referralCode,
     });
 
-    const level2 = referral2.level2;
-    level2.push({
-      referrarId: userId,
-      amount: 0,
-    });
-
     referralModel.updateOne(
       { userId: user2.referralCode },
       {
-        level2: level2,
+        $push: {
+          "level2.$.items": userEntry,
+        },
       }
     );
 
@@ -100,16 +95,12 @@ class UserServices {
       userId: user3.referralCode,
     });
 
-    const level3 = referral3.level3;
-    level3.push({
-      referrarId: userId,
-      amount: 0,
-    });
-
     referralModel.updateOne(
       { userId: user3.referralCode },
       {
-        level3: level3,
+        $push: {
+          "level3.$.items": userEntry,
+        },
       }
     );
   }
