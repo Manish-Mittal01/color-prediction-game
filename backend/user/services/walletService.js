@@ -14,8 +14,10 @@ class WalletService {
     await walletModal.updateOne(
       { userId: userId },
       {
-        totalAmount: totalAmount,
-        withdrawableAmount: withdrawableAmount,
+        $set: {
+          totalAmount: totalAmount,
+          withdrawableAmount: withdrawableAmount,
+        },
       }
     );
   }

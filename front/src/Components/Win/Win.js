@@ -180,7 +180,7 @@ const Win = () => {
 
       <div className='join_btns'>
         <button disabled={disabled} className={disabled ? "join_green disabled" : 'join_green'} onClick={() => makeBet("green")} > Join Green </button>
-        <button disabled={disabled} className={disabled ? "Join_Violet disabled" : 'Join_Violet'} onClick={() => makeBet("voilet")}>  Join Violet  </button>
+        <button disabled={disabled} className={disabled ? "Join_Violet disabled" : 'Join_Violet'} onClick={() => makeBet("violet")}>  Join Violet  </button>
         <button disabled={disabled} className={disabled ? "join_red disabled" : 'join_red'} onClick={() => makeBet("red")}> Join Red </button>
       </div>
 

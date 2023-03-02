@@ -29,9 +29,11 @@ class PeriodService {
     const period = await PeriodModel.updateOne(
       { periodId: periodId },
       {
-        price: price,
-        resultColor: resultColor,
-        resultNumber: resultNumber,
+        $set: {
+          price: price,
+          resultColor: resultColor,
+          resultNumber: resultNumber,
+        },
       }
     );
   }
@@ -40,7 +42,7 @@ class PeriodService {
   static async calculatePeriodResult() {
     // 1. Get Current Period
     const periods = await SessionController.getCurrentSession();
-    periods.sort((a, b) => a.periodId - b.periodId)
+    periods.sort((a, b) => a.periodId - b.periodId);
 
     // 2. Fetch Data of all bets of current period
     const parity = [];
@@ -56,7 +58,7 @@ class PeriodService {
           periodName: name,
           periodId: periods[index].periodId,
         });
-        periodsList.splice(index, 1, result)
+        periodsList.splice(index, 1, result);
       }
     }
     await makePeriodList();
@@ -80,7 +82,7 @@ class PeriodService {
       let violetAmount = 0;
       let greenAmount = 0;
       //This loop is on list of bets on each period
-      // periodBets.forEach((bet, j) => 
+      // periodBets.forEach((bet, j) =>
       for (let bet of periodBets) {
         // This means prediction is a color
         console.log(periodBets.indexOf(bet));
@@ -127,24 +129,34 @@ class PeriodService {
       console.log("[Amount] - violet", violetAmount);
 
       if (redAmount <= greenAmount && redAmount <= violetAmount) {
-        console.log('--> Red List');
+        console.log("--> Red List");
         winningList = redList;
         winUpdateMultiple = 2;
-        await this._updatePeriod({ periodId: periods[i].periodId, resultColor: "red" });
+        await this._updatePeriod({
+          periodId: periods[i].periodId,
+          resultColor: "red",
+        });
       } else if (greenAmount <= redAmount && greenAmount <= violetAmount) {
-        console.log('--> Green List');
+        console.log("--> Green List");
         winningList = greenList;
         winUpdateMultiple = 2;
-        await this._updatePeriod({ periodId: periods[i].periodId, resultColor: "green" });
+        await this._updatePeriod({
+          periodId: periods[i].periodId,
+          resultColor: "green",
+        });
       } else if (violetAmount <= redAmount && violetAmount <= greenAmount) {
-        console.log('--> Violet List');
+        console.log("--> Violet List");
         winningList = violetList;
         winUpdateMultiple = 4.5;
-        await this._updatePeriod({ periodId: periods[i].periodId, resultColor: "violet" });
+        await this._updatePeriod({
+          periodId: periods[i].periodId,
+          resultColor: "violet",
+        });
       }
 
-      console.log('WINNING LIST', winningList);
+      console.log("WINNING LIST", winningList);
       winningList.forEach(async (winnerBet) => {
+        console.log(winnerBet);
         let amount;
         if (isNaN(winnerBet.prediction)) {
           amount = winnerBet.betAmount * winUpdateMultiple;
@@ -152,8 +164,8 @@ class PeriodService {
           amount = winnerBet.betAmount * 9;
         }
         Bet.updateOne(
-          { betId: winnerBet.betId },
-          { didWon: true, resultAmount: amount }
+          { _id: winnerBet._id },
+          { $set: { didWon: true, resultAmount: amount } }
         );
         await WalletController.updateWalletWinningAmount({
           userId: winnerBet.userId,
