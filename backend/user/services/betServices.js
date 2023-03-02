@@ -5,6 +5,7 @@ const User = require("../Models/UserModel");
 const { ResponseService } = require("../../common/responseService");
 const PeriodModel = require("../Models/PeriodModel");
 const { SessionController } = require("../controllers/sessionController");
+const WalletModel = require("../Models/walletModal");
 
 class BetServices {
   static async getBets(req, res) {
@@ -59,22 +60,87 @@ class BetServices {
 
   static async makeBet(req, res) {
     const { prediction, amount, userId, periodId, periodName } = req.body;
-    function errorMsg(err, code) {
-      ResponseService.failed(res, err, code ?? StatusCode.badRequest);
+
+    if (!prediction || !amount || !userId || !periodId || !periodName) {
+      const errors = [];
+      if (!prediction) errors.push("Prediction is required");
+      if (!amount) errors.push("Bet Amount is required");
+      if (!userId) errors.push("userId is required");
+      if (!periodId) errors.push("periodId is required");
+      if (!periodName) errors.push("periodName is required");
+
+      return ResponseService.failed(res, errors, StatusCode.badRequest);
     }
-    if (!prediction) return errorMsg("Prediction is required");
-    if (!amount) return errorMsg("Bet Amount is required");
-    if (!userId) return errorMsg("userId is required");
-    if (!periodId) return errorMsg("periodId is required");
-    if (!periodName) return errorMsg("periodName is required");
 
     const validUser = await User.findOne({
       userId: userId,
     });
-    if (!validUser)
-      return errorMsg("User does not exists!", StatusCode.notFound);
+    if (!validUser) {
+      ResponseService.failed(res, "User does not exists!", StatusCode.notFound);
+    }
 
-    // TODO: update wallet amount here and add conditions for notAllowedAmount and referralAmount
+    const wallet = await WalletModel.findOne({ userId: userId });
+
+    if (!wallet) {
+      return ResponseService.failed(
+        res,
+        "User wallet not found",
+        StatusCode.notFound
+      );
+    }
+
+    if (wallet.totalAmount < amount) {
+      return ResponseService.failed(
+        res,
+        "Bet amount exceeds user total wallet amount",
+        StatusCode.forbidden
+      );
+    }
+
+    if (wallet.notAllowedAmount >= amount) {
+      // This means we can easily deduct the notAllowedAmount amount from wallet
+      WalletModel.updateOne(
+        { userId: userId },
+        {
+          $set: {
+            notAllowedAmount: wallet.notAllowedAmount - amount,
+            totalAmount: wallet.totalAmount - amount,
+          },
+        }
+      );
+    } else if (wallet.referralAmount >= amount - wallet.notAllowedAmount) {
+      // This means we need to deduct all the notAllowedAmount amount as well some of the referralAmount from wallet
+      WalletModel.updateOne(
+        { userId: userId },
+        {
+          $set: {
+            notAllowedAmount: 0,
+            referralAmount:
+              wallet.referralAmount - (amount - wallet.notAllowedAmount),
+            totalAmount:
+              wallet.totalAmount - (amount - wallet.notAllowedAmount),
+          },
+        }
+      );
+    } else {
+      // This means we need to deduct all the notAllowedAmount amount & referralAmount as well some of the withdrawableAmount from wallet
+      WalletModel.updateOne(
+        { userId: userId },
+        {
+          $set: {
+            notAllowedAmount: 0,
+            referralAmount: 0,
+            withdrawableAmount:
+              wallet.withdrawableAmount -
+              (amount - wallet.notAllowedAmount - wallet.referralAmount),
+            totalAmount:
+              wallet.totalAmount -
+              (amount - wallet.notAllowedAmount - wallet.referralAmount),
+          },
+        }
+      );
+    }
+
     let result = await new Bet({
       prediction: prediction,
       totalAmount: amount,
