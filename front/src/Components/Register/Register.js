@@ -14,12 +14,13 @@ export const getOtp = ({ user, setErr, setOtpBtn, mode }) => {
     }
     else if (user.mobile.length !== 10) {
         setOtpBtn(1)
-        return setErr("invalid mobile number");
+        return setErr({ message: "invalid mobile number" });
     }
     axios.post("user/sendOtp", { mobile: user.mobile, mode: mode })
         .then(resp => {
             setErr("")
             setOtpBtn("")
+            alert("otp sent successfully")
             console.log(resp.data);
         })
         .catch(err => {
@@ -37,7 +38,7 @@ export function verifyOtp({ user, setErr, setOtpBtn, mode, navigate }) {
         otp: user.otp,
         mode: mode,
         password: user.password,
-        recommendation_code: user.recommendation_code
+        referralCode: user.referralCode
     }
     axios.post("user/sendOtp/verifyOtp", newUser)
         .then(resp => {
@@ -53,17 +54,16 @@ export function verifyOtp({ user, setErr, setOtpBtn, mode, navigate }) {
 }
 
 const Register = () => {
-    const recommendation_code = useLocation().state?.recommendation_code;
-    console.log(recommendation_code)
+    const referralCode = useLocation().state?.referralCode;
     const [user, setUser] = useState({
         mobile: '',
         otp: '',
         password: "",
-        recommendation_code: recommendation_code || ""
+        referralCode: referralCode || ""
     });
     const [err, setErr] = useState();
     const [otpBtn, setOtpBtn] = useState();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
 
     return (
@@ -85,7 +85,7 @@ const Register = () => {
                 </div>
                 {
                     (otpBtn === 1 && err) &&
-                    <p style={{ color: 'red', paddingLeft: 10 }} >{"*"}{err.err}</p>
+                    <p style={{ color: 'red', paddingLeft: 10 }} >{"*"}{err.message}</p>
                 }
                 <div className='d-flex'>
                     <div className='fild_input_1'>
@@ -128,16 +128,16 @@ const Register = () => {
                         type="text"
                         placeholder="Recommendation Code"
                         style={{ outline: 'none', border: "none" }}
-                        value={user.recommendation_code}
+                        value={user.referralCode}
                         onChange={(e) => setUser({
                             ...user,
-                            recommendation_code: e.target.value
+                            referralCode: e.target.value
                         })}
                     />
                 </div>
                 {
                     (otpBtn === 0 && err) &&
-                    <p className='err' >{err.err}</p>
+                    <p className='err' >{err.message}</p>
                 }
                 <div className="input_box_btn">
                     <button onClick={() => {

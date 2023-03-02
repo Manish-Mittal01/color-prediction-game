@@ -150,3 +150,14 @@ ul.right_nav li {
 .table_cus_5d {
     padding: 20px 34px;
 }
+
+.levelTab {
+    border: none;
+    outline: none;
+    padding: 12px;
+    margin-block: 10px;
+}
+
+.levelTab:hover {
+    background-color: #e1dfdf;
+}

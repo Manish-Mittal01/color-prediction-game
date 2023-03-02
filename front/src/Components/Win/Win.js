@@ -63,7 +63,8 @@ const Win = () => {
           Bcone,
           Emred
         });
-        setTimer(data.expiredAt - Date.now())
+        setTimer(data.expiredAt - Date.now());
+
       })
       .catch(err => setErr(err));
 
@@ -77,7 +78,7 @@ const Win = () => {
   }, [updateTimer]);
 
   useEffect(() => {
-    if (timer <= 0) return setUpdateTimer(!updateTimer);
+    if (timer < 0) return setUpdateTimer(!updateTimer);
     const interval = setInterval(() => {
       let newTimer = Math.floor(timer / 1000)
       let sec = newTimer % 60
@@ -93,7 +94,6 @@ const Win = () => {
   async function getBets() {
     await axios.get(`bet?userId=${userData.userId}`)
       .then(resp => {
-        console.log("bet history", resp.data)
         let parityRecords = resp.data.data.filter(item => item.periodName === "Parity")
         let sapreRecords = resp.data.data.filter(item => item.periodName === "Sapre")
         let bconRecords = resp.data.data.filter(item => item.periodName === "Bcone")

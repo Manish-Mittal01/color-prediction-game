@@ -35,7 +35,7 @@ const MyRecord = ({ tab, records }) => {
                                                 <div className="kd_t5">
                                                     <p className="res_text">{item.periodId}</p>
                                                     <p style={{ color: item.didWon ? "green" : "red" }} className="res_text">{result}</p>
-                                                    <p style={{ color: item.didWon ? "green" : "red" }} className="res_text">{item.didWon ? "+" : "-"}{item.amount}</p>
+                                                    <p style={{ color: item.didWon ? "green" : "red" }} className="res_text">{item.didWon ? "+" : "-"}{item.betAmount}</p>
                                                 </div>
                                             </Accordion.Header>
                                             <Accordion.Body style={{ padding: "10px 16px", boxShadow: "0px 1px 1px 1px lightGrey" }}>
@@ -47,19 +47,19 @@ const MyRecord = ({ tab, records }) => {
                                                     </p>
                                                     <p className="results" >
                                                         <span>Contract Money</span>
-                                                        <span>{item.amount}</span>
+                                                        <span>{item.totalAmount}</span>
                                                     </p>
                                                     <p className="results" >
                                                         <span>Delivery</span>
-                                                        <span>{item.amount * 0.95}</span>
+                                                        <span>{item.betAmount}</span>
                                                     </p>
                                                     <p className="results" >
                                                         <span>Fee</span>
-                                                        <span>{item.amount * 0.05}</span>
+                                                        <span>{item.totalAmount * 0.05}</span>
                                                     </p>
                                                     <p className="results" >
                                                         <span>Result</span>
-                                                        <span>{item.amount * 0.95}</span>
+                                                        <span>{item.resultNumber} {item.resultColor}</span>
                                                     </p>
                                                     <p className="results" >
                                                         <span>Select</span>

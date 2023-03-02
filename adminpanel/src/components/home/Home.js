@@ -4,8 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartArea, faChartBar, faChartLine, faChartPie, faCheckSquare, faCoffee } from '@fortawesome/fontawesome-free-solid';
 import styles from './Home.module.css'
 import { Card, Col, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
+    const navigate = useNavigate()
     return (
         <>
             <LeftSideSection />
@@ -64,9 +66,9 @@ export default function Home() {
                         </Card>
                     </Col>
                 </Row>
-                <div style={{ textAlign: 'center' }}>
+                <div style={{ textAlign: 'center', width: "100%" }}>
                     <h2>Block user</h2>
-                    <h2>Next Prediction</h2>
+                    <h2 style={{ cursor: 'pointer', width: 'fit-content', marginInline: 'auto' }} onClick={() => navigate("/setPrediction")} >Next Prediction</h2>
                 </div>
             </div>
         </>

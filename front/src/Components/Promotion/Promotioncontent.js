@@ -11,7 +11,8 @@ const Promotion_content = () => {
     const [user, setUser] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage, setPostsPerPage] = useState(20);
-    const [referrals, setReferrals] = useState({})
+    const [referrals, setReferrals] = useState({});
+    const [referralLevel, setReferralLevel] = useState("level1")
 
     const states = useSelector((state) => state.getData)
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ const Promotion_content = () => {
 
         axios.get(`user/referrals?userId=${userData.userId}`)
             .then(resp => {
+                setReferrals(resp.data.data)
                 console.log(resp.data)
             })
             .catch(err => {
@@ -32,63 +34,6 @@ const Promotion_content = () => {
     }, []);
 
 
-    const data = {
-        columns: [
-            {
-                label: 'ID',
-                field: 'ID',
-                sort: 'asc',
-                width: 150
-            },
-            {
-                label: 'Phone',
-                field: 'Phone',
-                sort: 'asc',
-                width: 270
-            },
-            {
-                label: 'Water_reward',
-                field: 'Water_reward',
-                sort: 'asc',
-                width: 200
-            },
-            {
-                label: 'First_reward',
-                field: 'First_reward',
-                sort: 'asc',
-                width: 100
-            }
-
-        ],
-        rows: [
-            {
-                ID: '705',
-                Phone: '7087376726',
-                Water_reward: 'Edinburgh',
-                First_reward: '61',
-            },
-            {
-                ID: '705',
-                Phone: '7087376726',
-                Water_reward: 'Edinburgh',
-                First_reward: '61',
-            }
-            ,
-            {
-                ID: '705',
-                Phone: '7087376726',
-                Water_reward: 'Edinburgh',
-                First_reward: '61',
-            },
-            {
-                ID: '705',
-                Phone: '7087376726',
-                Water_reward: 'Edinburgh',
-                First_reward: '61',
-            }
-        ]
-    };
-
     const lastPostIndex = currentPage * postsPerPage;
     const firstPostIndex = lastPostIndex - postsPerPage;
     // let currentPosts = history.previousResults.slice(firstPostIndex, lastPostIndex);
@@ -96,7 +41,7 @@ const Promotion_content = () => {
     return (
         <>
             <div className="container">
-                <div className="headline"> Bonus:₹ <span >{states.referralAmount}</span></div>
+                <div className="headline"> Bonus:₹ <span >{referrals.totalReferralAmount}</span></div>
             </div>
 
             <div className="level_box">
@@ -104,9 +49,9 @@ const Promotion_content = () => {
                     <div className="level_list">
                         <ul className="layout"><li>
                             <ol> Total People </ol>
-                            <ol className="two_ol">456</ol>
+                            <ol className="two_ol">{referrals.level1.length + referrals.level2.length + referrals.level3.length}</ol>
                         </li><li><ol> Contribution </ol>
-                                <ol className="two_ol"> ₹ {states.referralAmount}</ol>
+                                <ol className="two_ol"> ₹ {referrals.totalContributionAmount}</ol>
                             </li></ul><div className="layout_bot">
                             <div className="bot_list">
                                 <p className="titles">My Promotion Code</p>
@@ -129,6 +74,12 @@ const Promotion_content = () => {
                 </div>
             </div>
 
+            <div className='row'>
+                <button className={`col-sm-4 levelTab `} onClick={() => setReferralLevel("level1")} >Level 1</button>
+                <button className={`col-sm-4 levelTab `} onClick={() => setReferralLevel("level2")} >Level 2</button>
+                <button className={`col-sm-4 levelTab `} onClick={() => setReferralLevel("level3")} >Level 3</button>
+            </div>
+
             <Table style={{ textAlign: 'center', marginBottom: 60 }} className='' responsive>
                 <thead>
                     <tr>
@@ -140,13 +91,13 @@ const Promotion_content = () => {
                 </thead>
                 <tbody>
                     {
-                        // (currentPosts && currentPosts?.length > 0) &&
-                        data.rows.map((item, index) => (
-                            <tr key={item.ID}>
-                                <td>{item.ID}</td>
-                                <td>{item.Phone}</td>
-                                <td className='c_code'>{item.Water_reward}</td>
-                                <td className='c_code'>{item.First_reward}</td>
+                        referrals[referralLevel] && referrals[referralLevel].length > 0 &&
+                        referrals[referralLevel].map((item, index) => (
+                            <tr key={index}>
+                                <td>{item.referrarId}</td>
+                                <td>{item.mobile}</td>
+                                <td className='c_code'>0</td>
+                                <td className='c_code'>{item.amount}</td>
                             </tr>
                         ))
                     }
@@ -154,7 +105,7 @@ const Promotion_content = () => {
             </Table>
 
             <Pagination
-                // totalPosts={records.length}
+                totalPosts={referrals[referralLevel].length}
                 postsPerPage={postsPerPage}
                 setCurrentPage={setCurrentPage}
                 currentPage={currentPage}
