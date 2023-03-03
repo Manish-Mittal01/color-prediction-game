@@ -20,12 +20,12 @@ export const getOtp = ({ user, setErr, setOtpBtn, mode }) => {
     axios.post("user/sendOtp", { mobile: user.mobile, mode: mode })
         .then(resp => {
             setErr("")
-            setOtpBtn("")
+            setOtpBtn && setOtpBtn("")
             alert("otp sent successfully")
             console.log(resp.data);
         })
         .catch(err => {
-            console.log(err.response.data)
+            console.log(err)
             setOtpBtn(1)
             setErr(err.response.data);
             blockedUser();

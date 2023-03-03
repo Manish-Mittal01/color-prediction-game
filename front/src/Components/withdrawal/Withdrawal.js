@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { BsArrowLeft } from 'react-icons/bs'
+import React, { useState } from 'react'
 import { VscThreeBars } from 'react-icons/vsc'
 import withdro from '../../images/withdro.png';
-import card2 from '../../images/card2.png';
-import { Dropdown } from 'react-bootstrap';
 import axios from '../../axios/axios';
 import jwt from 'jwt-decode';
 import { useSelector } from 'react-redux'

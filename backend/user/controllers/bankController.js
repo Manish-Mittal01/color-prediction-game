@@ -18,8 +18,9 @@ module.exports.bankDetails = async (req, res) => {
   if (!user) return errorMsg("user is required");
   if (acc_number) {
     if (!ifsc) return errorMsg("ifsc is required");
-  } else {
-    if (!upi) return errorMsg("upi or account details are required");
+  }
+  if (!acc_number && !upi) {
+    errorMsg("upi or account details are required");
   }
   if (!mobile) return errorMsg("mobile is required");
   if (!otp) return errorMsg("otp is required");

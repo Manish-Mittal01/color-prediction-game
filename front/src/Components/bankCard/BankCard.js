@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { BsArrowLeft } from 'react-icons/bs'
 import { GrAdd } from "react-icons/gr";
 import { getOtp } from '../Register/Register';
+import axios from '../../axios/axios'
+
 const Bankcard = () => {
     const [fillDetails, setFillDetails] = useState(false);
     const [err, setErr] = useState({});
@@ -31,21 +33,28 @@ const Bankcard = () => {
             otp,
         } = bankDetails;
 
-        console.log(err)
 
         if (!acc_number) {
             if (!upi) {
                 setErr({ bank: "upi or account detail required" })
             }
+            else {
+                setErr("")
+            }
         }
         else if (!ifsc) {
             setErr({ ifsc: "ifsc code is required" })
         }
-        console.log(err)
         if (!mobile) return setErr({ mobile: "Mobile is required" });
-        console.log(err)
         if (!otp) return setErr({ otp: "otp is required" });
-        console.log(err)
+
+        axios.post("user/userBank", bankDetails)
+            .then(resp => {
+                console.log(resp.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
     console.log(err)
 
@@ -152,7 +161,10 @@ const Bankcard = () => {
                                     err.otp &&
                                     <span data-v-b351b8b8="" className="tips_span">{err.otp}</span>
                                 }
-                                <button id="otpbtn" data-v-b351b8b8="" className="gocode" onClick={() => getOtp()} > OTP </button>
+                                <button id="otpbtn" data-v-b351b8b8="" className="gocode" onClick={() =>
+                                    getOtp({ user: bankDetails, setErr })
+
+                                } > OTP </button>
                             </div>
                         </li>
                     </ul>
