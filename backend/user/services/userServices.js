@@ -41,7 +41,7 @@ class UserServices {
       return;
     }
 
-    const isActive = await UserController.checkUserActive(userId);
+    const isActive = await this.checkUserActive(userId);
 
     if (isActive == null) {
       ResponseService.failed(res, "User not Found", StatusCode.notFound);
