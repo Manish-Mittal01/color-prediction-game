@@ -37,9 +37,13 @@ function TableRecord({ history, tab }) {
                                 <td>{item.price}</td>
                                 <td>{item.resultNumber}</td>
                                 <td>
-                                    <span className='c_red' style={{ color: item.resultColor }}>
-                                        <GoPrimitiveDot style={{ width: 20, height: 20 }} />
-                                    </span>
+                                    {item.resultColor &&
+                                        item.resultColor.split(" ").map((color) => (
+                                            <span className='c_red' style={{ color: color }}>
+                                                <GoPrimitiveDot style={{ width: 20, height: 20 }} />
+                                            </span>
+                                        ))
+                                    }
                                 </td>
                             </tr>
                         ))

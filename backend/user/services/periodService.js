@@ -24,6 +24,8 @@ class PeriodService {
       resultNumber = Utility.getRandomValue(ColorNumbers.green);
     } else if (resultColor === "violet") {
       resultNumber = Utility.getRandomValue(ColorNumbers.violet);
+      resultNumber === 0 ? resultColor = "red violet" : resultColor = "green violet"
+      console.log("resultNumber--------------------------------------------------", resultNumber)
     }
     console.log(`[${periodId}]`, resultColor, resultNumber);
     const period = await PeriodModel.updateOne(

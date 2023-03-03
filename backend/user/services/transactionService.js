@@ -4,6 +4,7 @@ const { ResponseService } = require("../../common/responseService");
 const TransactionModel = require("../Models/transactionModel");
 const UserModel = require("../Models/UserModel");
 const walletModal = require("../Models/walletModal");
+const { UserController } = require("../controllers/userController");
 
 class TransactionService {
   static async _createAndValidateTransaction({

@@ -3,7 +3,6 @@ import './Win.css'
 import Winnavbar from './Winnavbar'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { GiTargetPrize } from "react-icons/gi";
 import axios from '../../axios/axios';
 import MyVerticallyCenteredModal from './MyVarticallyCenteredModal';
 import MyRecord from './MyRecord';
@@ -13,8 +12,9 @@ import Form from 'react-bootstrap/Form';
 import TableRecord from './Tablerecord'
 import jwt from 'jwt-decode';
 import { AiOutlineMinus } from 'react-icons/ai';
-import { HiOutlinePlusSm } from 'react-icons/hi';
 import { BsPlus } from 'react-icons/bs';
+import Timer from './Timer';
+import { blockedUser } from '../../common/blockedUser';
 
 
 const Win = () => {
@@ -32,9 +32,7 @@ const Win = () => {
   });
   const [err, setErr] = useState();
   const [tab, setTab] = useState("Parity");
-  const [timer, setTimer] = useState(0);
   const [time, setTime] = useState({ min: "0", sec: "00" });
-  const [updateTimer, setUpdateTimer] = useState(false);
   const [betNumber, setBetNumber] = useState(1)
   const [amount, setAmount] = useState(10);
   const [prediction, setPrediction] = useState("");
@@ -49,49 +47,10 @@ const Win = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    axios.get('period')
-      .then(function (response) {
-        let data = response.data.data;
-        let Parity = data.Parity;
-        let Sapre = data.Sapre;
-        let Bcone = data.Bcone;
-        let Emred = data.Emred;
-        setPeriods({
-          Parity,
-          Sapre,
-          Bcone,
-          Emred
-        });
-        setTimer(data.expiredAt - Date.now());
-
-      })
-      .catch(err => setErr(err));
-
-    axios.get("period/history")
-      .then(resp => {
-        setPeriodHistory(resp.data.data)
-      })
-      .catch(err => setErr(err.response.data.message));
-
-  }, [updateTimer]);
-
-  useEffect(() => {
-    if (timer < 0) return setUpdateTimer(!updateTimer);
-    const interval = setInterval(() => {
-      let newTimer = Math.floor(timer / 1000)
-      let sec = newTimer % 60
-      let min = (newTimer - sec) / 60;
-      setTime({ min: min, sec: sec });
-      setTimer(prev => prev - 1000)
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timer]);
 
   useEffect(() => {
     getBets();
-  }, [])
+  }, []);
 
 
   async function getBets() {
@@ -108,7 +67,11 @@ const Win = () => {
           Emred: emredRecords
         })
       })
-      .catch(err => setErr(err.response.data.message));
+      .catch(err => {
+        blockedUser();
+        setErr(err.response.data.message)
+      }
+      );
   }
 
   function makeBet(prediction) {
@@ -129,7 +92,11 @@ const Win = () => {
       .then(resp => {
         alert("order succes")
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        blockedUser();
+        console.log(err)
+      }
+      );
 
     setBetNumber(1);
     setAmount(10);
@@ -160,23 +127,14 @@ const Win = () => {
       </Tabs>
       {/* end */}
 
-      {
-        periods[tab] &&
-        <div className='main_buy_sell'>
-          <div className='main_left_Period'>
-            <p className='Period'><span className='Period_icon'><GiTargetPrize /></span><span className='Period_content'>Period</span></p>
-            <p className='id_value'>{periods[tab]?.periodId}</p>
-          </div>
-          <div className='main_right_count_down'>
-            <p className='Count_Down_content'>Count Down</p>
-            <p className='Count_Down'>
-              <span >{time.min}</span>
-              <span className='num'>:</span>
-              <span>{time.sec}</span>
-            </p>
-          </div>
-        </div>
-      }
+      <Timer
+        periods={periods}
+        setPeriods={setPeriods}
+        periodHistory={periodHistory}
+        setPeriodHistory={setPeriodHistory}
+        time={time}
+        setTime={setTime}
+      />
 
       <div className='join_btns'>
         <button disabled={disabled} className={disabled ? "join_green disabled" : 'join_green'} onClick={() => makeBet("green")} > Join Green </button>

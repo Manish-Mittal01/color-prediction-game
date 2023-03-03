@@ -6,15 +6,16 @@ import { SiGooglemessages } from "react-icons/si";
 import { AiFillAccountBook } from 'react-icons/ai';
 import axios from '../../axios/axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { blockedUser } from '../../common/blockedUser';
 
 export const getOtp = ({ user, setErr, setOtpBtn, mode }) => {
     if (user.mobile.length === 0) {
         setOtpBtn(1)
-        return setErr("enter mobile number")
+        return setErr({ err: "enter mobile number" })
     }
     else if (user.mobile.length !== 10) {
         setOtpBtn(1)
-        return setErr({ message: "invalid mobile number" });
+        return setErr({ err: "invalid mobile number" });
     }
     axios.post("user/sendOtp", { mobile: user.mobile, mode: mode })
         .then(resp => {
@@ -26,7 +27,9 @@ export const getOtp = ({ user, setErr, setOtpBtn, mode }) => {
         .catch(err => {
             console.log(err.response.data)
             setOtpBtn(1)
-            setErr(err.response.data)
+            setErr(err.response.data);
+            blockedUser();
+
         })
 }
 
@@ -42,13 +45,14 @@ export function verifyOtp({ user, setErr, setOtpBtn, mode, navigate }) {
     }
     axios.post("user/sendOtp/verifyOtp", newUser)
         .then(resp => {
-            console.log(resp.data);
             setErr("");
             setOtpBtn("");
-            navigate("/login")
+            navigate("/login");
+            localStorage.clear()
         })
         .catch(err => {
-            console.log(err.response.data)
+            blockedUser();
+            console.log(err)
             setErr(err.response.data)
         })
 }
@@ -85,7 +89,7 @@ const Register = () => {
                 </div>
                 {
                     (otpBtn === 1 && err) &&
-                    <p style={{ color: 'red', paddingLeft: 10 }} >{"*"}{err.message}</p>
+                    <p style={{ color: 'red', paddingLeft: 10 }} >{"*"}{err.err}</p>
                 }
                 <div className='d-flex'>
                     <div className='fild_input_1'>
@@ -137,7 +141,7 @@ const Register = () => {
                 </div>
                 {
                     (otpBtn === 0 && err) &&
-                    <p className='err' >{err.message}</p>
+                    <p className='err' >{err.err}</p>
                 }
                 <div className="input_box_btn">
                     <button onClick={() => {

@@ -6,11 +6,12 @@ import { Table } from 'react-bootstrap';
 import Pagination from '../Win/Pagination';
 import { useSelector } from 'react-redux';
 import axios from '../../axios/axios'
+import { blockedUser } from '../../common/blockedUser';
 
 const Promotion_content = () => {
     const [user, setUser] = useState();
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage, setPostsPerPage] = useState(20);
+    const [postsPerPage, setPostsPerPage] = useState(10);
     const [referrals, setReferrals] = useState({});
     const [referralLevel, setReferralLevel] = useState("level1");
     const [totalReferrals, setTotalReferrals] = useState(0)
@@ -21,7 +22,7 @@ const Promotion_content = () => {
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem("user"));
-        let userData = jwt(user.token);
+        let userData = user && jwt(user.token);
         setUser(userData.userId);
 
         axios.get(`user/referrals?userId=${userData.userId}`)
@@ -32,6 +33,7 @@ const Promotion_content = () => {
                 console.log(data)
             })
             .catch(err => {
+                blockedUser();
                 console.log(err)
             })
     }, []);
@@ -39,7 +41,7 @@ const Promotion_content = () => {
 
     const lastPostIndex = currentPage * postsPerPage;
     const firstPostIndex = lastPostIndex - postsPerPage;
-    // let currentPosts = history.previousResults.slice(firstPostIndex, lastPostIndex);
+    let currentPosts = referrals[referralLevel] && referrals[referralLevel].slice(firstPostIndex, lastPostIndex);
 
 
     return (
@@ -84,7 +86,7 @@ const Promotion_content = () => {
                 <button className={`col-sm-4 levelTab `} onClick={() => setReferralLevel("level3")} >Level 3</button>
             </div>
 
-            <Table style={{ textAlign: 'center', marginBottom: 60 }} className='' responsive>
+            <Table style={{ textAlign: 'center' }} className='' responsive>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -96,7 +98,7 @@ const Promotion_content = () => {
                 <tbody>
                     {
                         referrals[referralLevel] && referrals[referralLevel].length > 0 &&
-                        referrals[referralLevel].map((item, index) => (
+                        currentPosts.map((item, index) => (
                             <tr key={index}>
                                 <td>{item.referrarId}</td>
                                 <td>{item.mobile}</td>

@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { StatusCode } = require("../../common/Constants");
 const { UserController } = require("./userController");
+const { ResponseService } = require("../../common/responseService");
 const { success, error } = require("../../common/Constants").Status;
 
 module.exports.login = async (req, res) => {
@@ -21,13 +22,12 @@ module.exports.login = async (req, res) => {
   const user = await User.findOne({
     mobile: mobile,
   });
-  const isActive = await UserController.checkUserActive(userId);
 
-  if (isActive == null) {
+  if (!user) {
     ResponseService.failed(res, "User not Found", StatusCode.notFound);
     return;
   }
-  if (!isActive) {
+  if (user.status === "blocked") {
     ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
     return;
   }

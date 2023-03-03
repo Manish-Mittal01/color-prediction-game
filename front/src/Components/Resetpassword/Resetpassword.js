@@ -3,8 +3,7 @@ import { BsFillKeyFill, BsPhone } from 'react-icons/bs'
 import { SiGooglemessages } from 'react-icons/si'
 import { getOtp, verifyOtp } from '../Register/Register'
 import '../Register/Register.css';
-import axios from '../../axios/axios';
-
+import { useNavigate } from 'react-router-dom'
 
 
 const Resetpassword = () => {
@@ -16,6 +15,8 @@ const Resetpassword = () => {
     });
     const [err, setErr] = useState();
     const [otpBtn, setOtpBtn] = useState();
+
+    const navigate = useNavigate();
 
     return (
         <>
@@ -43,7 +44,7 @@ const Resetpassword = () => {
                 </div>
                 {
                     (otpBtn === 1 && err) &&
-                    <p style={{ color: 'red', paddingLeft: 10 }} >{"*"}{err}</p>
+                    <p style={{ color: 'red', paddingLeft: 10 }} >{"*"}{err.err}</p>
                 }
                 <div className='d-flex'>
                     <div className='fild_input_1'>
@@ -88,7 +89,7 @@ const Resetpassword = () => {
                     <p className='err' >{err.err}</p>
                 }
                 <div className="input_box_btn">
-                    <button onClick={() => verifyOtp({ user, setErr, setOtpBtn, mode: "reset password" })} className="login_btn ripple">Continue</button>
+                    <button onClick={() => verifyOtp({ user, setErr, setOtpBtn, mode: "reset password", navigate })} className="login_btn ripple">Continue</button>
                 </div>
             </div>
         </>

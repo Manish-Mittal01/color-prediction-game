@@ -7,6 +7,7 @@ import { Dropdown } from 'react-bootstrap';
 import axios from '../../axios/axios';
 import jwt from 'jwt-decode';
 import { useSelector } from 'react-redux'
+import { blockedUser } from '../../common/blockedUser';
 
 
 
@@ -29,9 +30,14 @@ const Withdrawal = () => {
         }
         axios.post("user/withdraw", withdrawRequest)
             .then(resp => {
+                alert("withdrawlrequest submited successfully")
                 console.log(resp.data)
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                blockedUser();
+                console.log(err)
+            }
+            )
     }
 
     return (
@@ -54,11 +60,11 @@ const Withdrawal = () => {
             </div>
             <div className="code_input_box">
                 <div className="code_input">
-                    <img className src={withdro} alt="" />
+                    <img src={withdro} alt="" />
                     <input
                         value={amount || ""}
                         onChange={(e) => setAmount(e.target.value)}
-                        className id="amount" type="number" placeholder="Enter or Select recharge amount" style={{ outline: 'none' }}
+                        id="amount" type="number" placeholder="Enter or Select recharge amount" style={{ outline: 'none' }}
                     />
                 </div>
             </div>
@@ -68,7 +74,7 @@ const Withdrawal = () => {
             <div style={{ marginLeft: "2%" }} className="payment_box">
                 <p className="payment_text">Payout</p>
                 <div role="radiogroup" className="van-radio-group">
-                    <div role="radio" tabindex="0" aria-checked="true" className="van-radio">
+                    <div role="radio" tabIndex="0" aria-checked="true" className="van-radio">
                         <div className="van-radio__icon van-radio__icon--square van-radio__icon--checked">
                             <i className="van-icon van-icon-success"></i></div>
                         <span className="van-radio__label">
@@ -104,7 +110,7 @@ const Withdrawal = () => {
 
             <div style={{ marginTop: 15 }} className="code_input_box">
                 <div className="code_input">
-                    <img className src={withdro} alt="" />
+                    <img src={withdro} alt="" />
                     <input
                         value={password || ""}
                         onChange={(e) => setPassword(e.target.value)}

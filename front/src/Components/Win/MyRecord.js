@@ -4,13 +4,12 @@ import { BsFillFileTextFill } from "react-icons/bs";
 import Pagination from "./Pagination";
 
 const MyRecord = ({ tab, records, periods }) => {
-
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage, setPostsPerPage] = useState(20);
+    const [postsPerPage, setPostsPerPage] = useState(10);
 
     const lastPostIndex = currentPage * postsPerPage;
     const firstPostIndex = lastPostIndex - postsPerPage;
-    // let currentPosts = history.previousResults.slice(firstPostIndex, lastPostIndex);
+    let currentPosts = records[tab] && records[tab].slice(firstPostIndex, lastPostIndex);
 
 
     return (
@@ -20,11 +19,11 @@ const MyRecord = ({ tab, records, periods }) => {
                 <p>My Record</p>
             </div>
 
-            <Table style={{ textAlign: 'center', marginBottom: 70 }} className='' responsive>
+            <Table style={{ textAlign: 'center' }} className='' responsive>
                 <tbody>
                     {
-                        (records && records[tab]?.length > 0) &&
-                        records[tab].map((item, index) => {
+                        (records[tab] && records[tab].length > 0) &&
+                        currentPosts.map((item, index) => {
                             let result = item.didWon ? "win" : "fail"
                             return (
                                 <tr key={item.periodId + index}>
@@ -84,7 +83,7 @@ const MyRecord = ({ tab, records, periods }) => {
             </Table>
 
             <Pagination
-                totalPosts={records.length}
+                totalPosts={records[tab] && records[tab].length}
                 postsPerPage={postsPerPage}
                 setCurrentPage={setCurrentPage}
                 currentPage={currentPage}

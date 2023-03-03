@@ -42,14 +42,14 @@ function App() {
             <Route path="/policies" element={<Auth Comp={Policies} />} />
             <Route path="/riskmanagements" element={<Auth Comp={Riskmanagement} />} />
             <Route path="/Complaints" element={<Auth Comp={Complaints} />} />
-            <Route path="/recharge" element={<Recharge />} />
-            <Route path="/withdrawal" element={<Withdrawal />} />
-            <Route path="/transaction" element={<Transactions />} />
-            <Route path="/RechargeRecord" element={<Recharge_Record />} />
-            <Route path="/Orders" element={<Orders />} />
-            <Route path="/Promotion" element={<Promotion />} />
-            <Route path="/Bankcard" element={<Bankcard />} />
-            <Route path="/SubmitRechargeRequest" element={<SubmitRechargeRequest />} />
+            <Route path="/recharge" element={< Auth Comp={Recharge} />} />
+            <Route path="/withdrawal" element={<Auth Comp={Withdrawal} />} />
+            <Route path="/transaction" element={<Auth Comp={Transactions} />} />
+            <Route path="/RechargeRecord" element={<Auth Comp={Recharge_Record} />} />
+            <Route path="/Orders" element={<Auth Comp={Orders} />} />
+            <Route path="/Promotion" element={<Auth Comp={Promotion} />} />
+            <Route path="/Bankcard" element={<Auth Comp={Bankcard} />} />
+            <Route path="/SubmitRechargeRequest" element={<Auth Comp={SubmitRechargeRequest} />} />
           </Routes>
           <Footer />
         </BrowserRouter>

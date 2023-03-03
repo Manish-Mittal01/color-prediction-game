@@ -14,7 +14,7 @@ const Pagination = ({
     }
 
     return (
-        <div className='pagination'>
+        <div className='pagination' style={{ marginBottom: 100 }}>
             {pages.map((page, index) => {
                 return (
                     <button

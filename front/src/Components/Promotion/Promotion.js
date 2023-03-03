@@ -3,8 +3,6 @@ import Modal from 'react-bootstrap/Modal';
 import './Promotion.css'
 import { GoThreeBars } from "react-icons/go";
 import Promotioncontent from './Promotioncontent';
-import axios from '../../axios/axios'
-import jwt from 'jwt-decode';
 
 const Promotion = () => {
     const [show, setShow] = useState(false);

@@ -11,6 +11,10 @@ const { UserController } = require("../controllers/userController");
 class BetServices {
   static async getBets(req, res) {
     const userId = req.query.userId;
+
+    const validUser = await User.findOne({ userId: userId });
+    if (!validUser) return ResponseService.failed(res, "User not Found", StatusCode.notFound);
+
     const isActive = await UserController.checkUserActive(userId);
 
     if (isActive == null) {

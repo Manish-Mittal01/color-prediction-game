@@ -2,6 +2,7 @@ import jwt from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
 import { BsArrowLeft } from 'react-icons/bs'
 import axios from '../../axios/axios'
+import { blockedUser } from '../../common/blockedUser'
 
 const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
@@ -12,7 +13,11 @@ const Transactions = () => {
             .then(resp => {
                 console.log(resp.data)
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                blockedUser();
+                console.log(err)
+            }
+            )
     }, [])
 
     return (

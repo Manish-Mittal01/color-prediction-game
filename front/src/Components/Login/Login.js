@@ -23,7 +23,7 @@ const Login = () => {
     async function login() {
         const user = userDetails;
         setErr("")
-        // if (user.mobile.length !== 10) return setErr("invalid mobile number");
+        if (user.mobile.length !== 10) return setErr("invalid mobile number");
 
         await axios.post("user/login", user)
             .then(resp => {
@@ -34,6 +34,7 @@ const Login = () => {
                 userWallet(jwt(resp.data.token).userId)
             })
             .catch(err => {
+                console.log(err)
                 setErr(err.response.data.message);
             })
     }

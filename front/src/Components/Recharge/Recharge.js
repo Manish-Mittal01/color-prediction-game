@@ -10,7 +10,8 @@ import small3 from '../../images/small3.png'
 import small4 from '../../images/small4.png'
 import small5 from '../../images/small5.png'
 import jwt from 'jwt-decode';
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
+import { blockedUser } from '../../common/blockedUser'
 
 
 
@@ -86,7 +87,9 @@ export default Recharge;
 export const SubmitRechargeRequest = () => {
     const [transactionId, setTransactionId] = useState();
     const [err, setErr] = useState();
-    const amount = useLocation().state.amount;
+    const location = useLocation()
+    console.log(location.state)
+    const amount = location.state ? location.state.amount : "";
     const navigate = useNavigate();
 
     const upi = "mrginfotech@upi";
@@ -105,7 +108,10 @@ export const SubmitRechargeRequest = () => {
                 alert("request submitted successfully");
                 navigate("/mine");
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                blockedUser()
+                console.log(err)
+            })
     }
 
     return (
@@ -192,7 +198,7 @@ export const SubmitRechargeRequest = () => {
                                     <input type="text" id="upi-input" value={transactionId} name="utr" placeholder="ENTER REF NO.:2188xxxxxxxx" onChange={(e) => {
                                         setErr("")
                                         setTransactionId(e.target.value)
-                                    }} maxlength="12" />
+                                    }} maxLength="12" />
                                 </div>
                             </div>
                             <div id="error"

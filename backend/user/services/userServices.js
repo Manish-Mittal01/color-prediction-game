@@ -1,17 +1,18 @@
 const { LogService } = require("../../common/logService");
 const { ResponseService } = require("../../common/responseService");
+const { UserController } = require("../controllers/userController");
 const referralModel = require("../Models/referralModel");
 const UserModel = require("../Models/UserModel");
 const walletModal = require("../Models/walletModal");
 
 class UserServices {
   static async checkUserActive(userId) {
-    const user = await UserModel.findOne(userId);
+    const user = await UserModel.findOne({ userId: userId });
 
     if (!user) {
       return null;
     }
-    if (user.status == "active") {
+    if (user.status === "active") {
       return true;
     }
     return false;
