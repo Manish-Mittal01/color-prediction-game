@@ -65,7 +65,7 @@ const Resetpassword = () => {
                     </div>
                     <div className='get_otp'>
                         <button onClick={() => {
-                            getOtp({ user, setErr, setOtpBtn, mode: "reset password" })
+                            getOtp({ user, setErr, setOtpBtn, mode: "reset password", navigate })
                         }} style={{ width: "100%" }} className='w-100'>get otp</button>
                     </div>
                 </div>

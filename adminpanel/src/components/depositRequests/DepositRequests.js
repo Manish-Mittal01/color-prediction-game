@@ -1,33 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap'
 import LeftSideSection from '../leftsideSection';
+import axios from '../../axios/axios'
+import './DepositRequest.css'
 
 const WithdrwaRequests = () => {
-    const [records, setRecords] = useState([
-        {
-            userName: "9876543210",
-            userId: "jqydfgeyu",
-            password: "123",
-            balance: 123,
-            name: "Manish",
-            AccountNumber: 1234,
-            ifsc: "ifsc",
-            upi: "upi"
-        },
-        {
-            userName: "9876543210",
-            userId: "jqyfgeyu",
-            password: "123",
-            balance: 123,
-            name: "Manish",
-            AccountNumber: 1234,
-            ifsc: "ifsc",
-            upi: "upi"
-        }
-    ]);
-    const [filteredData, setFilteredData] = useState([...records]);
-    const [searchValue, setSearchValue] = useState("");
+    const [records, setRecords] = useState([]);
 
+    useEffect(() => {
+        axios.get("admin/deposit")
+            .then(resp => {
+                setRecords(resp.data.data)
+                console.log(resp.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, []);
+
+    function finalizeRequest({ isApproved, item }) {
+        const transactionDetail = {
+            userId: item.userId,
+            amount: item.amount,
+            isApproved,
+            transactionId: item._id
+        }
+        console.log("function called")
+
+        axios.post('admin/deposit', transactionDetail)
+            .then(resp => {
+                console.log(resp.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
 
     return (
         <div>
@@ -50,18 +57,19 @@ const WithdrwaRequests = () => {
                     </thead>
                     <tbody>
                         {
-                            (filteredData && filteredData.length > 0) &&
-                            filteredData.map((item, index) => {
+                            (records && records.length > 0) &&
+                            records.map((item, index) => {
                                 return (
-                                    <tr key={item.userId}>
-                                        <td>{item.userName}</td>
+                                    <tr key={item.userId + index}>
                                         <td>{item.userId}</td>
-                                        <td>{item.password}</td>
+                                        <td>{item.amount}</td>
+                                        <td>{item.status}</td>
                                         <td>{item.balance}</td>
                                         <td >{item.name}</td>
                                         <td >{item.AccountNumber}</td>
-                                        <td >{item.ifsc}</td>
-                                        <td >{item.upi}</td>
+                                        <td >{item.requestTime}</td>
+                                        <td onClick={(e) => { finalizeRequest({ isApproved: true, item }) }} className='yesBtn' >Yes</td>
+                                        <td onClick={(e) => { finalizeRequest({ isApproved: false, item }) }} className='noBtn' >No</td>
                                     </tr>
                                 )
                             })

@@ -3,6 +3,8 @@ const BankDetails = require("../Models/bankDetailsModel");
 const Otp = require("../Models/OtpModel");
 const User = require("../Models/UserModel");
 const bcrypt = require("bcrypt");
+const { ResponseService } = require("../../common/responseService");
+const { StatusCode } = require("../../common/Constants");
 
 module.exports.bankDetails = async (req, res) => {
   const { mobile, acc_number, ifsc, otp, user, acc_holder_name, branch, upi } =
@@ -33,6 +35,8 @@ module.exports.bankDetails = async (req, res) => {
     userId: user,
   });
   if (!userfound) return errorMsg("user does not exist");
+  console.log(userfound)
+  if (userfound.status === "blocked") return ResponseService.failed(res, "User is blocked", StatusCode.unauthorized)
 
   const rightOtpFind = otpHolder[otpHolder.length - 1];
   const validUser = await bcrypt.compare(otp, rightOtpFind.otp);
@@ -59,7 +63,6 @@ module.exports.bankDetails = async (req, res) => {
   res.status(200).send({
     status: success,
     message: "bank successfulkly added",
-    err: "",
     paymentDetails: banks,
   });
 };

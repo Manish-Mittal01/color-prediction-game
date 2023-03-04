@@ -16,6 +16,7 @@ class TransactionAdminService {
       transactionType: TransactionType.deposit,
     });
 
+
     if (!allDeposits || allDeposits.length === 0) {
       return ResponseService.success(res, "No Deposit requests found", []);
     }
@@ -31,11 +32,12 @@ class TransactionAdminService {
       }
     }
 
+    await separateDeposits();
+
     if (!pending || pending.length === 0) {
       return ResponseService.success(res, "No Deposit requests found", []);
     }
 
-    await separateDeposits();
 
     return ResponseService.success(res, "Deposit requests found", pending);
   }
@@ -118,37 +120,50 @@ class TransactionAdminService {
         StatusCode.notFound
       );
     }
-    const updatedTransaction = await transactionModel.updateOne(
-      { _id: transactionId },
-      {
-        $set: {
-          status: isApproved
-            ? TransactionStatus.approved
-            : TransactionStatus.rejected,
+    console.log("start")
+    try {
+
+      const updatedTransaction = await transactionModel.updateOne(
+        { _id: transactionId, userId: userId },
+        {
+          $set: {
+            "status": isApproved
+              ? TransactionStatus.approved
+              : TransactionStatus.rejected,
+          },
         },
-      },
-      (err, docs) => LogService.updateLog("Deposit-Transaction", err, docs)
-    );
+        (err, docs) => LogService.updateLog("Deposit-Transaction", err, docs)
+      );
+    } catch (e) {
+      console.log('[Error] -', e);
+    }
+
+    console.log("after updating transaction===============================");
 
     if (isApproved) {
+      console.log("isApproved found--------------------------------------------------------")
       let depositAmount;
       if (wallet.isFirstDeposit && user.referralCode) {
+        console.log("first deposit----------")
         depositAmount = amount * 1.3; // Adding 30% before of referral
         ReferralController.depositReferralAmount(userId, amount);
       } else {
+        console.log("not first deposit---------")
         depositAmount = wallet.notAllowedAmount + amount;
       }
+      console.log("before updating wallet")
       const result = await walletModal.updateOne(
-        { userId: userId },
+        { "userId": userId },
         {
           $set: {
-            notAllowedAmount: depositAmount,
-            totalAmount: wallet.totalAmount + depositAmount,
-            isFirstDeposit: false,
+            "notAllowedAmount": depositAmount,
+            "totalAmount": wallet.totalAmount + depositAmount,
+            "isFirstDeposit": false,
           },
         },
         (err, docs) => LogService.updateLog("Deposit-Wallet", err, docs)
       );
+      console.log("after updating wallet")
       ResponseService.success(res, "Request Approved Successfully", {});
     } else {
       ResponseService.success(res, "Request Rejected Successfully", {});

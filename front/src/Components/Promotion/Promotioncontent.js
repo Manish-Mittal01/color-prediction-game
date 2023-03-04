@@ -6,7 +6,7 @@ import { Table } from 'react-bootstrap';
 import Pagination from '../Win/Pagination';
 import { useSelector } from 'react-redux';
 import axios from '../../axios/axios'
-import { blockedUser } from '../../common/blockedUser';
+import { blockUser } from '../../common/blockUser';
 
 const Promotion_content = () => {
     const [user, setUser] = useState();
@@ -33,7 +33,8 @@ const Promotion_content = () => {
                 console.log(data)
             })
             .catch(err => {
-                blockedUser();
+                err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
+
                 console.log(err)
             })
     }, []);

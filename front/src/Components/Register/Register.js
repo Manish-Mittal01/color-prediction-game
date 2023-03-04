@@ -6,9 +6,9 @@ import { SiGooglemessages } from "react-icons/si";
 import { AiFillAccountBook } from 'react-icons/ai';
 import axios from '../../axios/axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { blockedUser } from '../../common/blockedUser';
+import { blockUser } from '../../common/blockUser';
 
-export const getOtp = ({ user, setErr, setOtpBtn, mode }) => {
+export const getOtp = ({ user, setErr, setOtpBtn, mode, navigate }) => {
     if (user.mobile.length === 0) {
         setOtpBtn(1)
         return setErr({ err: "enter mobile number" })
@@ -28,7 +28,7 @@ export const getOtp = ({ user, setErr, setOtpBtn, mode }) => {
             console.log(err)
             setOtpBtn(1)
             setErr(err.response.data);
-            blockedUser();
+            err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
 
         })
 }
@@ -51,9 +51,9 @@ export function verifyOtp({ user, setErr, setOtpBtn, mode, navigate }) {
             localStorage.clear()
         })
         .catch(err => {
-            blockedUser();
             console.log(err)
             setErr(err.response.data)
+            err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
         })
 }
 
@@ -108,7 +108,7 @@ const Register = () => {
                         </div>
                     </div>
                     <div className='get_otp'>
-                        <button onClick={() => getOtp({ user, setErr, setOtpBtn, mode: "new user" })} style={{ width: "100%" }} className='w-100'>get otp</button>
+                        <button onClick={() => getOtp({ user, setErr, setOtpBtn, mode: "new user", navigate })} style={{ width: "100%" }} className='w-100'>get otp</button>
                     </div>
                 </div>
 

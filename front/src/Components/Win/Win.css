@@ -133,7 +133,6 @@ p.Count_Down_content {
 .join_btns {
     display: flex;
     justify-content: space-around;
-
 }
 
 .join_btns button {

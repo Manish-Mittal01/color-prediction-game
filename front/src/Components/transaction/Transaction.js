@@ -1,11 +1,13 @@
 import jwt from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
 import { BsArrowLeft } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
 import axios from '../../axios/axios'
-import { blockedUser } from '../../common/blockedUser'
+import { blockUser } from '../../common/blockUser'
 
 const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
+    const navigate = useNavigate()
 
     const userId = localStorage.getItem("user") && jwt(JSON.parse(localStorage.getItem("user")).token).userId
     useEffect(() => {
@@ -14,10 +16,9 @@ const Transactions = () => {
                 console.log(resp.data)
             })
             .catch(err => {
-                blockedUser();
                 console.log(err)
-            }
-            )
+                err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
+            })
     }, [])
 
     return (

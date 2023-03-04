@@ -2,21 +2,16 @@ import React, { useEffect, useState } from 'react'
 import './Win.css'
 import { GiTargetPrize } from "react-icons/gi";
 import axios from '../../axios/axios';
-import { blockedUser } from '../../common/blockedUser';
+import { useNavigate } from 'react-router-dom';
+import { blockUser } from '../../common/blockUser';
 
 export default function Timer({ periods, setPeriods, setPeriodHistory, time, setTime }) {
-    // const [periods, setPeriods] = useState({
-    //     Parity: "",
-    //     Sapre: "",
-    //     Bcone: "",
-    //     Emred: ""
-    // });
     const [err, setErr] = useState();
     const [tab, setTab] = useState("Parity");
     const [timer, setTimer] = useState(0);
-    // const [time, setTime] = useState({ min: "0", sec: "00" });
     const [updateTimer, setUpdateTimer] = useState(false);
-    // const [periodHistory, setPeriodHistory] = useState({})
+
+    const navigate = useNavigate()
 
 
     useEffect(() => {
@@ -38,20 +33,20 @@ export default function Timer({ periods, setPeriods, setPeriodHistory, time, set
 
             })
             .catch(err => {
-                blockedUser();
-                setErr(err)
-            }
-            );
+                err.response && setErr(err.response.data.message)
+                err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
+
+            });
 
         axios.get("period/history")
             .then(resp => {
                 setPeriodHistory(resp.data.data)
             })
             .catch(err => {
-                blockedUser();
-                setErr(err.response.data.message)
-            }
-            );
+                err.response && setErr(err.response.data.message)
+                err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
+
+            });
 
 
     }, [updateTimer]);

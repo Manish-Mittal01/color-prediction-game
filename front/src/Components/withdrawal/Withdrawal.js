@@ -4,7 +4,8 @@ import withdro from '../../images/withdro.png';
 import axios from '../../axios/axios';
 import jwt from 'jwt-decode';
 import { useSelector } from 'react-redux'
-import { blockedUser } from '../../common/blockedUser';
+import { useNavigate } from 'react-router-dom';
+import { blockUser } from '../../common/blockUser';
 
 
 
@@ -12,7 +13,8 @@ const Withdrawal = () => {
     const [amount, setAmount] = useState(0);
     const [password, setPassword] = useState("");
 
-    const states = useSelector((state) => state.getData)
+    const states = useSelector((state) => state.getData);
+    const navigate = useNavigate()
 
 
 
@@ -31,10 +33,10 @@ const Withdrawal = () => {
                 console.log(resp.data)
             })
             .catch(err => {
-                blockedUser();
                 console.log(err)
-            }
-            )
+                err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
+
+            })
     }
 
     return (

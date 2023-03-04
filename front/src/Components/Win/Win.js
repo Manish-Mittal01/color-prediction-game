@@ -14,7 +14,8 @@ import jwt from 'jwt-decode';
 import { AiOutlineMinus } from 'react-icons/ai';
 import { BsPlus } from 'react-icons/bs';
 import Timer from './Timer';
-import { blockedUser } from '../../common/blockedUser';
+import { useNavigate } from 'react-router-dom';
+import { blockUser } from '../../common/blockUser';
 
 
 const Win = () => {
@@ -44,6 +45,8 @@ const Win = () => {
   let user = JSON.parse(localStorage.getItem("user"))
   let userData = user && jwt(user.token);
 
+  const navigate = useNavigate()
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -68,8 +71,10 @@ const Win = () => {
         })
       })
       .catch(err => {
-        blockedUser();
-        setErr(err.response.data.message)
+        console.log(err)
+        err.response && setErr(err.response.data.message)
+        blockUser({ errMsg: err.response.data.message, navigate: navigate })
+
       }
       );
   }
@@ -93,7 +98,9 @@ const Win = () => {
         alert("order succes")
       })
       .catch(err => {
-        blockedUser();
+        err.response && setErr(err.response.data.message)
+        err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
+
         console.log(err)
       }
       );

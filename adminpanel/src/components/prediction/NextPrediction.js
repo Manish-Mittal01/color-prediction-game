@@ -1,54 +1,40 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { Button, Container, Grid, Stack, Typography } from '@mui/material';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
-
-
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
+import './NextPrediction.css'
+import { Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 
 
 export default function NextPrediction() {
-    const [value, setValue] = React.useState('1');
+    const [value, setValue] = useState('1');
+    const [tab, setTab] = useState("Parity")
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
     return (
         <>
-            <Container>
-                <Typography variant="h4" sx={{ mb: 5 }}>
+            <Container style={{ textAlign: 'center' }}>
+                <h4  >
                     New Prediction
-                </Typography>
-                <Box sx={{ width: '100%', typography: 'body1' }}>
-                    <TabContext value={value}>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                <Tab label="Parity" value="1" />
-                                <Tab label="sapre" value="2" />
-                                <Tab label="Emred" value="3" />
-                                <Tab label="Becone" value="4" />
-                            </TabList>
-                        </Box>
-                        <TabPanel value="1">Parity</TabPanel>
-                        <TabPanel value="2">sapre</TabPanel>
-                        <TabPanel value="3">Emred</TabPanel>
-                        <TabPanel value="4">Becone</TabPanel>
-                    </TabContext>
-                </Box>
+                </h4>
+
+                <Tabs
+                    id="fill-tab-example"
+                    className="mb-3"
+                    activeKey={tab}
+                    onSelect={(key) => setTab(key)}
+                    fill
+                >
+                    <Tab eventKey="Parity" title="Parity">  </Tab>
+                    <Tab eventKey="Sapre" title="Sapre">  </Tab>
+                    <Tab eventKey="Bcone" title="Bcone">  </Tab>
+                    <Tab eventKey="Emred" title="Emred" > </Tab>
+                </Tabs>
+
+
                 {/*  */}
+
                 <div className='d-flex'>
                     <h3 style={{ color: "green" }}>Total User balance :</h3><span><h3> 12172.3</h3></span>
                 </div>
@@ -59,60 +45,59 @@ export default function NextPrediction() {
                 <div className='d-flex'>
                     <h4>Time : </h4><span> <h4>00:00</h4></span>
                 </div>
+
                 <div className='df_5d mt-4'>
+                    <div className='join_btns'>
+                        <p className='join_green colors'>
+                            Green
+                        </p>
+                        <p className={'Join_Violet colors'}>
+                            Violet
+                        </p>
+                        <p className={'join_red colors'}>
+                            Red
+                        </p>
+                    </div>
 
-                    <Grid container spacing={2}>
-                        <Grid item xs={4}>
-                            <Item><span>Red:₹ <b>0</b></span></Item>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Item><span>Green:₹<b>0</b></span></Item>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Item><span>Violet:₹ <b>0</b></span></Item>
-                        </Grid>
-                    </Grid>
-
-
+                    <div className='input_value'>
+                        <div className='first_row'>
+                            <p className={'enter_value'}>
+                                0 = 111111
+                            </p>
+                            <p className={'enter_value'}>
+                                1
+                            </p>
+                            <p className={'enter_value'}>
+                                2
+                            </p>
+                            <p className={'enter_value'}>
+                                3
+                            </p>
+                            <p className={'enter_value'}>
+                                4
+                            </p>
+                        </div>
+                        <div className='secound_row'>
+                            <p className={'enter_value'}>
+                                5
+                            </p>
+                            <p className={'enter_value'}>
+                                6
+                            </p>
+                            <p className={'enter_value'}>
+                                7
+                            </p>
+                            <p className={'enter_value'}>
+                                8
+                            </p>
+                            <p className={'enter_value'}>
+                                9
+                            </p>
+                        </div>
+                    </div>
 
                     {/*  */}
-
-                    <Grid container spacing={2}>
-                        {/* f1 */}
-                        <Grid item xs={3}>
-                            <Item><span>zero:₹  <b>0</b></span></Item>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Item><span>one:₹<b>0</b></span></Item>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Item><span>two:₹ <b>0</b></span></Item>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Item><span> three:₹ <b>0</b></span></Item>
-                        </Grid>
-                        {/* f2 */}
-                        <Grid item xs={3}>
-                            <Item><span>four:₹ <b>0</b></span></Item>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Item><span>five:₹<b>0</b></span></Item>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Item><span>six:₹ <b>0</b></span></Item>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Item><span>seven:₹ <b>0</b></span></Item>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Item><span>eight:₹ <b>0</b></span></Item>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Item><span>nine:₹ <b>0</b></span></Item>
-                        </Grid>
-
-                    </Grid>
-                    <Grid container spacing={2}>
+                    {/* <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Item> <div className='nest '>
                                 <TextField id="outlined-basic" placeholder='Enter a number from 0-9' label="Next Prediction" variant="outlined" />
@@ -123,8 +108,7 @@ export default function NextPrediction() {
 
                             </Item>
                         </Grid>
-
-                    </Grid>
+                    </Grid> */}
                 </div>
 
             </Container>

@@ -1,6 +1,5 @@
 const { LogService } = require("../../common/logService");
 const { ResponseService } = require("../../common/responseService");
-const { UserController } = require("../controllers/userController");
 const referralModel = require("../Models/referralModel");
 const UserModel = require("../Models/UserModel");
 const walletModal = require("../Models/walletModal");

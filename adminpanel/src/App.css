@@ -13776,6 +13776,10 @@ span.nav_path {
   width: 50%;
 }
 
+.searchBox::placeholder {
+  padding-left: 4px;
+}
+
 @media (max-width: 800px) {
   .statusDetails {
     width: 100%;

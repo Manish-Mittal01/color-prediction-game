@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from '../../axios/axios'
 import { Table } from 'react-bootstrap'
 import LeftSideSection from '../leftsideSection';
 
@@ -27,6 +28,18 @@ const WithdrwaRequests = () => {
     ]);
     const [filteredData, setFilteredData] = useState([...records]);
     const [searchValue, setSearchValue] = useState("");
+
+
+
+    useEffect(() => {
+        axios.get("admin/withdraw")
+            .then(resp => {
+                console.log(resp.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [])
 
 
     return (

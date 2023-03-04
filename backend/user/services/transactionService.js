@@ -66,12 +66,12 @@ class TransactionService {
   static async requestWithdraw(req, res) {
     const { userId, amount, mobile, password } = req.body;
 
-    if (!userId || !amount || !mobile || !password) {
+    if (!userId || !amount || !password) {
       const missingFields = [];
 
       if (!userId) missingFields.push("userId is required");
       if (!amount) missingFields.push("amount is required");
-      if (!mobile) missingFields.push("mobile is required");
+      // if (!mobile) missingFields.push("mobile is required");
       if (!password) missingFields.push("password is required");
       ResponseService.failed(res, missingFields, StatusCode.badRequest);
       return;
@@ -87,10 +87,13 @@ class TransactionService {
       ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
       return;
     }
+    const user = await UserModel.findOne({
+      userId: userId
+    })
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordCorrect || !(mobile == user.mobile)) {
+    if (!isPasswordCorrect) {
       ResponseService.failed(
         res,
         "User Details doesn't match",

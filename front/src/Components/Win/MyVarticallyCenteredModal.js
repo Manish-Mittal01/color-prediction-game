@@ -1,6 +1,7 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+
 const MyVerticallyCenteredModal = (props) => {
     return (
         <>
@@ -71,11 +72,6 @@ const MyVerticallyCenteredModal = (props) => {
                     <p>Note: I have carefully read all contents of this presale management rule, Risk Disclosure Agreement and Risk Agreement and I am agreed to continue with my own risk.
 
                     </p>
-
-
-
-
-
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={props.onHide}>Close</Button>

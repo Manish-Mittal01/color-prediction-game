@@ -4,11 +4,13 @@ import { BsArrowLeft } from 'react-icons/bs'
 import { GrAdd } from "react-icons/gr";
 import { getOtp } from '../Register/Register';
 import axios from '../../axios/axios'
+import { useNavigate } from 'react-router-dom';
+import { blockUser } from '../../common/blockUser';
 
 const Bankcard = () => {
     const [fillDetails, setFillDetails] = useState(false);
     const [err, setErr] = useState({});
-    const userMobile = jwt(JSON.parse(localStorage.getItem("user")).token).mobile
+    const userMobile = localStorage.getItem("user") && jwt(JSON.parse(localStorage.getItem("user")).token).mobile
 
     const [bankDetails, setBankDetails] = useState({
         name: "",
@@ -18,46 +20,37 @@ const Bankcard = () => {
         upi: "",
         mobile: userMobile,
         otp: ""
-    })
-
-
+    });
+    const navigate = useNavigate();
 
     const addBank = () => {
-        const {
-            name,
-            acc_number,
-            ifsc,
-            branch,
-            upi,
-            mobile,
-            otp,
-        } = bankDetails;
-
+        const userId = localStorage.getItem("user") && jwt(JSON.parse(localStorage.getItem("user")).token).userId
+        const { name, acc_number, ifsc, branch, upi, mobile, otp } = bankDetails;
 
         if (!acc_number) {
-            if (!upi) {
-                setErr({ bank: "upi or account detail required" })
-            }
+            if (!upi) return setErr({ bank: "upi or account detail required" });
             else {
                 setErr("")
             }
         }
-        else if (!ifsc) {
-            setErr({ ifsc: "ifsc code is required" })
-        }
+        else if (!ifsc) return setErr({ ifsc: "ifsc code is required" });
         if (!mobile) return setErr({ mobile: "Mobile is required" });
         if (!otp) return setErr({ otp: "otp is required" });
 
-        axios.post("user/userBank", bankDetails)
+        const userBankDetails = { ...bankDetails, user: userId }
+
+        axios.post("user/userBank", userBankDetails)
             .then(resp => {
+                alert("bank details added successfully");
+                navigate("/mine")
                 console.log(resp.data)
             })
             .catch(err => {
+                err.response && setErr(err.response.data.message);
+                err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
                 console.log(err)
             })
     }
-    console.log(err)
-
 
     return (
         <>
@@ -162,7 +155,7 @@ const Bankcard = () => {
                                     <span data-v-b351b8b8="" className="tips_span">{err.otp}</span>
                                 }
                                 <button id="otpbtn" data-v-b351b8b8="" className="gocode" onClick={() =>
-                                    getOtp({ user: bankDetails, setErr })
+                                    getOtp({ user: bankDetails, setErr, navigate })
 
                                 } > OTP </button>
                             </div>
@@ -170,14 +163,13 @@ const Bankcard = () => {
                     </ul>
                     {
                         err.bank &&
-                        <span data-v-b351b8b8="" className="tips_span">{err.bank}</span>
+                        <p data-v-b351b8b8="" className="tips_span" style={{ textAlign: 'center', position: 'inherit' }} >{err.bank}</p>
                     }
                     <div data-v-b351b8b8="" className="continue_btn">
                         <button data-v-b351b8b8="" className="ripple" onClick={() => addBank()} >Continue</button>
                     </div>
                 </div>
             }
-
 
         </>
     )

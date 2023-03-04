@@ -11,7 +11,7 @@ import small4 from '../../images/small4.png'
 import small5 from '../../images/small5.png'
 import jwt from 'jwt-decode';
 import { useSelector } from 'react-redux';
-import { blockedUser } from '../../common/blockedUser'
+import { blockUser } from '../../common/blockUser';
 
 
 
@@ -105,11 +105,13 @@ export const SubmitRechargeRequest = () => {
         }
         axios.post("user/deposit", request)
             .then(resp => {
+                console.log(resp.data)
                 alert("request submitted successfully");
                 navigate("/mine");
             })
             .catch(err => {
-                blockedUser()
+                err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
+
                 console.log(err)
             })
     }
