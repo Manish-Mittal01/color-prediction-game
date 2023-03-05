@@ -5,7 +5,7 @@ import axios from '../../axios/axios';
 import LeftSideSection from '../leftsideSection';
 import SearchBox from '../search/SearchBox';
 
-const User = () => {
+const WithdrawRecords = () => {
     const [records, setRecords] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchValue, setSearchValue] = useState("");
@@ -14,11 +14,11 @@ const User = () => {
 
 
     useEffect(() => {
-        axios.post("admin/allUsers")
+        axios.get("admin/withdraw/history")
             .then(resp => {
-                const users = resp.data.users
-                setRecords(users)
-                setFilteredData(users)
+                // const users = resp.data.users
+                // setRecords(users)
+                // setFilteredData(users)
                 console.log(resp.data)
             })
             .catch(err => {
@@ -78,4 +78,4 @@ const User = () => {
     )
 }
 
-export default User
+export default WithdrawRecords

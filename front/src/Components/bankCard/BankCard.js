@@ -37,7 +37,7 @@ const Bankcard = () => {
         if (!mobile) return setErr({ mobile: "Mobile is required" });
         if (!otp) return setErr({ otp: "otp is required" });
 
-        const userBankDetails = { ...bankDetails, user: userId }
+        const userBankDetails = { ...bankDetails, userId: userId }
 
         axios.post("user/userBank", userBankDetails)
             .then(resp => {

@@ -4,17 +4,15 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import jwt from 'jwt-decode'
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux'
 
 
-const Minenav = () => {
+const Minenav = ({ wallet }) => {
     const [show, setShow] = useState(false);
     const [user, setUser] = useState({
         user: "",
         mobile: ""
     });
     const navigate = useNavigate();
-    const states = useSelector((state) => state.getData);
 
 
     useEffect(() => {
@@ -55,12 +53,14 @@ const Minenav = () => {
                 <div className='nav_2'>
                     <div className="mine_top_items">
                         <div className="top_item">
-                            <div>₹ {states.totalAmount} </div>
+                            <div>₹ {wallet.totalAmount} </div>
                             Balance
                             <button onClick={() => navigate("/recharge")} className="one_btn ripple"> Recharge </button>
                         </div>
-                        <div className="top_item"><div>
-                            ₹ {states.referralAmount}</div> Commission
+                        <div className="top_item">
+                            <div>
+                                ₹ {wallet.referralAmount}
+                            </div> Commission
                             <button className="one_btn ripple">See</button>
                         </div><div className="top_item"><div>₹ 2382</div>
                             Interest

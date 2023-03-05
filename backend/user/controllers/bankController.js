@@ -7,7 +7,7 @@ const { ResponseService } = require("../../common/responseService");
 const { StatusCode } = require("../../common/Constants");
 
 module.exports.bankDetails = async (req, res) => {
-  const { mobile, acc_number, ifsc, otp, user, acc_holder_name, branch, upi } =
+  const { mobile, acc_number, ifsc, otp, userId, acc_holder_name, branch, upi } =
     req.body;
   function errorMsg(err) {
     return res.status(400).json({
@@ -17,7 +17,7 @@ module.exports.bankDetails = async (req, res) => {
     });
   }
 
-  if (!user) return errorMsg("user is required");
+  if (!userId) return errorMsg("userId is required");
   if (acc_number) {
     if (!ifsc) return errorMsg("ifsc is required");
   }
@@ -32,7 +32,7 @@ module.exports.bankDetails = async (req, res) => {
   });
   if (otpHolder.length === 0) return errorMsg("Otp expired");
   let userfound = await User.findOne({
-    userId: user,
+    userId: userId,
   });
   if (!userfound) return errorMsg("user does not exist");
   console.log(userfound)
@@ -42,7 +42,7 @@ module.exports.bankDetails = async (req, res) => {
   const validUser = await bcrypt.compare(otp, rightOtpFind.otp);
 
   const bank = {
-    user,
+    userId,
     acc_holder_name,
     acc_number,
     ifsc,
@@ -57,7 +57,7 @@ module.exports.bankDetails = async (req, res) => {
     mobile: rightOtpFind.mobile,
   });
   let banks = await BankDetails.find({
-    user: user,
+    user: userId,
   });
 
   res.status(200).send({

@@ -18,17 +18,18 @@ const WithdrwaRequests = () => {
             })
     }, []);
 
-    function finalizeRequest({ isApproved, item }) {
+    function finalizeRequest({ isApproved, item, index }) {
         const transactionDetail = {
             userId: item.userId,
             amount: item.amount,
             isApproved,
             transactionId: item._id
         }
-        console.log("function called")
 
         axios.post('admin/deposit', transactionDetail)
             .then(resp => {
+                records.splice(index, 1);
+                setRecords([...records])
                 console.log(resp.data)
             })
             .catch(err => {
@@ -68,8 +69,8 @@ const WithdrwaRequests = () => {
                                         <td >{item.name}</td>
                                         <td >{item.AccountNumber}</td>
                                         <td >{item.requestTime}</td>
-                                        <td onClick={(e) => { finalizeRequest({ isApproved: true, item }) }} className='yesBtn' >Yes</td>
-                                        <td onClick={(e) => { finalizeRequest({ isApproved: false, item }) }} className='noBtn' >No</td>
+                                        <td onClick={(e) => { finalizeRequest({ isApproved: true, item, index }) }} className='yesBtn' >Yes</td>
+                                        <td onClick={(e) => { finalizeRequest({ isApproved: false, item, index }) }} className='noBtn' >No</td>
                                     </tr>
                                 )
                             })

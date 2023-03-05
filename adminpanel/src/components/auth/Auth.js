@@ -5,7 +5,7 @@ export default function Auth({ Comp }) {
     const navigate = useNavigate()
 
     useEffect(() => {
-        let user = localStorage.getItem("authToken");
+        let user = localStorage.getItem("user");
         if (!user) {
             navigate("/login");
         }

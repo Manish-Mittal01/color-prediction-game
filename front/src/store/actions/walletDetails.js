@@ -12,7 +12,9 @@ const walletSlice = createSlice({
     initialState,
     reducers: {
         updateWallet: (state, action) => {
+            console.log(action.payload)
             state = action.payload;
+            console.log(state)
         },
     },
 

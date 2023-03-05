@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import './Win.css'
 import { GiTargetPrize } from "react-icons/gi";
 import axios from '../../axios/axios';
@@ -11,7 +11,8 @@ export default function Timer({ periods, setPeriods, setPeriodHistory, time, set
     const [timer, setTimer] = useState(0);
     const [updateTimer, setUpdateTimer] = useState(false);
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const Ref = useRef(null)
 
 
     useEffect(() => {
@@ -29,13 +30,13 @@ export default function Timer({ periods, setPeriods, setPeriodHistory, time, set
                     Emred
                 }
                 setPeriods(periodData);
-                setTimer(data.expiredAt - Date.now());
-
+                let timeRemaning = data.expiredAt - Date.now();
+                setTimer(timeRemaning);
+                clearTimer(getDeadTime(timeRemaning));
             })
             .catch(err => {
                 err.response && setErr(err.response.data.message)
                 err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
-
             });
 
         axios.get("period/history")
@@ -47,22 +48,40 @@ export default function Timer({ periods, setPeriods, setPeriodHistory, time, set
                 err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
 
             });
-
-
     }, [updateTimer]);
 
-    useEffect(() => {
-        if (timer < 0) return setUpdateTimer(!updateTimer);
-        const interval = setInterval(() => {
-            let newTimer = Math.floor(timer / 1000)
-            let sec = newTimer % 60
-            let min = (newTimer - sec) / 60;
-            setTime({ min: min, sec: sec });
-            setTimer(prev => prev - 1000)
-        }, 1000);
+    const getTimeRemaining = (e) => {
+        const total = Date.parse(e) - Date.parse(new Date());
+        const seconds = Math.floor((total / 1000) % 60);
+        const minutes = Math.floor((total / 1000 / 60) % 60);
+        if (!total || total <= 0) setUpdateTimer(!updateTimer)
+        return {
+            total, minutes, seconds
+        };
+    }
 
-        return () => clearInterval(interval);
-    }, [timer]);
+    const startTimer = (e) => {
+        let { total, minutes, seconds }
+            = getTimeRemaining(e);
+        if (total >= 0) {
+            setTime({ min: (minutes > 9 ? minutes : '0' + minutes), sec: (seconds > 9 ? seconds : '0' + seconds) })
+        }
+    }
+
+    const clearTimer = (e) => {
+        if (Ref.current) clearInterval(Ref.current);
+        const id = setInterval(() => {
+            startTimer(e);
+        }, 1000)
+        Ref.current = id;
+    }
+
+    const getDeadTime = (timeRemaning) => {
+        let deadline = new Date();
+        deadline.setSeconds(deadline.getSeconds() + timeRemaning / 1000);
+        return deadline;
+    };
+
 
     return (
         <>

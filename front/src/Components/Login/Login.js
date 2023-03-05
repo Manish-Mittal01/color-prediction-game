@@ -6,7 +6,6 @@ import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../axios/axios';
 import jwt from 'jwt-decode';
-import { useDispatch } from 'react-redux'
 import { updateWallet } from '../../store/actions/walletDetails';
 
 const Login = () => {
@@ -17,7 +16,6 @@ const Login = () => {
     const [err, setErr] = useState("");
     const [user, setUser] = useState("");
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     async function login() {
@@ -48,7 +46,6 @@ const Login = () => {
                     referralAmount: data.referralAmount,
                     withdrawableAmount: data.withdrawableAmount
                 }
-                dispatch(updateWallet(walletDetails))
             })
             .catch(err => console.log(err))
     }

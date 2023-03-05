@@ -3,10 +3,10 @@ import Minenav from './Minenav'
 import './Mine.css'
 import Dashboeard from '../Dashboard/Dashboeard'
 import Logoutdashboard from '../Dashboard/Logoutdas/Logoutdashboard'
-const Mine = () => {
+const Mine = ({ wallet }) => {
   return (
     <>
-      <Minenav />
+      <Minenav wallet={wallet} />
       <br />
       <Dashboeard />
       <Logoutdashboard />

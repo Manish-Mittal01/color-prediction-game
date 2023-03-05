@@ -17,7 +17,7 @@ module.exports.login = async (req, res) => {
   };
 
   if (!mobile || !password)
-    return errMsg("Invalid data", StatusCode.badRequest);
+    return errMsg("Invalid username or password", StatusCode.badRequest);
 
   const user = await User.findOne({
     mobile: mobile,

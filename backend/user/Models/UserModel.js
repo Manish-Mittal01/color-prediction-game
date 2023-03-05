@@ -24,9 +24,6 @@ const userSchema = Schema(
   },
   { timestamps: true, versionKey: false }
 );
-//rQgj3wKtL
-//TOq1vqWYK
-//H1DoaTbjA
 
 userSchema.methods.generateJWT = () => {
   const token = jwt.sign(

@@ -5,27 +5,23 @@ import axios from '../../axios/axios';
 import LeftSideSection from '../leftsideSection';
 import SearchBox from '../search/SearchBox';
 
-const User = () => {
+const RechargeRecord = () => {
     const [records, setRecords] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchValue, setSearchValue] = useState("");
 
-    const navigate = useNavigate()
-
-
     useEffect(() => {
-        axios.post("admin/allUsers")
+        axios.get("admin/deposit/history")
             .then(resp => {
-                const users = resp.data.users
-                setRecords(users)
-                setFilteredData(users)
+                // const users = resp.data.users
+                // setRecords(users)
+                // setFilteredData(users)
                 console.log(resp.data)
             })
             .catch(err => {
                 console.log(err)
             })
     }, []);
-
 
     function filterResults(value) {
         setSearchValue(value)
@@ -78,4 +74,4 @@ const User = () => {
     )
 }
 
-export default User
+export default RechargeRecord

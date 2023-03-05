@@ -2,6 +2,8 @@ import React, { memo, useEffect, useState } from "react";
 import { Accordion, Table } from "react-bootstrap";
 import { BsFillFileTextFill } from "react-icons/bs";
 import Pagination from "./Pagination";
+import { GoPrimitiveDot } from "react-icons/go";
+
 
 const MyRecord = ({ tab, records, periods }) => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +35,7 @@ const MyRecord = ({ tab, records, periods }) => {
                                                 <div className="kd_t5">
                                                     <p className="res_text">{item.periodId}</p>
                                                     <p style={{ color: (item.didWon) ? "green" : "red" }} className="res_text">{item.periodId !== periods[tab].periodId && result}</p>
-                                                    <p style={{ color: (item.didWon) ? "green" : "red" }} className="res_text">{(item.periodId !== periods[tab].periodId && item.didWon) ? "+" : "-"}{item.periodId !== periods[tab].periodId && item.betAmount}</p>
+                                                    <p style={{ color: (item.didWon) ? "green" : "red" }} className="res_text">{item.periodId !== periods[tab].periodId ? item.didWon ? "+" : "-" : ""}{item.periodId !== periods[tab].periodId && item.betAmount}</p>
                                                 </div>
                                             </Accordion.Header>
                                             <Accordion.Body style={{ padding: "10px 16px", boxShadow: "0px 1px 1px 1px lightGrey" }}>
@@ -57,11 +59,19 @@ const MyRecord = ({ tab, records, periods }) => {
                                                     </p>
                                                     <p className="results" >
                                                         <span>Result</span>
-                                                        <span>{item.resultNumber} {item.resultColor}</span>
+                                                        <span>
+                                                            {item.resultNumber}
+                                                            {console.log(item.resultColor)}
+                                                            {
+                                                                item.resultColor && item.resultColor.split(" ").map(color => {
+                                                                    return <span style={{ color: color }}> {color} </span>
+                                                                })
+                                                            }
+                                                        </span>
                                                     </p>
                                                     <p className="results" >
                                                         <span>Select</span>
-                                                        <span>{item.prediction}</span>
+                                                        <span style={{ color: item.prediction }} >{item.prediction}</span>
                                                     </p>
                                                     <p className="results" >
                                                         <span>Status</span>

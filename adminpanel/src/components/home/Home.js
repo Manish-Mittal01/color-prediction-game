@@ -1,13 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import LeftSideSection from '../leftsideSection';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartArea, faChartBar, faChartLine, faChartPie, faCheckSquare, faCoffee } from '@fortawesome/fontawesome-free-solid';
 import styles from './Home.module.css'
 import { Card, Col, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Home() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [records, setRecords] = useState({
+        users: { newUsers: 0, totalUsers: 0 },
+        deposits: { newDeposits: 0, totalDeposits: 0 },
+        withdraw: { newWithdraw: 0, totalWithrawn: 0 },
+        profit: { todayProfit: 0, totalProfit: 0 },
+    })
+
+    useEffect(() => {
+        axios.post("admin/home")
+            .then(resp => {
+                setRecords(resp.data.data)
+                console.log(resp.data)
+            })
+            .catch(err => console.log(err))
+    }, [])
+
     return (
         <>
             <LeftSideSection />
@@ -21,7 +38,7 @@ export default function Home() {
                                     Todays / Total Users
                                 </Card.Title>
                                 <Card.Text>
-                                    0/10
+                                    {records.users.newUsers} / {records.users.totalUsers}
                                 </Card.Text>
                             </Card.Body>
                         </Card>
@@ -34,7 +51,7 @@ export default function Home() {
                                     Todays / Total Profit
                                 </Card.Title>
                                 <Card.Text>
-                                    0/20
+                                    {records.profit.todayProfit} / {records.profit.totalProfit}
                                 </Card.Text>
                             </Card.Body>
                         </Card>
@@ -47,7 +64,7 @@ export default function Home() {
                                     Todays / Total amount Withdrawn
                                 </Card.Title>
                                 <Card.Text>
-                                    0/200
+                                    {records.withdraw.newWithdraw} / {records.withdraw.totalWithrawn}
                                 </Card.Text>
                             </Card.Body>
                         </Card>
@@ -60,14 +77,14 @@ export default function Home() {
                                     Todays / Total recharge
                                 </Card.Title>
                                 <Card.Text>
-                                    0/2000
+                                    {records.deposits.newDeposits} / {records.deposits.totalDeposits}
                                 </Card.Text>
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
                 <div style={{ textAlign: 'center', width: "100%" }}>
-                    <h2>Block user</h2>
+                    <h2 onClick={() => navigate("/blockUser")} style={{ cursor: 'pointer' }} >Block user</h2>
                     <h2 style={{ cursor: 'pointer', width: 'fit-content', marginInline: 'auto' }} onClick={() => navigate("/setPrediction")} >Next Prediction</h2>
                 </div>
             </div>

@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 
 const bankDetails = Schema({
-    user: {
+    userId: {
         type: String,
         required: true
     },

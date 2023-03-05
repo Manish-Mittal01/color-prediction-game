@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
 
 
-const Win = () => {
+const Win = ({ wallet }) => {
   const [periods, setPeriods] = useState({
     Parity: "",
     Sapre: "",
@@ -114,11 +114,11 @@ const Win = () => {
     getBets();
   };
 
-  let disabled = time.min === 0 && time.sec < 30;
+  let disabled = time.min === "00" && time.sec < 30;
 
   return (
     <>
-      <Winnavbar />
+      <Winnavbar wallet={wallet} />
       {/* tabs */}
       <Tabs
         id="fill-tab-example"

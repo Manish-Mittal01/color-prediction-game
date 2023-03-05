@@ -109,58 +109,57 @@ class BetServices {
       );
     }
 
-    //TODO: uncomment this logic for wallet amount validation
-    // if (wallet.totalAmount < amount) {
-    //   return ResponseService.failed(
-    //     res,
-    //     "Bet amount exceeds user total wallet amount",
-    //     StatusCode.forbidden
-    //   );
-    // }
+    if (wallet.totalAmount < amount) {
+      return ResponseService.failed(
+        res,
+        "Bet amount exceeds user total wallet amount",
+        StatusCode.forbidden
+      );
+    }
 
-    // if (wallet.notAllowedAmount >= amount) {
-    //   // This means we can easily deduct the notAllowedAmount amount from wallet
-    //   WalletModel.updateOne(
-    //     { userId: userId },
-    //     {
-    //       $set: {
-    //         notAllowedAmount: wallet.notAllowedAmount - amount,
-    //         totalAmount: wallet.totalAmount - amount,
-    //       },
-    //     }
-    //   );
-    // } else if (wallet.referralAmount >= amount - wallet.notAllowedAmount) {
-    //   // This means we need to deduct all the notAllowedAmount amount as well some of the referralAmount from wallet
-    //   WalletModel.updateOne(
-    //     { userId: userId },
-    //     {
-    //       $set: {
-    //         notAllowedAmount: 0,
-    //         referralAmount:
-    //           wallet.referralAmount - (amount - wallet.notAllowedAmount),
-    //         totalAmount:
-    //           wallet.totalAmount - (amount - wallet.notAllowedAmount),
-    //       },
-    //     }
-    //   );
-    // } else {
-    //   // This means we need to deduct all the notAllowedAmount amount & referralAmount as well some of the withdrawableAmount from wallet
-    //   WalletModel.updateOne(
-    //     { userId: userId },
-    //     {
-    //       $set: {
-    //         notAllowedAmount: 0,
-    //         referralAmount: 0,
-    //         withdrawableAmount:
-    //           wallet.withdrawableAmount -
-    //           (amount - wallet.notAllowedAmount - wallet.referralAmount),
-    //         totalAmount:
-    //           wallet.totalAmount -
-    //           (amount - wallet.notAllowedAmount - wallet.referralAmount),
-    //       },
-    //     }
-    //   );
-    // }
+    if (wallet.notAllowedAmount >= amount) {
+      // This means we can easily deduct the notAllowedAmount amount from wallet
+      WalletModel.updateOne(
+        { userId: userId },
+        {
+          $set: {
+            notAllowedAmount: wallet.notAllowedAmount - amount,
+            totalAmount: wallet.totalAmount - amount,
+          },
+        }
+      );
+    } else if (wallet.referralAmount >= amount - wallet.notAllowedAmount) {
+      // This means we need to deduct all the notAllowedAmount amount as well some of the referralAmount from wallet
+      WalletModel.updateOne(
+        { userId: userId },
+        {
+          $set: {
+            notAllowedAmount: 0,
+            referralAmount:
+              wallet.referralAmount - (amount - wallet.notAllowedAmount),
+            totalAmount:
+              wallet.totalAmount - (amount - wallet.notAllowedAmount),
+          },
+        }
+      );
+    } else {
+      // This means we need to deduct all the notAllowedAmount amount & referralAmount as well some of the withdrawableAmount from wallet
+      WalletModel.updateOne(
+        { userId: userId },
+        {
+          $set: {
+            notAllowedAmount: 0,
+            referralAmount: 0,
+            withdrawableAmount:
+              wallet.withdrawableAmount -
+              (amount - wallet.notAllowedAmount - wallet.referralAmount),
+            totalAmount:
+              wallet.totalAmount -
+              (amount - wallet.notAllowedAmount - wallet.referralAmount),
+          },
+        }
+      );
+    }
 
     let result = await new Bet({
       prediction: prediction,

@@ -3,24 +3,24 @@ import { VscThreeBars } from 'react-icons/vsc'
 import withdro from '../../images/withdro.png';
 import axios from '../../axios/axios';
 import jwt from 'jwt-decode';
-import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
 
 
 
-const Withdrawal = () => {
+const Withdrawal = ({ wallet }) => {
     const [amount, setAmount] = useState(0);
     const [password, setPassword] = useState("");
+    const [err, setErr] = useState({})
 
-    const states = useSelector((state) => state.getData);
     const navigate = useNavigate()
-
-
 
     function makeWithdraw() {
         const user = JSON.parse(localStorage.getItem("user"));
-        const userData = jwt(user.token)
+        const userData = jwt(user.token);
+        if (wallet.withdrawableAmount < wallet.totalAmount) {
+            return setErr({ message: "not enough balance" })
+        }
 
         const withdrawRequest = {
             userId: userData.userId,
@@ -34,7 +34,8 @@ const Withdrawal = () => {
             })
             .catch(err => {
                 console.log(err)
-                err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
+                err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate });
+                setErr(err.response.data)
 
             })
     }
@@ -49,12 +50,12 @@ const Withdrawal = () => {
             </div>
             <div className='balance_av_text'>
                 <p className='balance_av_text-withrawal'>Balance:
-                    <span className='balance_av_text-withrawal'> ₹{states.totalAmount}</span>
+                    <span className='balance_av_text-withrawal'> ₹{wallet.totalAmount}</span>
                 </p>
             </div>
             <div className='balance_av_text' style={{ marginTop: -35 }}>
                 <p className='balance_av_text-withrawal' style={{ fontSize: 12 }}>Withdrawable Balance:
-                    <span style={{ fontSize: 10 }} className='balance_av_text-withrawal'> ₹{states.withdrawableAmount}</span>
+                    <span style={{ fontSize: 10 }} className='balance_av_text-withrawal'> ₹{wallet.withdrawableAmount}</span>
                 </p>
             </div>
             <div className="code_input_box">
@@ -81,31 +82,6 @@ const Withdrawal = () => {
                         </span></div>
                 </div>
             </div>
-            {/* add card */}
-            {/* <div className="add_card">
-                <div className="van-collapse van-hairline--top-bottom">
-                    <div className="van-collapse-item">
-                        <div role="button" tabindex="0" aria-expanded="true" className="van-cell van-cell--clickable van-collapse-item__title van-collapse-item__title--expanded">
-                            <div className="van-cell__title">
-                                <img src={card2} alt="" />
-                                <span className='d_flex'>
-                                    <Dropdown>
-                                        <Dropdown.Toggle >
-                                            Select Bank Card
-                                        </Dropdown.Toggle>
-
-                                        <Dropdown.Menu >
-                                            <Dropdown.Item href="#/action-1" >
-                                                Add Bank Card
-                                            </Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
 
             <div style={{ marginTop: 15 }} className="code_input_box">
                 <div className="code_input">
@@ -117,6 +93,10 @@ const Withdrawal = () => {
                     />
                 </div>
             </div>
+            {
+                err.message &&
+                <p style={{ color: "red", textAlign: "center" }}>{err.message}</p>
+            }
 
             <div className='button_f'>
                 <div className="recharge_btn" >

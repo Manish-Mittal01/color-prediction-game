@@ -4,6 +4,7 @@ import { BsPhone } from "react-icons/bs";
 import { BsFillKeyFill } from "react-icons/bs";
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
+import axios from '../../axios/axios'
 
 const Login = () => {
     const [userDetails, setUserDetails] = useState({
@@ -15,6 +16,22 @@ const Login = () => {
 
     const navigate = useNavigate();
 
+    async function login() {
+        const user = userDetails;
+        setErr("")
+        // if (user.mobile.length !== 10) return setErr("invalid mobile number");
+
+        await axios.post("admin/login", user)
+            .then(resp => {
+                setUser(resp.data);
+                localStorage.setItem("user", JSON.stringify(resp.data));
+                navigate("/")
+            })
+            .catch(err => {
+                console.log(err)
+                setErr(err.response.data.message);
+            })
+    }
 
     return (
         <>
@@ -57,13 +74,7 @@ const Login = () => {
                         {err && err}
                     </p>
                     <div className="input_box_btn">
-                        <button className="login_btn ripple">Login</button>
-                    </div>
-                    <div className="input_box_btn">
-                        <div className="two_btn">
-                            <button onClick={() => navigate("/register")} className="ripplegrey">Register</button>
-                            <button onClick={() => { navigate("/resetpassword") }} className="ripplegrey">Forgot Password?</button>
-                        </div>
+                        <button className="login_btn ripple" onClick={() => login()} >Login</button>
                     </div>
                 </div>
             </div>

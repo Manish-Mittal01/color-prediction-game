@@ -10,16 +10,14 @@ import small3 from '../../images/small3.png'
 import small4 from '../../images/small4.png'
 import small5 from '../../images/small5.png'
 import jwt from 'jwt-decode';
-import { useSelector } from 'react-redux';
 import { blockUser } from '../../common/blockUser';
 
 
 
-const Recharge = () => {
+const Recharge = ({ wallet }) => {
     const [amount, setAmount] = useState();
     const [err, setErr] = useState();
 
-    const states = useSelector((state) => state.getData)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -35,7 +33,7 @@ const Recharge = () => {
                 </div>
             </div>
             <div className='balance_av_text'>
-                <p>Balance:</p><span>₹ {states.totalAmount}</span>
+                <p>Balance:</p><span>₹ {wallet.totalAmount}</span>
             </div>
             <div className="code_input_box">
                 <div className="code_input">

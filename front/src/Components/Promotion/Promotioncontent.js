@@ -4,7 +4,6 @@ import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import Pagination from '../Win/Pagination';
-import { useSelector } from 'react-redux';
 import axios from '../../axios/axios'
 import { blockUser } from '../../common/blockUser';
 
@@ -16,7 +15,6 @@ const Promotion_content = () => {
     const [referralLevel, setReferralLevel] = useState("level1");
     const [totalReferrals, setTotalReferrals] = useState(0)
 
-    const states = useSelector((state) => state.getData)
     const navigate = useNavigate();
     const referalLink = `https://domain.com//#/register?r_code=${user}`
 
