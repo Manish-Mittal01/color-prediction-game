@@ -7,8 +7,13 @@ const { TransactionType, TransactionStatus } = require("../common/Constants");
 module.exports.newRecords = async (req, res) => {
 
     const allUsers = await UserModel.find();
+    let date = new Date();
+
+    const today = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
     const newUsers = await UserModel.find({
-        createdAt: { $lte: new Date() }
+        createdAt: {
+            $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+        }
     });
 
     const allDeposits = await transactionModel.find({
@@ -18,7 +23,9 @@ module.exports.newRecords = async (req, res) => {
     const newDeposits = await transactionModel.find({
         transactionType: TransactionType.deposit,
         status: TransactionStatus.approved,
-        createdAt: { $lte: new Date() }
+        createdAt: {
+            $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+        }
     });
 
     let totalDepositAmount = 0;
@@ -38,7 +45,9 @@ module.exports.newRecords = async (req, res) => {
     const newWithdraw = await transactionModel.find({
         transactionType: TransactionType.withdraw,
         status: TransactionStatus.approved,
-        createdAt: { $lte: new Date() }
+        createdAt: {
+            $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+        }
     });
 
     let totalWithrawnAmount = 0;
@@ -54,7 +63,7 @@ module.exports.newRecords = async (req, res) => {
 
     res.status(200).send({
         status: success,
-        message: "data fetched successfullt",
+        message: "data fetched successfully",
         data: {
             users: { newUsers: newUsers.length, totalUsers: allUsers.length },
             deposits: { newDeposits: todayDeposits, totalDeposits: totalDepositAmount },

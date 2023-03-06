@@ -5,9 +5,8 @@ import axios from '../../axios/axios';
 import { useNavigate } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
 
-export default function Timer({ periods, setPeriods, setPeriodHistory, time, setTime }) {
+export default function Timer({ periods, setPeriods, setPeriodHistory, time, setTime, tab }) {
     const [err, setErr] = useState();
-    const [tab, setTab] = useState("Parity");
     const [timer, setTimer] = useState(0);
     const [updateTimer, setUpdateTimer] = useState(false);
 
@@ -81,7 +80,6 @@ export default function Timer({ periods, setPeriods, setPeriodHistory, time, set
         deadline.setSeconds(deadline.getSeconds() + timeRemaning / 1000);
         return deadline;
     };
-
 
     return (
         <>

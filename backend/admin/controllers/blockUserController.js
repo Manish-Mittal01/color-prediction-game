@@ -7,15 +7,14 @@ module.exports.blockUser = async (req, res) => {
   const errMsg = (errorMsg) => {
     res.status(400).send({
       status: error,
-      message: "",
-      err: errorMsg,
+      message: errorMsg,
     });
   };
 
   if (!mobile) return errMsg("mobile is required");
   if (!userStatus) return errMsg("user status is required");
-  else if (userStatus !== "active" || userStatus !== "blocked")
-    return errMsg("invalid uaer status");
+  else if (userStatus !== "active" && userStatus !== "blocked")
+    return errMsg("invalid user status");
 
   const user = await User.findOne({
     mobile: mobile,
@@ -26,7 +25,7 @@ module.exports.blockUser = async (req, res) => {
     return errMsg(`user is already ${userStatus}`);
 
   let result = await User.updateOne({ _id: user._id }, { status: userStatus });
-  console.log(user);
+  // console.log(user);
 
   res.status(200).send({
     status: success,

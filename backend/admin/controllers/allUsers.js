@@ -13,18 +13,28 @@ module.exports.allUsers = async (req, res) => {
     let userBankDetails = userBanks.filter(values => values.userId === item.userId);
     let userWallet = wallets.find(wallet => wallet.userId === item.userId);
 
-    userBankDetails.map(bank => {
+    if (userBankDetails.length > 0) {
+      userBankDetails.map(bank => {
+        let userAllDetails = {
+          username: item.mobile,
+          userId: item.userId,
+          balance: userWallet.totalAmount,
+          name: bank.acc_holder_name,
+          accountNo: bank.acc_number,
+          ifsc: bank.ifsc,
+          upi: bank.upi
+        };
+        usersDetails.push(userAllDetails)
+      })
+    }
+    else {
       let userAllDetails = {
         username: item.mobile,
         userId: item.userId,
         balance: userWallet.totalAmount,
-        name: bank.acc_holder_name,
-        accountNo: bank.acc_number,
-        ifsc: bank.ifsc,
-        upi: bank.upi
       };
       usersDetails.push(userAllDetails)
-    })
+    }
   });
 
 

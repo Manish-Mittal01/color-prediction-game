@@ -36,20 +36,34 @@ class BetServices {
     }
 
     function makeResponseObject({ betModel, periodModel }) {
-      return {
-        periodName: betModel.periodName,
-        periodId: betModel.periodId,
-        userId: betModel.userId,
-        totalAmount: betModel.totalAmount,
-        betAmount: betModel.betAmount,
-        resultAmount: betModel.resultAmount,
-        prediction: betModel.prediction,
-        didWon: betModel.didWon,
-        price: periodModel.price,
-        resultColor: periodModel.resultColor,
-        resultNumber: periodModel.resultNumber,
-        createdAt: betModel.createdAt,
-      };
+      if (periodModel) {
+        return {
+          periodName: betModel.periodName,
+          periodId: betModel.periodId,
+          userId: betModel.userId,
+          totalAmount: betModel.totalAmount,
+          betAmount: betModel.betAmount,
+          resultAmount: betModel.resultAmount,
+          prediction: betModel.prediction,
+          didWon: betModel.didWon,
+          price: periodModel.price,
+          resultColor: periodModel.resultColor,
+          resultNumber: periodModel.resultNumber,
+          createdAt: betModel.createdAt,
+        }
+      }
+      else {
+        return {
+          periodName: betModel.periodName,
+          periodId: betModel.periodId,
+          userId: betModel.userId,
+          totalAmount: betModel.totalAmount,
+          betAmount: betModel.betAmount,
+          resultAmount: betModel.resultAmount,
+          prediction: betModel.prediction,
+          didWon: betModel.didWon,
+        }
+      }
     }
 
     const periodMap = {};

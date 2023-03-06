@@ -141,6 +141,7 @@ const Win = ({ wallet }) => {
         setPeriodHistory={setPeriodHistory}
         time={time}
         setTime={setTime}
+        tab={tab}
       />
 
       <div className='join_btns'>

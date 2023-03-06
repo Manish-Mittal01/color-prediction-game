@@ -61,7 +61,6 @@ const MyRecord = ({ tab, records, periods }) => {
                                                         <span>Result</span>
                                                         <span>
                                                             {item.resultNumber}
-                                                            {console.log(item.resultColor)}
                                                             {
                                                                 item.resultColor && item.resultColor.split(" ").map(color => {
                                                                     return <span style={{ color: color }}> {color} </span>

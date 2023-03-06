@@ -28,6 +28,12 @@ class PeriodService {
     } else if (resultColor === "violet red") {
       resultNumber = 0;
     }
+
+    const currentPeriod = await PeriodModel.findOne({
+      periodId: periodId
+    });
+    if (currentPeriod.isResultByAdmin) return;
+
     const period = await PeriodModel.updateOne(
       { periodId: periodId },
       {
@@ -38,7 +44,7 @@ class PeriodService {
         },
       }
     );
-    console.log(period);
+    // console.log(period);
   }
 
   /**This method will be used to calculate result after period is finished*/
