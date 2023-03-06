@@ -2,6 +2,7 @@ const _ = require("lodash");
 const axios = require("axios");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcrypt");
+var mongo = require("mongodb");
 
 const User = require("../Models/UserModel");
 const Otp = require("../Models/OtpModel");
@@ -116,7 +117,7 @@ module.exports.verifyOtp = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         let newPassword = await bcrypt.hash(password, salt);
         result = await User.updateOne(
-          { _id: newUser._id },
+          { _id: mongo.ObjectId(newUser._id) },
           { password: newPassword }
         );
         result = {};

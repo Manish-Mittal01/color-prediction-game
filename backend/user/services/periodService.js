@@ -3,6 +3,7 @@ const {
   StatusCode,
   ColorNumbers,
 } = require("../../common/Constants");
+var mongo = require("mongodb");
 const { Utility } = require("../../common/utility");
 const PeriodModel = require("../Models/PeriodModel");
 const { ResponseService } = require("../../common/responseService");
@@ -12,7 +13,6 @@ const Bet = require("../Models/betModel");
 
 class PeriodService {
   static async _updatePeriod({ periodId, resultColor }) {
-    console.log("resultColor", resultColor)
     const minPrice = 41123;
     const maxPrice = 49152;
     const price = Math.floor(
@@ -30,11 +30,11 @@ class PeriodService {
     }
 
     const currentPeriod = await PeriodModel.findOne({
-      periodId: periodId
+      periodId: periodId,
     });
     if (currentPeriod.isResultByAdmin) return;
 
-    const period = await PeriodModel.updateOne(
+    await PeriodModel.updateOne(
       { periodId: periodId },
       {
         $set: {
@@ -76,7 +76,12 @@ class PeriodService {
     // This loop is on list of periods
     periodsList.forEach(async (periodBets, i) => {
       if (periodBets.length == 0) {
-        const color = Utility.getRandomValue(["red", "green", "violet green", "violet red"]);
+        const color = Utility.getRandomValue([
+          "red",
+          "green",
+          "violet green",
+          "violet red",
+        ]);
         return await this._updatePeriod({
           periodId: periods[i].periodId,
           resultColor: color,
@@ -129,32 +134,40 @@ class PeriodService {
       let winUpdateMultiple;
       let winningList;
 
-
-      if (redAmount <= greenAmount && redAmount <= violetAmount) {
-        winningList = redList;
-        winUpdateMultiple = 2;
-        await this._updatePeriod({
-          periodId: periods[i].periodId,
-          resultColor: "red",
-        });
-      } else if (greenAmount <= redAmount && greenAmount <= violetAmount) {
-        winningList = greenList;
-        winUpdateMultiple = 2;
-        await this._updatePeriod({
-          periodId: periods[i].periodId,
-          resultColor: "green",
-        });
-      } else if (violetAmount <= redAmount && violetAmount <= greenAmount) {
-        console.log("winning list is violet list")
-        winningList = violetList;
-        winUpdateMultiple = 4.5;
-        await this._updatePeriod({
-          periodId: periods[i].periodId,
-          resultColor: `violet ${Utility.getRandomValue(["red", "green"])}`,
-        });
+      async function checkWinningList() {
+        console.log("--------------- Checking Winning list");
+        if (redAmount <= greenAmount && redAmount <= violetAmount) {
+          console.log("=== RED LIST ===");
+          winningList = redList;
+          winUpdateMultiple = 2;
+          await PeriodService._updatePeriod({
+            periodId: periods[i].periodId,
+            resultColor: "red",
+          });
+        } else if (greenAmount <= redAmount && greenAmount <= violetAmount) {
+          console.log("=== GREEN LIST ===");
+          winningList = greenList;
+          winUpdateMultiple = 2;
+          await PeriodService._updatePeriod({
+            periodId: periods[i].periodId,
+            resultColor: "green",
+          });
+        } else if (violetAmount <= redAmount && violetAmount <= greenAmount) {
+          console.log("=== VIOLET LIST ===");
+          winningList = violetList;
+          winUpdateMultiple = 4.5;
+          await PeriodService._updatePeriod({
+            periodId: periods[i].periodId,
+            resultColor: `violet ${Utility.getRandomValue(["red", "green"])}`,
+          });
+        }
       }
 
-      console.log("winningList", winningList)
+      console.log("Before Calculating ------------");
+
+      await checkWinningList();
+
+      console.log("winningList", winningList);
 
       winningList.forEach(async (winnerBet) => {
         let amount;
@@ -164,7 +177,7 @@ class PeriodService {
           amount = winnerBet.betAmount * 9;
         }
         Bet.updateOne(
-          { _id: winnerBet._id },
+          { _id: mongo.ObjectId(winnerBet._id) },
           { $set: { didWon: true, resultAmount: amount } }
         );
         await WalletController.updateWalletWinningAmount({

@@ -1,4 +1,5 @@
 const { success, error } = require("../../common/Constants").Status;
+var mongo = require("mongodb");
 const User = require("../../user/Models/UserModel");
 
 module.exports.blockUser = async (req, res) => {
@@ -24,7 +25,10 @@ module.exports.blockUser = async (req, res) => {
   if (user.status === userStatus)
     return errMsg(`user is already ${userStatus}`);
 
-  let result = await User.updateOne({ _id: user._id }, { status: userStatus });
+  let result = await User.updateOne(
+    { _id: mongo.ObjectId(user._id) },
+    { status: userStatus }
+  );
   // console.log(user);
 
   res.status(200).send({

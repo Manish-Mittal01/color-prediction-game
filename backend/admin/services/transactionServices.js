@@ -3,6 +3,7 @@ const {
   TransactionType,
   TransactionStatus,
 } = require("../../common/Constants");
+var mongo = require("mongodb");
 const { LogService } = require("../../common/logService");
 const { ResponseService } = require("../../common/responseService");
 const transactionModel = require("../../user/Models/transactionModel");
@@ -15,7 +16,6 @@ class TransactionAdminService {
     const allDeposits = await transactionModel.find({
       transactionType: TransactionType.deposit,
     });
-
 
     if (!allDeposits || allDeposits.length === 0) {
       return ResponseService.success(res, "No Deposit requests found", []);
@@ -37,7 +37,6 @@ class TransactionAdminService {
     if (!pending || pending.length === 0) {
       return ResponseService.success(res, "No Deposit requests found", []);
     }
-
 
     return ResponseService.success(res, "Deposit requests found", pending);
   }
@@ -109,7 +108,7 @@ class TransactionAdminService {
       );
     }
     const transaction = await transactionModel.findOne({
-      _id: transactionId,
+      _id: mongo.ObjectId(transactionId),
       status: TransactionStatus.pending,
     });
 
@@ -122,19 +121,15 @@ class TransactionAdminService {
     }
 
     const updatedTransaction = await transactionModel.updateOne(
-      { _id: transactionId, userId: userId },
+      { _id: mongo.ObjectId(transactionId), userId: userId },
       {
         $set: {
-          "status": isApproved
+          status: isApproved
             ? TransactionStatus.approved
             : TransactionStatus.rejected,
         },
-      },
+      }
     );
-
-
-
-
 
     if (isApproved) {
       let depositAmount;
@@ -145,14 +140,14 @@ class TransactionAdminService {
         depositAmount = wallet.notAllowedAmount + amount;
       }
       const result = await walletModal.updateOne(
-        { "userId": userId },
+        { userId: userId },
         {
           $set: {
-            "notAllowedAmount": depositAmount,
-            "totalAmount": wallet.totalAmount + amount,
-            "isFirstDeposit": false,
+            notAllowedAmount: depositAmount,
+            totalAmount: wallet.totalAmount + amount,
+            isFirstDeposit: false,
           },
-        },
+        }
       );
       ResponseService.success(res, "Request Approved Successfully", {});
     } else {
@@ -266,7 +261,7 @@ class TransactionAdminService {
     }
 
     const transaction = await transactionModel.findOne({
-      _id: transactionId,
+      _id: mongo.ObjectId(transactionId),
       status: TransactionStatus.pending,
     });
 
@@ -278,14 +273,14 @@ class TransactionAdminService {
       );
     }
     const updatedTransaction = await transactionModel.updateOne(
-      { _id: transactionId },
+      { _id: mongo.ObjectId(transactionId) },
       {
         $set: {
           status: isApproved
             ? TransactionStatus.approved
             : TransactionStatus.rejected,
         },
-      },
+      }
     );
 
     if (isApproved) {
@@ -296,7 +291,7 @@ class TransactionAdminService {
             withdrawableAmount: wallet.withdrawableAmount - amount,
             totalAmount: wallet.totalAmount - amount,
           },
-        },
+        }
       );
       ResponseService.success(res, "Request Approved Successfully", {});
     } else {
