@@ -20,9 +20,25 @@ export default function NextPrediction() {
     const [time, setTime] = useState({ min: "0", sec: "00" });
     const [err, setErr] = useState("")
     const [nextPrediction, setNextPrediction] = useState({});
+    const [currentBets, setCurrentBets] = useState({})
 
     const navigate = useNavigate();
-    const Ref = useRef(null)
+    const Ref = useRef(null);
+
+
+    function currentPeriodsBets(id) {
+        const period = {
+            periodId: id,
+        }
+        axios.post("admin/currentPeriodBets", period)
+            .then(resp => {
+                setCurrentBets(resp.data.data)
+                console.log(resp.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    };
 
     useEffect(() => {
         axios.get('period')
@@ -39,6 +55,7 @@ export default function NextPrediction() {
                     Emred
                 }
                 setPeriods(periodData);
+                currentPeriodsBets(periodData["Parity"].periodId);
                 let timeRemaning = data.expiredAt - Date.now();
                 setTimer(timeRemaning);
                 clearTimer(getDeadTime(timeRemaning));
@@ -48,6 +65,7 @@ export default function NextPrediction() {
             });
 
     }, [updateTimer]);
+
 
     const getTimeRemaining = (e) => {
         const total = Date.parse(e) - Date.parse(new Date());
@@ -100,18 +118,14 @@ export default function NextPrediction() {
             })
     };
 
-    useEffect(() => {
-        const period = {
-            periodId: periods[tab]?.periodId,
-        }
-        axios.post("admin/currentPeriodBets", period)
-            .then(resp => {
-                console.log(resp.data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }, [periods])
+    // function totalAmount(filterKey) {
+    //     console.log(currentBets[tab])
+    //     let data = currentBets[tab].filter(item => item.prediction === filterKey);
+    //     data.map(item => {
+    //         let amount = 0;
+    //         amount += item.betAmount;
+    //     })
+    // }
 
 
     return (
@@ -144,9 +158,9 @@ export default function NextPrediction() {
                 </div>
                 <div className='d-flex' style={{ justifyContent: 'center' }}>
                     <h4>Time : </h4><span> <h4>
-                        <span >{time.min}</span>
-                        <span className='num'>:</span>
-                        <span>{time.sec}</span>
+                        <span style={{ fontSize: 20 }} >{time.min}</span>
+                        <span style={{ fontSize: 20 }} className='num'>:</span>
+                        <span style={{ fontSize: 20 }}>{time.sec}</span>
                     </h4></span>
                 </div>
 
@@ -154,6 +168,7 @@ export default function NextPrediction() {
                     <div className='join_btns'>
                         <p className='join_green colors'>
                             Green
+                            {/* {totalAmount("green")} */}
                         </p>
                         <p className={'Join_Violet colors'}>
                             Violet
@@ -165,38 +180,22 @@ export default function NextPrediction() {
 
                     <div className='input_value'>
                         <div className='first_row'>
-                            <p className={'enter_value'}>
-                                0 = 111111
-                            </p>
-                            <p className={'enter_value'}>
-                                1
-                            </p>
-                            <p className={'enter_value'}>
-                                2
-                            </p>
-                            <p className={'enter_value'}>
-                                3
-                            </p>
-                            <p className={'enter_value'}>
-                                4
-                            </p>
+                            {
+                                [0, 1, 2, 3, 4].map(item => (
+                                    <p className={'enter_value'}>
+                                        {item}
+                                    </p>
+                                ))
+                            }
                         </div>
                         <div className='secound_row'>
-                            <p className={'enter_value'}>
-                                5
-                            </p>
-                            <p className={'enter_value'}>
-                                6
-                            </p>
-                            <p className={'enter_value'}>
-                                7
-                            </p>
-                            <p className={'enter_value'}>
-                                8
-                            </p>
-                            <p className={'enter_value'}>
-                                9
-                            </p>
+                            {
+                                [5, 6, 7, 8, 9].map(item => (
+                                    <p className={'enter_value'}>
+                                        {item}
+                                    </p>
+                                ))
+                            }
                         </div>
                     </div>
                 </div>

@@ -4,7 +4,7 @@ import Header from '../Header/Header';
 
 export const Products = memo(() => {
   const [img, setImg] = useState([]);
-  const [err, setErr] = useState();
+  const [err, setErr] = useState({});
 
   function GetData() {
     let data = localStorage.getItem("products")
@@ -19,7 +19,10 @@ export const Products = memo(() => {
           setImg(products)
           localStorage.setItem("products", JSON.stringify(products))
         })
-        .catch(err => setErr(err))
+        .catch(err => {
+          console.log(err)
+          setErr(err)
+        })
     }
   };
 
@@ -53,7 +56,7 @@ export const Products = memo(() => {
                   </li>
                 )
               })
-              : <p>{err}</p>
+              : <p>{"something wrong happened"}</p>
           }
         </ul>
       </div>
