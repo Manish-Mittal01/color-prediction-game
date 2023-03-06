@@ -10,6 +10,7 @@ const { ResponseService } = require("../../common/responseService");
 const { SessionController } = require("../controllers/sessionController");
 const { WalletController } = require("../controllers/walletController");
 const Bet = require("../Models/betModel");
+const { LogService } = require("../../common/logService");
 
 class PeriodService {
   static async _updatePeriod({ periodId, resultColor }) {

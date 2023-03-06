@@ -7,13 +7,15 @@ const PeriodModel = require("../Models/PeriodModel");
 const { SessionController } = require("../controllers/sessionController");
 const WalletModel = require("../Models/walletModal");
 const { UserController } = require("../controllers/userController");
+const { LogService } = require("../../common/logService");
 
 class BetServices {
   static async getBets(req, res) {
     const userId = req.query.userId;
 
     const validUser = await User.findOne({ userId: userId });
-    if (!validUser) return ResponseService.failed(res, "User not Found", StatusCode.notFound);
+    if (!validUser)
+      return ResponseService.failed(res, "User not Found", StatusCode.notFound);
 
     const isActive = await UserController.checkUserActive(userId);
 
@@ -50,9 +52,8 @@ class BetServices {
           resultColor: periodModel.resultColor,
           resultNumber: periodModel.resultNumber,
           createdAt: betModel.createdAt,
-        }
-      }
-      else {
+        };
+      } else {
         return {
           periodName: betModel.periodName,
           periodId: betModel.periodId,
@@ -62,7 +63,7 @@ class BetServices {
           resultAmount: betModel.resultAmount,
           prediction: betModel.prediction,
           didWon: betModel.didWon,
-        }
+        };
       }
     }
 
@@ -140,7 +141,8 @@ class BetServices {
             notAllowedAmount: wallet.notAllowedAmount - amount,
             totalAmount: wallet.totalAmount - amount,
           },
-        }
+        },
+        (err, docs) => LogService.updateLog("MakeBet-NotAllowed", err, docs)
       );
     } else if (wallet.referralAmount >= amount - wallet.notAllowedAmount) {
       // This means we need to deduct all the notAllowedAmount amount as well some of the referralAmount from wallet
@@ -154,7 +156,8 @@ class BetServices {
             totalAmount:
               wallet.totalAmount - (amount - wallet.notAllowedAmount),
           },
-        }
+        },
+        (err, docs) => LogService.updateLog("MakeBet-Referral", err, docs)
       );
     } else {
       // This means we need to deduct all the notAllowedAmount amount & referralAmount as well some of the withdrawableAmount from wallet
@@ -171,7 +174,8 @@ class BetServices {
               wallet.totalAmount -
               (amount - wallet.notAllowedAmount - wallet.referralAmount),
           },
-        }
+        },
+        (err, docs) => LogService.updateLog("MakeBet-Withdrawable", err, docs)
       );
     }
 
