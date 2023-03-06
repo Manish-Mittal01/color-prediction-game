@@ -48,6 +48,7 @@ const WithdrwaRequests = () => {
                             <th>Username</th>
                             <th>amount</th>
                             <th>Status</th>
+                            <th>wallet</th>
                             <th>Account No.</th>
                             <th>IFSC</th>
                             <th>UPI</th>
@@ -65,6 +66,7 @@ const WithdrwaRequests = () => {
                                         <td>{item.userId}</td>
                                         <td>{item.amount}</td>
                                         <td>{item.status}</td>
+                                        <td>{item.wallet}</td>
                                         <td>{item.balance}</td>
                                         <td >{item.name}</td>
                                         <td >{item.AccountNumber}</td>

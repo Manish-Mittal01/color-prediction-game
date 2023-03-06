@@ -24,6 +24,10 @@ const transactionSchema = Schema(
       required: true,
       default: "pending",
     },
+    wallet: {
+      type: Number,
+      required: true
+    }
   },
   { timestamps: true }
 );

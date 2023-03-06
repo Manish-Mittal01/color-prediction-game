@@ -12,6 +12,7 @@ class TransactionService {
     userId,
     amount,
     transactionType,
+    walletBalance
   }) {
     if (!userId || !amount || !transactionType) {
       const missingFields = [];
@@ -38,6 +39,7 @@ class TransactionService {
       userId: userId,
       amount: amount,
       transactionType: transactionType,
+      wallet: walletBalance
     }).save();
     return transaction;
   }
@@ -45,11 +47,14 @@ class TransactionService {
   static async requestDeposit(req, res) {
     const { userId, amount } = req.body;
 
+    const wallet = await walletModal.findOne({ userId: userId });
+    console.log(wallet)
     const transaction = await this._createAndValidateTransaction({
       res: res,
       userId: userId,
       amount: amount,
       transactionType: TransactionType.deposit,
+      walletBalance: wallet.totalAmount
     });
 
     if (transaction == null) {
@@ -128,6 +133,7 @@ class TransactionService {
       userId: userId,
       amount: withdrawableAmount,
       transactionType: TransactionType.withdraw,
+      walletBalance: wallet.withdrawableAmount
     });
 
     if (transaction == null) {
