@@ -167,9 +167,9 @@ class PeriodService {
 
       await checkWinningList();
 
-      console.log("winningList", winningList);
+      // console.log("winningList", winningList);
 
-      for (winnerBet of winningList) {
+      for (let winnerBet of winningList) {
         const i = winningList.indexOf(winnerBet);
         console.log("--- ", i, winnerBet);
         let amount;
@@ -179,7 +179,7 @@ class PeriodService {
           amount = winnerBet.betAmount * 9;
         }
         Bet.updateOne(
-          { _id: mongo.ObjectId(winnerBet._id) },
+          { _id: winnerBet._id },
           { $set: { didWon: true, resultAmount: amount } }
         );
         await WalletController.updateWalletWinningAmount({

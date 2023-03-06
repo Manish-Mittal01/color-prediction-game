@@ -13,6 +13,7 @@ export default function BlockUser() {
         axios.post("admin/blockUser", userDetails)
             .then(resp => {
                 setErr({});
+                setUser("")
                 alert("user blocked successfully")
                 console.log(resp.data)
             })

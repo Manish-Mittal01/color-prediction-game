@@ -117,7 +117,7 @@ module.exports.verifyOtp = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         let newPassword = await bcrypt.hash(password, salt);
         result = await User.updateOne(
-          { _id: mongo.ObjectId(newUser._id) },
+          { _id: newUser._id },
           { password: newPassword }
         );
         result = {};

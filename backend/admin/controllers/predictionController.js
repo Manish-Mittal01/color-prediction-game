@@ -55,32 +55,31 @@ module.exports.prediction = async (req, res) => {
 }
 
 module.exports.getBetsAmount = async (req, res) => {
-    const { periodId } = req.body;
+    let { periodId } = req.body;
+    // periodId = Number(periodId)
 
-    let ParityBets = await betModel.find({
-        periodId: periodId,
-        periodName: periodNames[0]
-    })
-    let SapreBets = await betModel.find({
-        periodId: periodId,
-        periodName: periodNames[1]
-    })
-    let BconeBets = await betModel.find({
-        periodId: periodId,
-        periodName: periodNames[2]
-    })
-    let EmredBets = await betModel.find({
-        periodId: periodId,
-        periodName: periodNames[3]
-    })
+    // let ParityBets = await betModel.find({
+    //     periodId: periodId,
+    // });
+    // let SapreBets = await betModel.find({
+    //     periodId: periodId + 1,
+    // });
+    // let BconeBets = await betModel.find({
+    //     periodId: periodId + 2,
+    // });
+    // let EmredBets = await betModel.find({
+    //     periodId: periodId + 3,
+    // });
 
+    console.log("ParityBets")
+    // console.log(ParityBets)
 
 
     res.status(200).send({
         status: success,
         message: "bet amounts found",
-        data: {
-            ParityBets, SapreBets, BconeBets, EmredBets
-        }
+        // data: {
+        //     ParityBets, SapreBets, BconeBets, EmredBets
+        // }
     })
 }

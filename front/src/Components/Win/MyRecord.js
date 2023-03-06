@@ -2,7 +2,6 @@ import React, { memo, useEffect, useState } from "react";
 import { Accordion, Table } from "react-bootstrap";
 import { BsFillFileTextFill } from "react-icons/bs";
 import Pagination from "./Pagination";
-import { GoPrimitiveDot } from "react-icons/go";
 
 
 const MyRecord = ({ tab, records, periods }) => {
@@ -24,7 +23,7 @@ const MyRecord = ({ tab, records, periods }) => {
             <Table style={{ textAlign: 'center' }} className='' responsive>
                 <tbody>
                     {
-                        (records[tab] && records[tab].length > 0) &&
+                        (currentPosts && currentPosts.length > 0) &&
                         currentPosts.map((item, index) => {
                             let result = item.didWon ? "win" : "fail"
                             return (

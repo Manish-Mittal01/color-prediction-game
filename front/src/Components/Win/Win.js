@@ -42,6 +42,7 @@ const Win = ({ wallet }) => {
   const [modalShow, setModalShow] = useState(false);
   const [check, setCheck] = useState(false);
 
+
   let user = JSON.parse(localStorage.getItem("user"))
   let userData = user && jwt(user.token);
 
@@ -75,8 +76,7 @@ const Win = ({ wallet }) => {
         err.response && setErr(err.response.data.message)
         blockUser({ errMsg: err.response.data.message, navigate: navigate })
 
-      }
-      );
+      });
   }
 
   function makeBet(prediction) {
@@ -100,10 +100,8 @@ const Win = ({ wallet }) => {
       .catch(err => {
         err.response && setErr(err.response.data.message)
         err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
-
         console.log(err)
-      }
-      );
+      });
 
     setBetNumber(1);
     setAmount(10);
@@ -142,6 +140,7 @@ const Win = ({ wallet }) => {
         time={time}
         setTime={setTime}
         tab={tab}
+        getBets={getBets}
       />
 
       <div className='join_btns'>

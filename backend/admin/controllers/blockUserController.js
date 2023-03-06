@@ -26,7 +26,7 @@ module.exports.blockUser = async (req, res) => {
     return errMsg(`user is already ${userStatus}`);
 
   let result = await User.updateOne(
-    { _id: mongo.ObjectId(user._id) },
+    { _id: user._id },
     { status: userStatus }
   );
   // console.log(user);
