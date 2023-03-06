@@ -26,11 +26,8 @@ export default function NextPrediction() {
     const Ref = useRef(null);
 
 
-    function currentPeriodsBets(id) {
-        const period = {
-            periodId: id,
-        }
-        axios.post("admin/currentPeriodBets", period)
+    function currentPeriodsBets() {
+        axios.get("admin/currentPeriodBets")
             .then(resp => {
                 setCurrentBets(resp.data.data)
                 console.log(resp.data)
@@ -65,7 +62,6 @@ export default function NextPrediction() {
             });
 
     }, [updateTimer]);
-
 
     const getTimeRemaining = (e) => {
         const total = Date.parse(e) - Date.parse(new Date());
@@ -118,16 +114,6 @@ export default function NextPrediction() {
             })
     };
 
-    // function totalAmount(filterKey) {
-    //     console.log(currentBets[tab])
-    //     let data = currentBets[tab].filter(item => item.prediction === filterKey);
-    //     data.map(item => {
-    //         let amount = 0;
-    //         amount += item.betAmount;
-    //     })
-    // }
-
-
     return (
         <>
             <Container style={{ textAlign: 'center' }}>
@@ -168,13 +154,15 @@ export default function NextPrediction() {
                     <div className='join_btns'>
                         <p className='join_green colors'>
                             Green
-                            {/* {totalAmount("green")} */}
+                            {(currentBets[tab] && currentBets[tab].colors) && `- ${currentBets[tab].colors.green}`}
                         </p>
                         <p className={'Join_Violet colors'}>
                             Violet
+                            {(currentBets[tab] && currentBets[tab].colors) && `- ${currentBets[tab].colors.violet}`}
                         </p>
                         <p className={'join_red colors'}>
                             Red
+                            {(currentBets[tab] && currentBets[tab].colors) && `- ${currentBets[tab].colors.red}`}
                         </p>
                     </div>
 
@@ -184,6 +172,7 @@ export default function NextPrediction() {
                                 [0, 1, 2, 3, 4].map(item => (
                                     <p className={'enter_value'}>
                                         {item}
+                                        {(currentBets[tab] && currentBets[tab].numbers) && `- ${currentBets[tab].numbers[item] || 0}`}
                                     </p>
                                 ))
                             }
@@ -193,6 +182,7 @@ export default function NextPrediction() {
                                 [5, 6, 7, 8, 9].map(item => (
                                     <p className={'enter_value'}>
                                         {item}
+                                        {(currentBets[tab] && currentBets[tab].numbers) && `- ${currentBets[tab].numbers[item] || 0}`}
                                     </p>
                                 ))
                             }

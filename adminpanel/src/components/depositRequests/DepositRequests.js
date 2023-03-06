@@ -41,7 +41,7 @@ const WithdrwaRequests = () => {
         <div>
             <LeftSideSection />
             <div style={{ marginLeft: 20, marginTop: 80 }}>
-                <h1>Disposit Requests</h1>
+                <h1>Deposit Requests</h1>
                 <Table style={{ textAlign: 'center' }} className='' responsive striped bordered >
                     <thead>
                         <tr>

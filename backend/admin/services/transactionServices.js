@@ -83,7 +83,7 @@ class TransactionAdminService {
       if (!isApproved) errorMsgs.push("isApproved is required");
       if (!transactionId) errorMsgs.push("transactionId is required");
 
-      return ResponseService.failed(res, errorMsgs, StatusCode.badRequest);
+      return ResponseService.failed(res, "userId is required", StatusCode.badRequest);
     }
 
     const user = await UserModel.findOne({
@@ -159,30 +159,14 @@ class TransactionAdminService {
   static async getWithdrawalRequests(req, res) {
     const allDeposits = await transactionModel.find({
       transactionType: TransactionType.withdraw,
+      status: TransactionStatus.pending
     });
 
     if (!allDeposits || allDeposits.length === 0) {
       return ResponseService.success(res, "No Withdraw requests found", []);
     }
 
-    const pending = [];
-
-    async function separateDeposits() {
-      for (let i in allDeposits) {
-        const deposit = allDeposits[i];
-        if (deposit.status === TransactionStatus.pending) {
-          pending.push(deposit);
-        }
-      }
-    }
-
-    if (!pending || pending.length === 0) {
-      return ResponseService.success(res, "No Withdraw requests found", []);
-    }
-
-    await separateDeposits();
-
-    return ResponseService.success(res, "Withdraw requests found", pending);
+    return ResponseService.success(res, "Withdraw requests found", allDeposits);
   }
 
   static async getWithdrawHistory(req, res) {
@@ -219,16 +203,11 @@ class TransactionAdminService {
   static async withdrawRequest(req, res) {
     const { userId, amount, isApproved, transactionId } = req.body;
 
-    if (!userId || !amount || !isApproved) {
-      const errorMsgs = [];
+    if (!userId) return ResponseService.failed(res, "userId is required", StatusCode.badRequest);
+    if (!amount) return ResponseService.failed(res, "amount is required", StatusCode.badRequest);
+    if (isApproved === undefined) return ResponseService.failed(res, "isApproved is required", StatusCode.badRequest);
+    if (!transactionId) return ResponseService.failed(res, "transactionId is required", StatusCode.badRequest);
 
-      if (!userId) errorMsgs.push("userId is required");
-      if (!amount) errorMsgs.push("amount is required");
-      if (!isApproved) errorMsgs.push("isApproved is required");
-      if (!transactionId) errorMsgs.push("transactionId is required");
-
-      return ResponseService.failed(res, errorMsgs, StatusCode.badRequest);
-    }
 
     const user = await UserModel.findOne({
       userId: userId,
@@ -252,7 +231,7 @@ class TransactionAdminService {
       );
     }
 
-    if (wallet.withdrawableAmount < amount) {
+    if (wallet.withdrawableAmount < amount && isApproved) {
       return ResponseService.failed(
         res,
         `Not enough Withdrawable Amount Wallet`,
@@ -268,7 +247,7 @@ class TransactionAdminService {
     if (!transaction) {
       return ResponseService.failed(
         res,
-        `No pending transaction found for user with TransactionID:${userId}`,
+        `No pending transaction found for user with TransactionID: ${userId}`,
         StatusCode.notFound
       );
     }

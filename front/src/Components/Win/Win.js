@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
 
 
-const Win = ({ wallet }) => {
+const Win = () => {
   const [periods, setPeriods] = useState({
     Parity: "",
     Sapre: "",
@@ -41,6 +41,7 @@ const Win = ({ wallet }) => {
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [check, setCheck] = useState(false);
+  const [wallet, setWallet] = useState(0)
 
 
   let user = JSON.parse(localStorage.getItem("user"))
@@ -54,12 +55,27 @@ const Win = ({ wallet }) => {
 
   useEffect(() => {
     getBets();
+    userWallet(userData.userId)
   }, []);
 
+  function userWallet(userId) {
+    axios.get(`user/wallet?userId=${userId}`)
+      .then(resp => {
+        let data = resp.data.data
+        let walletDetails = {
+          totalAmount: data.totalAmount,
+          referralAmount: data.referralAmount,
+          withdrawableAmount: data.withdrawableAmount
+        }
+        setWallet(walletDetails)
+      })
+      .catch(err => console.log(err))
+  }
 
   async function getBets() {
     await axios.get(`bet?userId=${userData.userId}`)
       .then(resp => {
+        console.log(resp.data)
         let parityRecords = resp.data.data.filter(item => item.periodName === "Parity")
         let sapreRecords = resp.data.data.filter(item => item.periodName === "Sapre")
         let bconRecords = resp.data.data.filter(item => item.periodName === "Bcone")
@@ -69,7 +85,10 @@ const Win = ({ wallet }) => {
           Sapre: sapreRecords,
           Bcone: bconRecords,
           Emred: emredRecords
-        })
+        });
+
+        userWallet(userData.userId);
+
       })
       .catch(err => {
         console.log(err)
@@ -95,7 +114,8 @@ const Win = ({ wallet }) => {
 
     await axios.post("bet", betDetails)
       .then(resp => {
-        alert("order succes")
+        alert("order succes");
+        userWallet(userData.userId);
       })
       .catch(err => {
         err.response && setErr(err.response.data.message)

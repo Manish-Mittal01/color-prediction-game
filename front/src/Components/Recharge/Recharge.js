@@ -85,10 +85,21 @@ export default Recharge;
 export const SubmitRechargeRequest = () => {
     const [transactionId, setTransactionId] = useState();
     const [err, setErr] = useState();
+    const [paymentUPI, setPaymentUPI] = useState("");
+
     const location = useLocation()
-    console.log(location.state)
     const amount = location.state ? location.state.amount : "";
     const navigate = useNavigate();
+
+    useEffect(() => {
+        axios.get("admin/details")
+            .then((resp) => {
+                console.log(resp.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [])
 
     const upi = "mrginfotech@upi";
 
@@ -103,14 +114,11 @@ export const SubmitRechargeRequest = () => {
         }
         axios.post("user/deposit", request)
             .then(resp => {
-                console.log(resp.data)
                 alert("request submitted successfully");
                 navigate("/mine");
             })
             .catch(err => {
                 err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
-
-                console.log(err)
             })
     }
 

@@ -58,8 +58,7 @@ class ReferralService {
                     },
                   ],
                 },
-                (err, docs) =>
-                  LogService.updateLog("Referral-Level1", err, docs)
+                // (err, docs) =>LogService.updateLog("Referral-Level1", err, docs)
               );
             });
         } else if (refer.level == 2) {
@@ -79,7 +78,7 @@ class ReferralService {
                   },
                 ],
               },
-              (err, docs) => LogService.updateLog("Referral-Level2", err, docs)
+              // (err, docs) => LogService.updateLog("Referral-Level2", err, docs)
             );
           });
         } else if (refer.level == 3) {
@@ -99,7 +98,7 @@ class ReferralService {
                   },
                 ],
               },
-              (err, docs) => LogService.updateLog("Referral-Level3", err, docs)
+              // (err, docs) => LogService.updateLog("Referral-Level3", err, docs)
             );
           });
         }
@@ -118,7 +117,7 @@ class ReferralService {
               referralAmount: wallet.referralAmount + refer.amount,
             },
           },
-          (err, docs) => LogService.updateLog("Referral-Wallet", err, docs)
+          // (err, docs) => LogService.updateLog("Referral-Wallet", err, docs)
         );
       });
     });

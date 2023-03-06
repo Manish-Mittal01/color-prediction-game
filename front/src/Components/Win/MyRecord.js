@@ -34,7 +34,7 @@ const MyRecord = ({ tab, records, periods }) => {
                                                 <div className="kd_t5">
                                                     <p className="res_text">{item.periodId}</p>
                                                     <p style={{ color: (item.didWon) ? "green" : "red" }} className="res_text">{item.periodId !== periods[tab].periodId && result}</p>
-                                                    <p style={{ color: (item.didWon) ? "green" : "red" }} className="res_text">{item.periodId !== periods[tab].periodId ? item.didWon ? "+" : "-" : ""}{item.periodId !== periods[tab].periodId && item.betAmount}</p>
+                                                    <p style={{ color: (item.didWon) ? "green" : "red" }} className="res_text">{item.periodId !== periods[tab].periodId ? item.didWon ? "+" : "-" : ""}{item.periodId !== periods[tab].periodId && (item.resultAmount || item.betAmount)}</p>
                                                 </div>
                                             </Accordion.Header>
                                             <Accordion.Body style={{ padding: "10px 16px", boxShadow: "0px 1px 1px 1px lightGrey" }}>

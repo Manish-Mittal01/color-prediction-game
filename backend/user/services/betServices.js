@@ -149,8 +149,7 @@ class BetServices {
             totalAmount: wallet.totalAmount - amount,
           },
         },
-        (err, docs) => LogService.updateLog("MakeBet-NotAllowed", err, docs)
-      );
+      ).then((err, docs) => LogService.updateLog("MakeBet-NotAllowed", err, docs));
     } else if (wallet.referralAmount >= amount - wallet.notAllowedAmount) {
       // This means we need to deduct all the notAllowedAmount amount as well some of the referralAmount from wallet
       WalletModel.updateOne(
@@ -163,9 +162,8 @@ class BetServices {
             totalAmount:
               wallet.totalAmount - (amount - wallet.notAllowedAmount),
           },
-        },
-        (err, docs) => LogService.updateLog("MakeBet-Referral", err, docs)
-      );
+        }
+      ).then((err, docs) => LogService.updateLog("MakeBet-Referral", err, docs));
     } else {
       // This means we need to deduct all the notAllowedAmount amount & referralAmount as well some of the withdrawableAmount from wallet
       WalletModel.updateOne(
@@ -182,8 +180,7 @@ class BetServices {
               (amount - wallet.notAllowedAmount - wallet.referralAmount),
           },
         },
-        (err, docs) => LogService.updateLog("MakeBet-Withdrawable", err, docs)
-      );
+      ).then((err, docs) => LogService.updateLog("MakeBet-Withdrawable", err, docs));
     }
 
     let result = await new Bet({

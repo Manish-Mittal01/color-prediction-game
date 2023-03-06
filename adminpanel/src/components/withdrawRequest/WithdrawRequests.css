@@ -1,0 +1,12 @@
+.yesBtn {
+    background-color: green !important;
+    color: #fff !important;
+    cursor: pointer;
+}
+
+.noBtn {
+    background-color: red !important;
+    color: #fff !important;
+    cursor: pointer;
+
+}

@@ -83,8 +83,7 @@ class UserServices {
             level1: userEntry,
           },
         },
-        (err, docs) => LogService.updateLog("Referral-Level2", err, docs)
-      );
+      ).then((err, docs) => LogService.updateLog("Referral-Level2", err, docs));
     }
 
     const user2 = await UserModel.findOne({ userId: referralCode });
@@ -103,8 +102,7 @@ class UserServices {
           level2: userEntry,
         },
       },
-      (err, docs) => LogService.updateLog("Referral-Level2", err, docs)
-    );
+    ).then((err, docs) => LogService.updateLog("Referral-Level2", err, docs));
 
     const user3 = await UserModel.findOne({ userId: user2.referralCode });
 
@@ -122,8 +120,7 @@ class UserServices {
           level3: userEntry,
         },
       },
-      (err, docs) => LogService.updateLog("Referral-Level2", err, docs)
-    );
+    ).then((err, docs) => LogService.updateLog("Referral-Level2", err, docs));
   }
 }
 

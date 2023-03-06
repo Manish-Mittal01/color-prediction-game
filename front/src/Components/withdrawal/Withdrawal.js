@@ -18,7 +18,7 @@ const Withdrawal = ({ wallet }) => {
     function makeWithdraw() {
         const user = JSON.parse(localStorage.getItem("user"));
         const userData = jwt(user.token);
-        if (wallet.withdrawableAmount < wallet.totalAmount) {
+        if (wallet.withdrawableAmount < amount) {
             return setErr({ message: "not enough balance" })
         }
 
@@ -29,7 +29,8 @@ const Withdrawal = ({ wallet }) => {
         }
         axios.post("user/withdraw", withdrawRequest)
             .then(resp => {
-                alert("withdrawlrequest submited successfully")
+                alert("withdraw request submited successfully");
+                setErr({})
                 console.log(resp.data)
             })
             .catch(err => {
@@ -71,25 +72,13 @@ const Withdrawal = ({ wallet }) => {
 
             <div style={{ marginLeft: "2%", marginTop: 20 }} className="text_field"><p>Fee: <span className='nor'>{Math.floor(amount * 0.05)}</span>,to account <span className='nor'>{Math.floor(amount * 0.95)}</span></p></div>
 
-            <div style={{ marginLeft: "2%" }} className="payment_box">
-                <p className="payment_text">Payout</p>
-                <div role="radiogroup" className="van-radio-group">
-                    <div role="radio" tabIndex="0" aria-checked="true" className="van-radio">
-                        <div className="van-radio__icon van-radio__icon--square van-radio__icon--checked">
-                            <i className="van-icon van-icon-success"></i></div>
-                        <span className="van-radio__label">
-                            <span className="text">Bankcard</span>
-                        </span></div>
-                </div>
-            </div>
-
             <div style={{ marginTop: 15 }} className="code_input_box">
                 <div className="code_input">
                     <img src={withdro} alt="" />
                     <input
                         value={password || ""}
                         onChange={(e) => setPassword(e.target.value)}
-                        className id="amount" placeholder="Enter login password" style={{ outline: 'none' }}
+                        id="amount" placeholder="Enter login password" style={{ outline: 'none' }}
                     />
                 </div>
             </div>

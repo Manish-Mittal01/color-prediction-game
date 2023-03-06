@@ -20,8 +20,7 @@ class WalletService {
           withdrawableAmount: withdrawableAmount,
         },
       },
-      (err, docs) => LogService.updateLog("WinningWallet", err, docs)
-    );
+    ).then((err, docs) => LogService.updateLog("WinningWallet", err, docs));
   }
 }
 

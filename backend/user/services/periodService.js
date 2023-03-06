@@ -44,9 +44,9 @@ class PeriodService {
           resultNumber: resultNumber,
         },
       },
-      (err, docs) => LogService.updateLog("PeriodResult", err, docs)
-    );
-    // console.log(period);
+    ).then((err, docs) => {
+      LogService.updateLog("PeriodResult", err, docs)
+    });
   }
 
   /**This method will be used to calculate result after period is finished*/
@@ -183,8 +183,7 @@ class PeriodService {
         Bet.updateOne(
           { _id: winnerBet._id },
           { $set: { didWon: true, resultAmount: amount } },
-          (err, docs) => LogService.updateLog("BetWinner", err, docs)
-        );
+        ).then((err, docs) => LogService.updateLog("BetWinner", err, docs));
         await WalletController.updateWalletWinningAmount({
           userId: winnerBet.userId,
           amount: amount,

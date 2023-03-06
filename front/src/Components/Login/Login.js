@@ -6,7 +6,6 @@ import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../axios/axios';
 import jwt from 'jwt-decode';
-import { updateWallet } from '../../store/actions/walletDetails';
 
 const Login = () => {
     const [userDetails, setUserDetails] = useState({

@@ -1,52 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import axios from '../../axios/axios'
+import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap'
 import LeftSideSection from '../leftsideSection';
+import axios from '../../axios/axios'
+import './WithdrawRequests.css'
 
 const WithdrwaRequests = () => {
-    const [records, setRecords] = useState([
-        {
-            userName: "9876543210",
-            userId: "jqydfgeyu",
-            password: "123",
-            balance: 123,
-            name: "Manish",
-            AccountNumber: 1234,
-            ifsc: "ifsc",
-            upi: "upi"
-        },
-        {
-            userName: "9876543210",
-            userId: "jqyfgeyu",
-            password: "123",
-            balance: 123,
-            name: "Manish",
-            AccountNumber: 1234,
-            ifsc: "ifsc",
-            upi: "upi"
-        }
-    ]);
-    const [filteredData, setFilteredData] = useState([...records]);
-    const [searchValue, setSearchValue] = useState("");
-
-
+    const [records, setRecords] = useState([]);
+    const [err, setErr] = useState({})
 
     useEffect(() => {
         axios.get("admin/withdraw")
             .then(resp => {
+                setRecords(resp.data.data)
                 console.log(resp.data)
             })
             .catch(err => {
                 console.log(err)
             })
-    }, [])
+    }, []);
+
+    function finalizeRequest({ isApproved, item, index, transactionId }) {
+        const transactionDetail = {
+            userId: item.userId,
+            amount: item.amount,
+            isApproved,
+            transactionId
+        }
+        console.log(transactionId)
+
+        axios.post('admin/withdraw', transactionDetail)
+            .then(resp => {
+                records.splice(index, 1);
+                setRecords([...records]);
+                setErr({})
+                console.log(resp.data)
+            })
+            .catch(err => {
+                err.response && setErr(err.response.data)
+                console.log(err)
+            })
+    }
 
 
     return (
         <div>
             <LeftSideSection />
             <div style={{ marginLeft: 20, marginTop: 80 }}>
-                <h1>Withdraw Requests</h1>
+                <h1>Withdrawl Requests</h1>
                 <Table style={{ textAlign: 'center' }} className='' responsive striped bordered >
                     <thead>
                         <tr>
@@ -63,19 +63,28 @@ const WithdrwaRequests = () => {
                     </thead>
                     <tbody>
                         {
-                            (filteredData && filteredData.length > 0) &&
-                            filteredData.map((item, index) => {
+                            (records && records.length > 0) &&
+                            records.map((item, index) => {
                                 return (
-                                    <tr key={item.userId}>
-                                        <td>{item.userName}</td>
-                                        <td>{item.userId}</td>
-                                        <td>{item.password}</td>
-                                        <td>{item.balance}</td>
-                                        <td >{item.name}</td>
-                                        <td >{item.AccountNumber}</td>
-                                        <td >{item.ifsc}</td>
-                                        <td >{item.upi}</td>
-                                    </tr>
+                                    <>
+                                        <tr key={item.userId + index}>
+                                            <td>{item.userId}</td>
+                                            <td>{item.amount}</td>
+                                            <td>{item.status}</td>
+                                            <td>{item.balance}</td>
+                                            <td >{item.name}</td>
+                                            <td >{item.AccountNumber}</td>
+                                            <td >{item.requestTime}</td>
+                                            <td onClick={(e) => { finalizeRequest({ isApproved: true, item, index, transactionId: item._id }) }} className='yesBtn' >Yes</td>
+                                            <td onClick={(e) => { finalizeRequest({ isApproved: false, item, index, transactionId: item._id }) }} className='noBtn' >No</td>
+                                        </tr>
+                                        {
+                                            err.message &&
+                                            <tr>
+                                                <td style={{ color: 'red' }} colSpan={10}>{err.message}</td>
+                                            </tr>
+                                        }
+                                    </>
                                 )
                             })
                         }
