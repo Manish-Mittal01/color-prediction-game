@@ -43,7 +43,8 @@ class PeriodService {
           resultColor: resultColor,
           resultNumber: resultNumber,
         },
-      }
+      },
+      (err, docs) => LogService.updateLog("PeriodResult", err, docs)
     );
     // console.log(period);
   }
@@ -181,7 +182,8 @@ class PeriodService {
         }
         Bet.updateOne(
           { _id: winnerBet._id },
-          { $set: { didWon: true, resultAmount: amount } }
+          { $set: { didWon: true, resultAmount: amount } },
+          (err, docs) => LogService.updateLog("BetWinner", err, docs)
         );
         await WalletController.updateWalletWinningAmount({
           userId: winnerBet.userId,

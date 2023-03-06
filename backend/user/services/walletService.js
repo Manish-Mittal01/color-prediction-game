@@ -1,3 +1,4 @@
+const { LogService } = require("../../common/logService");
 const walletModal = require("../Models/walletModal");
 
 class WalletService {
@@ -18,7 +19,8 @@ class WalletService {
           totalAmount: totalAmount,
           withdrawableAmount: withdrawableAmount,
         },
-      }
+      },
+      (err, docs) => LogService.updateLog("WinningWallet", err, docs)
     );
   }
 }
