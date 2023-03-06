@@ -5,7 +5,10 @@ const { newRecords } = require("../controllers/todayVsTotal_records");
 const {
   TransactionAdminController,
 } = require("../controllers/transactionController");
-const { prediction, getBetsAmount } = require('../controllers/predictionController')
+const {
+  prediction,
+  getBetsAmount,
+} = require("../controllers/predictionController");
 
 const router = require("express").Router();
 
@@ -24,7 +27,6 @@ router
   .get(TransactionAdminController.getWithdrawHistory);
 router.route("/withdraw").post(TransactionAdminController.withdrawRequest);
 router.route("/nextprediction").post(prediction);
-router.route("/currentPeriodBets").post(getBetsAmount);
-
+router.route("/currentPeriodBets").get(getBetsAmount);
 
 module.exports = router;

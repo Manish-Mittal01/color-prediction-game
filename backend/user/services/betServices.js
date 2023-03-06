@@ -91,10 +91,17 @@ class BetServices {
 
   static async makeBet(req, res) {
     const { prediction, amount, userId, periodId, periodName } = req.body;
+    let isPrediction;
 
-    if (!prediction || !amount || !userId || !periodId || !periodName) {
+    if (isNaN(prediction)) {
+      isPrediction = String(prediction).trim().length != 0;
+    } else {
+      isPrediction = Number(prediction) >= 0;
+    }
+
+    if (!isPrediction || !amount || !userId || !periodId || !periodName) {
       const errors = [];
-      if (!prediction) errors.push("Prediction is required");
+      if (!isPrediction) errors.push("Prediction is required");
       if (!amount) errors.push("Bet Amount is required");
       if (!userId) errors.push("userId is required");
       if (!periodId) errors.push("periodId is required");
