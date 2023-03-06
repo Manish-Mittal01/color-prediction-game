@@ -169,7 +169,9 @@ class PeriodService {
 
       console.log("winningList", winningList);
 
-      winningList.forEach(async (winnerBet) => {
+      for (winnerBet of winningList) {
+        const i = winningList.indexOf(winnerBet);
+        console.log("--- ", i, winnerBet);
         let amount;
         if (isNaN(winnerBet.prediction)) {
           amount = winnerBet.betAmount * winUpdateMultiple;
@@ -184,8 +186,7 @@ class PeriodService {
           userId: winnerBet.userId,
           amount: amount,
         });
-      });
-      // }
+      }
     });
   }
 
