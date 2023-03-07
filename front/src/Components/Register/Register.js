@@ -88,8 +88,8 @@ const Register = () => {
                     />
                 </div>
                 {
-                    (otpBtn === 1 && err) &&
-                    <p style={{ color: 'red', paddingLeft: 10 }} >{"*"}{err.err}</p>
+                    (otpBtn === 1 && err.message) &&
+                    <p style={{ color: 'red', paddingLeft: 10 }} >{"*"}{err.message}</p>
                 }
                 <div className='d-flex'>
                     <div className='fild_input_1'>
@@ -140,8 +140,8 @@ const Register = () => {
                     />
                 </div>
                 {
-                    (otpBtn === 0 && err) &&
-                    <p className='err' >{err.err}</p>
+                    (otpBtn === 0 && err.message) &&
+                    <p className='err' >{err.message}</p>
                 }
                 <div className="input_box_btn">
                     <button onClick={() => {

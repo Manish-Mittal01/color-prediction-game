@@ -13,8 +13,14 @@ export default function SearchBox({ searchValue, filterResults }) {
                 placeholder="Search by username or user code"
                 className='searchBox'
             />
+            <h2>
+                <span style={{ textAlign: 'center', cursor: "pointer", fontSize: 25 }} onClick={() => navigate("/withdrawRecord")} >
+                    Withdraw Records</span>
+            </h2>
+            <h2>
+                <span style={{ textAlign: 'center', cursor: "pointer", fontSize: 25 }} onClick={() => navigate("/rechargeRecord")} >Recharge Records</span>
+            </h2>
             <h2 style={{ textAlign: 'center' }} onClick={() => navigate("/withdrawRecord")} >Withdraw Records</h2>
-            <h2 style={{ textAlign: 'center' }} onClick={() => navigate("/rechargeRecord")} >Recharge Records</h2>
         </div>
     )
 }

@@ -20,7 +20,7 @@ const Promotion = () => {
             </div>
             <Promotioncontent />
             {/* popup buttons */}
-            <Modal className='wrapper_cus_d5' show={show} onHide={handleClose}>
+            {/* <Modal className='wrapper_cus_d5' show={show} onHide={handleClose}>
                 <Modal.Body>
                     <div><ul className="right_nav">
                         <li>Bonus Record</li>
@@ -28,7 +28,7 @@ const Promotion = () => {
                     </ul>
                     </div>
                 </Modal.Body>
-            </Modal>
+            </Modal> */}
         </>
     )
 }

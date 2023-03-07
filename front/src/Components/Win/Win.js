@@ -92,7 +92,7 @@ const Win = () => {
       })
       .catch(err => {
         console.log(err)
-        err.response && setErr(err.response.data.message)
+        err.response && setErr(err.response.data)
         blockUser({ errMsg: err.response.data.message, navigate: navigate })
 
       });
@@ -118,8 +118,9 @@ const Win = () => {
         userWallet(userData.userId);
       })
       .catch(err => {
-        err.response && setErr(err.response.data.message)
-        err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
+        err.response && setErr(err.response.data)
+        err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate });
+        alert(err.response.data.message)
         console.log(err)
       });
 
