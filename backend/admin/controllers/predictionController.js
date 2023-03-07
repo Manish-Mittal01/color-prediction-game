@@ -4,14 +4,15 @@ const {
 } = require("../../user/controllers/sessionController");
 const betModel = require("../../user/Models/betModel");
 const PeriodModel = require("../../user/Models/PeriodModel");
+const { PeriodService } = require("../../user/services/periodService");
 const { ColorNumbers, periodNames } = require("../common/Constants");
 
 const { success, error } = require("../../common/Constants").Status;
 
 module.exports.prediction = async (req, res) => {
-  const { periodId, resultNumber } = req.body;
+  const { Parity, Sapre, Bcone, Emred } = req.body;
 
-  async function updatePeriod() {
+  async function updatePeriod(periodId, resultNumber) {
     const minPrice = 41123;
     const maxPrice = 49152;
     const price = Math.floor(
@@ -42,16 +43,19 @@ module.exports.prediction = async (req, res) => {
     );
   }
 
-  await updatePeriod();
+  const periods = [Parity, Sapre, Bcone, Emred].where((e) => e != null);
 
-  const currentUpdatedPeriod = await PeriodModel.findOne({
-    periodId: periodId,
-  });
+  for await (const period of periods) {
+    await updatePeriod(period.periodId, period.resultNumber);
+  }
 
-  res.status(200).send({
-    status: success,
-    message: "prediction set successfully",
-    period: currentUpdatedPeriod,
+  PeriodService.calculatePeriodResult();
+
+  ResponseService.success(res, "Period Results set successfully", {
+    Parity: Parity != null,
+    Sapre: Sapre != null,
+    Bcone: Bcone != null,
+    Emred: Emred != null,
   });
 };
 
