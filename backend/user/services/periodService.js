@@ -51,16 +51,13 @@ class PeriodService {
 
   /**This method will be used to calculate result after period is finished*/
   static async calculatePeriodResult(fromAdmin = false) {
-    console.log("into calculate period")
     // 1. Get Current Period
     let periods = [];
     if (fromAdmin) {
       periods = await PeriodModel.find().limit(4).sort({ _id: -1 });
       SessionController.currentSession = periods;
-      console.log("fromAdmin true")
     } else {
       periods = await SessionController.getCurrentSession();
-      console.log("fromAdmin false")
     }
     periods.sort((a, b) => a.periodId - b.periodId);
 
@@ -91,17 +88,26 @@ class PeriodService {
       let winUpdateMultiple;
       let winningList;
 
-      console.log("period from periodlist", periodBets)
-      console.log(period)
-
       if (period.isResultByAdmin) {
-        winningList = periodBets.filter(
-          (bet) => {
+        const matches = periodBets.filter(
+          (bet) =>
             bet.prediction == period.resultNumber ||
-              period.resultColor.includes(bet.prediction)
-            console.log(" ================================= ", bet, period)
-          }
+            period.resultColor.includes(bet.prediction)
         );
+        console.log(`Matches ${matches}`);
+        winningList = matches;
+        if (matches.length === 0) {
+          winUpdateMultiple = 1;
+        } else {
+          if (
+            matches[0].prediction === "red" ||
+            matches[0].prediction === "green"
+          ) {
+            winUpdateMultiple = 2;
+          } else if (matches[0].prediction === "violet") {
+            winUpdateMultiple = 4.5;
+          }
+        }
       } else {
         if (periodBets.length == 0) {
           const color = Utility.getRandomValue([
@@ -115,7 +121,6 @@ class PeriodService {
             resultColor: color,
           });
         }
-
 
         const redList = [];
         const violetList = [];
@@ -188,38 +193,41 @@ class PeriodService {
         await checkWinningList();
       }
 
-      console.log("winningList", winningList);
-
       const looserList = periodBets.filter((e) => !winningList.includes(e));
 
-      console.log("looser list", looserList)
-
-      for await (const looser of looserList) {
-        Bet.updateOne(
-          { _id: looser._id },
-          { $set: { didWon: false, resultAmount: looser.betAmount } }
-        ).then((err, docs) => LogService.updateLog("BetLoser", err, docs));
-      }
-
-      for (let winnerBet of winningList) {
-        const i = winningList.indexOf(winnerBet);
-        let amount;
-        if (isNaN(winnerBet.prediction)) {
-          amount = winnerBet.betAmount * winUpdateMultiple;
-        } else {
-          amount = winnerBet.betAmount * 9;
+      try {
+        for await (const looser of looserList) {
+          console.log(`[Looser] ${JSON.stringify(looser)}`);
+          Bet.updateOne(
+            { _id: looser._id },
+            { $set: { didWon: false, resultAmount: Number(looser.betAmount) } }
+          ).then((err, docs) => LogService.updateLog("BetLoser", err, docs));
         }
-        Bet.updateOne(
-          { _id: winnerBet._id },
-          { $set: { didWon: true, resultAmount: amount } }
-        ).then((err, docs) => LogService.updateLog("BetWinner", err, docs));
-        await WalletController.updateWalletWinningAmount({
-          userId: winnerBet.userId,
-          amount: amount,
-        });
+
+        for (let winnerBet of winningList) {
+          const i = winningList.indexOf(winnerBet);
+          let amount;
+          if (isNaN(winnerBet.prediction)) {
+            amount = winnerBet.betAmount * winUpdateMultiple;
+          } else {
+            amount = winnerBet.betAmount * 9;
+          }
+          console.log(
+            `[WINNER] ${JSON.stringify(winnerBet)} ${amount} ${typeof amount}`
+          );
+          Bet.updateOne(
+            { _id: winnerBet._id },
+            { $set: { didWon: true, resultAmount: Number(amount) } }
+          ).then((err, docs) => LogService.updateLog("BetWinner", err, docs));
+          await WalletController.updateWalletWinningAmount({
+            userId: winnerBet.userId,
+            amount: amount,
+          });
+        }
+      } catch (e) {
+        console.log(`[CATCH] ${e}`);
       }
     });
-
   }
 
   /**This function is to return an object for class PeriodTimer */

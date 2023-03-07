@@ -8,6 +8,7 @@ const { SessionController } = require("./sessionController");
 
 class PeriodController {
   static createNewPeriods = (time) => {
+    console.log(`[STARTED] - ${Date(time).toString()}`);
     SessionController.currentSession = PeriodService.createNewPeriods(time);
   };
 
@@ -61,6 +62,7 @@ class PeriodController {
 
     // This will go to next iteration of the loop after 3 mins of start
     setTimeout(() => {
+      console.log(`[ENDED] - ${Date(expireTime).toString()}`);
       return this.handlePeriod();
     }, expireTime - Date.now());
   }
