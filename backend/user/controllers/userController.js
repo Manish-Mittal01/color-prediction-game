@@ -30,8 +30,7 @@ module.exports.sendOtp = async (req, res) => {
   function errorMsg(err) {
     return res.status(400).json({
       status: error,
-      message: "",
-      err: err,
+      message: err,
     });
   }
   if (!mobile) return errorMsg("mobile is required");
@@ -79,8 +78,7 @@ module.exports.verifyOtp = async (req, res) => {
   function errorMsg(err) {
     return res.status(400).json({
       status: error,
-      message: "",
-      err: err,
+      message: err,
     });
   }
 
@@ -131,7 +129,6 @@ module.exports.verifyOtp = async (req, res) => {
         message: message,
         token: token,
         data: result,
-        err: "",
       });
     } else {
       return errorMsg(err);

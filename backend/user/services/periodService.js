@@ -50,9 +50,18 @@ class PeriodService {
   }
 
   /**This method will be used to calculate result after period is finished*/
-  static async calculatePeriodResult() {
+  static async calculatePeriodResult(fromAdmin = false) {
+    console.log("into calculate period")
     // 1. Get Current Period
-    const periods = await SessionController.getCurrentSession();
+    let periods = [];
+    if (fromAdmin) {
+      periods = await PeriodModel.find().limit(4).sort({ _id: -1 });
+      SessionController.currentSession = periods;
+      console.log("fromAdmin true")
+    } else {
+      periods = await SessionController.getCurrentSession();
+      console.log("fromAdmin false")
+    }
     periods.sort((a, b) => a.periodId - b.periodId);
 
     // 2. Fetch Data of all bets of current period
@@ -82,11 +91,16 @@ class PeriodService {
       let winUpdateMultiple;
       let winningList;
 
+      console.log("period from periodlist", periodBets)
+      console.log(period)
+
       if (period.isResultByAdmin) {
-        winningList = periodBets.find(
-          (bet) =>
+        winningList = periodBets.filter(
+          (bet) => {
             bet.prediction == period.resultNumber ||
-            period.resultColor.includes(bet.prediction)
+              period.resultColor.includes(bet.prediction)
+            console.log(" ================================= ", bet, period)
+          }
         );
       } else {
         if (periodBets.length == 0) {
@@ -101,6 +115,7 @@ class PeriodService {
             resultColor: color,
           });
         }
+
 
         const redList = [];
         const violetList = [];
@@ -170,13 +185,14 @@ class PeriodService {
             });
           }
         }
-
         await checkWinningList();
       }
 
       console.log("winningList", winningList);
 
       const looserList = periodBets.filter((e) => !winningList.includes(e));
+
+      console.log("looser list", looserList)
 
       for await (const looser of looserList) {
         Bet.updateOne(
@@ -203,6 +219,7 @@ class PeriodService {
         });
       }
     });
+
   }
 
   /**This function is to return an object for class PeriodTimer */

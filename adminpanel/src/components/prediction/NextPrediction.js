@@ -7,7 +7,12 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function NextPrediction() {
-    const [value, setValue] = useState('1');
+    const [value, setValue] = useState({
+        Parity: "",
+        Sapre: "",
+        Bcone: "",
+        Emred: ""
+    });
     const [tab, setTab] = useState("Parity");
     const [timer, setTimer] = useState(0);
     const [updateTimer, setUpdateTimer] = useState(false);
@@ -20,7 +25,8 @@ export default function NextPrediction() {
     const [time, setTime] = useState({ min: "0", sec: "00" });
     const [err, setErr] = useState("")
     const [nextPrediction, setNextPrediction] = useState({});
-    const [currentBets, setCurrentBets] = useState({})
+    const [currentBets, setCurrentBets] = useState({});
+    const [disable, setDisable] = useState(true)
 
     const navigate = useNavigate();
     const Ref = useRef(null);
@@ -97,13 +103,29 @@ export default function NextPrediction() {
 
     function makePrediction() {
         if (!value) return setErr({ message: "enter prediction number" })
+
         const period = {
-            periodId: periods[tab]?.periodId,
-            resultNumber: value
+            "Parity": value.Parity ? {
+                "periodId": periods.Parity.periodId,
+                "resultNumber": value.Parity
+            } : null,
+            "Sapre": value.Sapre ? {
+                "periodId": periods.Sapre.periodId,
+                "resultNumber": value.Sapre
+            } : null,
+            "Bcone": value.Bcone ? {
+                "periodId": periods.Bcone.periodId,
+                "resultNumber": value.Bcone
+            } : null,
+            "Emred": value.Emred ? {
+                "periodId": periods.Emred.periodId,
+                "resultNumber": value.Emred
+            } : null
         }
+
         axios.post("admin/nextprediction", period)
             .then(resp => {
-                setNextPrediction({ ...nextPrediction, [tab]: value });
+                setNextPrediction({ ...nextPrediction, [tab]: value[tab] });
                 setErr("")
                 setValue("")
                 alert("current period prediction added successfully")
@@ -113,6 +135,7 @@ export default function NextPrediction() {
                 console.log(err)
             })
     };
+
 
     return (
         <>
@@ -169,17 +192,7 @@ export default function NextPrediction() {
                     <div className='input_value'>
                         <div className='first_row'>
                             {
-                                [0, 1, 2, 3, 4].map(item => (
-                                    <p className={'enter_value'}>
-                                        {item}
-                                        {(currentBets[tab] && currentBets[tab].numbers) && `- ${currentBets[tab].numbers[item] || 0}`}
-                                    </p>
-                                ))
-                            }
-                        </div>
-                        <div className='secound_row'>
-                            {
-                                [5, 6, 7, 8, 9].map(item => (
+                                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,].map(item => (
                                     <p className={'enter_value'}>
                                         {item}
                                         {(currentBets[tab] && currentBets[tab].numbers) && `- ${currentBets[tab].numbers[item] || 0}`}
@@ -193,11 +206,24 @@ export default function NextPrediction() {
                 <div action="emredpre" id="pre" className="form-signup">
                     <h2 style={{ padding: 10 }} >Next Prediction</h2>
                     <div data-v-309ccc10="" className="input_box">
-                        <input data-v-309ccc10="" type="text" name="username" id="next" placeholder="Enter a number from 0-9" onChange={(e) => {
-                            let newValue = e.target.value
-                            setValue(newValue);
-                            (newValue && (isNaN(newValue) || newValue > 9)) && setErr({ message: "enter a number from 0-9" })
-                        }} />
+                        <input
+                            data-v-309ccc10=""
+                            type="text"
+                            name="username"
+                            id="next"
+                            placeholder="Enter a number from 0-9"
+                            onChange={(e) => {
+                                let newValue = e.target.value
+                                setValue({ ...value, [tab]: newValue });
+                                if (newValue && (isNaN(newValue) || newValue > 9)) {
+                                    setErr({ message: "enter a number from 0-9" })
+                                    setDisable(true)
+                                }
+                                else {
+                                    setErr({})
+                                    setDisable(false)
+                                }
+                            }} />
                     </div>
                     {
                         (err.message) &&
@@ -206,8 +232,13 @@ export default function NextPrediction() {
 
                     <div data-v-309ccc10="" className="input_box_btn">
                         <button
+                            disabled={disable}
                             onClick={() => makePrediction()}
-                            data-v-309ccc10="" type="button" className="login_btn ripple">Confirm Next Prediction</button>
+                            data-v-309ccc10=""
+                            type="button"
+                            className="login_btn ripple finalBtn"
+                        >
+                            Confirm Next Prediction</button>
                     </div>
                 </div>
 

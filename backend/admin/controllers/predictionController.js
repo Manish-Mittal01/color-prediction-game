@@ -13,6 +13,7 @@ module.exports.prediction = async (req, res) => {
   const { Parity, Sapre, Bcone, Emred } = req.body;
 
   async function updatePeriod(periodId, resultNumber) {
+    console.log("into update period")
     const minPrice = 41123;
     const maxPrice = 49152;
     const price = Math.floor(
@@ -41,15 +42,18 @@ module.exports.prediction = async (req, res) => {
         },
       }
     );
+    console.log("period updated")
   }
 
-  const periods = [Parity, Sapre, Bcone, Emred].where((e) => e != null);
+  const periods = [Parity, Sapre, Bcone, Emred].filter((e) => e != null);
+  console.log("periods", periods)
 
   for await (const period of periods) {
+    console.log("period in for", period)
     await updatePeriod(period.periodId, period.resultNumber);
   }
 
-  PeriodService.calculatePeriodResult();
+  PeriodService.calculatePeriodResult(true);
 
   ResponseService.success(res, "Period Results set successfully", {
     Parity: Parity != null,
