@@ -20,7 +20,6 @@ export default function SearchBox({ searchValue, filterResults }) {
             <h2>
                 <span style={{ textAlign: 'center', cursor: "pointer", fontSize: 25 }} onClick={() => navigate("/rechargeRecord")} >Recharge Records</span>
             </h2>
-            <h2 style={{ textAlign: 'center' }} onClick={() => navigate("/withdrawRecord")} >Withdraw Records</h2>
         </div>
     )
 }

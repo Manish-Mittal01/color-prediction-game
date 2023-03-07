@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
 import './Promotion.css'
 import { GoThreeBars } from "react-icons/go";
 import Promotioncontent from './Promotioncontent';
