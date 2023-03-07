@@ -15,6 +15,9 @@ module.exports.login = async (req, res) => {
     });
   };
 
+  console.log(`Mobile ${mobile}`);
+  console.log(`Password ${password}`);
+
   if (!mobile || !password)
     return errMsg("Invalid username or password", StatusCode.badRequest);
 
@@ -22,16 +25,15 @@ module.exports.login = async (req, res) => {
     mobile: mobile,
   });
 
+  console.log(`User ${JSON.stringify(user)}`);
+
   if (!user) {
     ResponseService.failed(res, "User not Found", StatusCode.notFound);
     return;
   }
-  if (user.status === "blocked") {
-    ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
-    return;
-  }
 
-  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  const isPasswordCorrect = user.password === password;
+  console.log(`isPassword ${isPasswordCorrect}`);
   if (user.mobile === mobile && isPasswordCorrect) {
     const token = jwt.sign(
       {
