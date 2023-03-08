@@ -83,7 +83,11 @@ class TransactionAdminService {
       if (!isApproved) errorMsgs.push("isApproved is required");
       if (!transactionId) errorMsgs.push("transactionId is required");
 
-      return ResponseService.failed(res, "userId is required", StatusCode.badRequest);
+      return ResponseService.failed(
+        res,
+        "userId is required",
+        StatusCode.badRequest
+      );
     }
 
     const user = await UserModel.findOne({
@@ -133,22 +137,32 @@ class TransactionAdminService {
 
     if (isApproved) {
       let depositAmount;
+      let bonusAmount;
+      let totalAmount;
       if (wallet.isFirstDeposit && user.referralCode) {
+        bonusAmount = wallet.bonusAmount + amount * 0.3;
         depositAmount = amount * 1.3; // Adding 30% before of referral
+        totalAmount = wallet.totalAmount + depositAmount;
         ReferralController.depositReferralAmount(userId, amount);
       } else {
+        bonusAmount = wallet.bonusAmount;
         depositAmount = wallet.notAllowedAmount + amount;
+        totalAmount = wallet.totalAmount + amount;
       }
-      const result = await walletModal.updateOne(
-        { userId: userId },
-        {
-          $set: {
-            notAllowedAmount: depositAmount,
-            totalAmount: wallet.totalAmount + amount,
-            isFirstDeposit: false,
-          },
-        }
-      );
+      // Here wallet of current user is being updated
+      const result = await walletModal
+        .updateOne(
+          { userId: userId },
+          {
+            $set: {
+              notAllowedAmount: depositAmount,
+              totalAmount: totalAmount,
+              isFirstDeposit: false,
+              bonusAmount: bonusAmount,
+            },
+          }
+        )
+        .then((err, docs) => LogService.updateLog("UserWallet", err, docs));
       ResponseService.success(res, "Request Approved Successfully", {});
     } else {
       ResponseService.success(res, "Request Rejected Successfully", {});
@@ -159,7 +173,7 @@ class TransactionAdminService {
   static async getWithdrawalRequests(req, res) {
     const allDeposits = await transactionModel.find({
       transactionType: TransactionType.withdraw,
-      status: TransactionStatus.pending
+      status: TransactionStatus.pending,
     });
 
     if (!allDeposits || allDeposits.length === 0) {
@@ -203,11 +217,30 @@ class TransactionAdminService {
   static async withdrawRequest(req, res) {
     const { userId, amount, isApproved, transactionId } = req.body;
 
-    if (!userId) return ResponseService.failed(res, "userId is required", StatusCode.badRequest);
-    if (!amount) return ResponseService.failed(res, "amount is required", StatusCode.badRequest);
-    if (isApproved === undefined) return ResponseService.failed(res, "isApproved is required", StatusCode.badRequest);
-    if (!transactionId) return ResponseService.failed(res, "transactionId is required", StatusCode.badRequest);
-
+    if (!userId)
+      return ResponseService.failed(
+        res,
+        "userId is required",
+        StatusCode.badRequest
+      );
+    if (!amount)
+      return ResponseService.failed(
+        res,
+        "amount is required",
+        StatusCode.badRequest
+      );
+    if (isApproved === undefined)
+      return ResponseService.failed(
+        res,
+        "isApproved is required",
+        StatusCode.badRequest
+      );
+    if (!transactionId)
+      return ResponseService.failed(
+        res,
+        "transactionId is required",
+        StatusCode.badRequest
+      );
 
     const user = await UserModel.findOne({
       userId: userId,

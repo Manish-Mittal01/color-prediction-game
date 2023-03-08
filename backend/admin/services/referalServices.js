@@ -46,10 +46,34 @@ class ReferralService {
                 (e) => e.referrarId == userId
               );
 
-              referralModel.updateOne(
+              referralModel
+                .updateOne(
+                  { userId: referral.userId },
+                  {
+                    $set: { "level1.$[item].amount": refer.amount },
+                  },
+                  {
+                    arrayFilters: [
+                      {
+                        "item.referrarId": referredUser.referrarId,
+                      },
+                    ],
+                  }
+                )
+                .then((err, docs) =>
+                  LogService.updateLog("Referral-Level1", err, docs)
+                );
+            });
+        } else if (refer.level == 2) {
+          referralModel.findOne({ userId: refer.userId }).then((referral) => {
+            const referrals = referral.level2;
+            const referredUser = referrals.find((e) => e.referrarId == userId);
+
+            referralModel
+              .updateOne(
                 { userId: referral.userId },
                 {
-                  $set: { "level1.$[item].amount": refer.amount },
+                  $set: { "level2.$[item].amount": refer.amount },
                 },
                 {
                   arrayFilters: [
@@ -57,47 +81,34 @@ class ReferralService {
                       "item.referrarId": referredUser.referrarId,
                     },
                   ],
-                },
-
-              ).then((err, docs) => LogService.updateLog("Referral-Level1", err, docs));
-            });
-        } else if (refer.level == 2) {
-          referralModel.findOne({ userId: refer.userId }).then((referral) => {
-            const referrals = referral.level2;
-            const referredUser = referrals.find((e) => e.referrarId == userId);
-
-            referralModel.updateOne(
-              { userId: referral.userId },
-              {
-                $set: { "level2.$[item].amount": refer.amount },
-              },
-              {
-                arrayFilters: [
-                  {
-                    "item.referrarId": referredUser.referrarId,
-                  },
-                ],
-              },
-            ).then((err, docs) => LogService.updateLog("Referral-Level2", err, docs));
+                }
+              )
+              .then((err, docs) =>
+                LogService.updateLog("Referral-Level2", err, docs)
+              );
           });
         } else if (refer.level == 3) {
           referralModel.findOne({ userId: refer.userId }).then((referral) => {
             const referrals = referral.level3;
             const referredUser = referrals.find((e) => e.referrarId == userId);
 
-            referralModel.updateOne(
-              { userId: referral.userId },
-              {
-                $set: { "level3.$[item].amount": refer.amount },
-              },
-              {
-                arrayFilters: [
-                  {
-                    "item.referrarId": referredUser.referrarId,
-                  },
-                ],
-              },
-            ).then((err, docs) => LogService.updateLog("Referral-Level3", err, docs));
+            referralModel
+              .updateOne(
+                { userId: referral.userId },
+                {
+                  $set: { "level3.$[item].amount": refer.amount },
+                },
+                {
+                  arrayFilters: [
+                    {
+                      "item.referrarId": referredUser.referrarId,
+                    },
+                  ],
+                }
+              )
+              .then((err, docs) =>
+                LogService.updateLog("Referral-Level3", err, docs)
+              );
           });
         }
       });
@@ -107,15 +118,19 @@ class ReferralService {
 
     referralLevel.forEach((refer) => {
       walletModal.findOne({ userId: refer.userId }).then((wallet) => {
-        walletModal.updateOne(
-          { userId: refer.userId },
-          {
-            $set: {
-              totalAmount: wallet.totalAmount + refer.amount,
-              referralAmount: wallet.referralAmount + refer.amount,
-            },
-          },
-        ).then((err, docs) => LogService.updateLog("Referral-Wallet", err, docs));
+        walletModal
+          .updateOne(
+            { userId: refer.userId },
+            {
+              $set: {
+                totalAmount: wallet.totalAmount + refer.amount,
+                referralAmount: wallet.referralAmount + refer.amount,
+              },
+            }
+          )
+          .then((err, docs) =>
+            LogService.updateLog("Referral-Wallet", err, docs)
+          );
       });
     });
   }

@@ -74,16 +74,24 @@ class UserServices {
       referralModel({
         userId: referralCode,
         level1: [userEntry],
-      }).save();
+      })
+        .save()
+        .then((err, docs) =>
+          LogService.updateLog("ReferralCode-Level1", err, docs)
+        );
     } else {
-      referralModel.updateOne(
-        { userId: referralCode },
-        {
-          $push: {
-            level1: userEntry,
-          },
-        },
-      ).then((err, docs) => LogService.updateLog("Referral-Level2", err, docs));
+      referralModel
+        .updateOne(
+          { userId: referralCode },
+          {
+            $push: {
+              level1: userEntry,
+            },
+          }
+        )
+        .then((err, docs) =>
+          LogService.updateLog("ReferralCode-Level1", err, docs)
+        );
     }
 
     const user2 = await UserModel.findOne({ userId: referralCode });
@@ -95,14 +103,18 @@ class UserServices {
       userId: user2.referralCode,
     });
 
-    referralModel.updateOne(
-      { userId: user2.referralCode },
-      {
-        $push: {
-          level2: userEntry,
-        },
-      },
-    ).then((err, docs) => LogService.updateLog("Referral-Level2", err, docs));
+    referralModel
+      .updateOne(
+        { userId: user2.referralCode },
+        {
+          $push: {
+            level2: userEntry,
+          },
+        }
+      )
+      .then((err, docs) =>
+        LogService.updateLog("ReferralCode-Level2", err, docs)
+      );
 
     const user3 = await UserModel.findOne({ userId: user2.referralCode });
 
@@ -113,14 +125,18 @@ class UserServices {
       userId: user3.referralCode,
     });
 
-    referralModel.updateOne(
-      { userId: user3.referralCode },
-      {
-        $push: {
-          level3: userEntry,
-        },
-      },
-    ).then((err, docs) => LogService.updateLog("Referral-Level2", err, docs));
+    referralModel
+      .updateOne(
+        { userId: user3.referralCode },
+        {
+          $push: {
+            level3: userEntry,
+          },
+        }
+      )
+      .then((err, docs) =>
+        LogService.updateLog("ReferralCode-Level3", err, docs)
+      );
   }
 }
 

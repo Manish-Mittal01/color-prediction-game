@@ -23,6 +23,10 @@ const walletSchema = Schema(
       type: Number,
       default: 0,
     },
+    bonusAmount: {
+      type: Number,
+      default: 0,
+    },
     notAllowedAmount: {
       type: Number,
       default: 0,
