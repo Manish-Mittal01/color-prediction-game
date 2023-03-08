@@ -48,8 +48,8 @@ class PeriodController {
       }
     }
 
-    const calculateTime = startTime + (2 * 60 + 40) * 1000; // This will give startTime + 2:30 mins
-    const expireTime = calculateTime + 20 * 1000; // This will give expire time - startTime + 3:00 mins
+    const calculateTime = startTime + (2 * 60 + 50) * 1000; // This will give startTime + 2:30 mins
+    const expireTime = calculateTime + 10 * 1000; // This will give expire time - startTime + 3:00 mins
 
     if (hasSessionEnded) {
       this.createNewPeriods(startTime);

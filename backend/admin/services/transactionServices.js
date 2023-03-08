@@ -75,17 +75,17 @@ class TransactionAdminService {
   static async depositRequest(req, res) {
     const { userId, amount, isApproved, transactionId } = req.body;
 
-    if (!userId || !amount || !isApproved) {
+    if (!userId || !amount || isApproved == "false") {
       const errorMsgs = [];
 
       if (!userId) errorMsgs.push("userId is required");
       if (!amount) errorMsgs.push("amount is required");
-      if (!isApproved) errorMsgs.push("isApproved is required");
+      if (isApproved == "false") errorMsgs.push("isApproved is required");
       if (!transactionId) errorMsgs.push("transactionId is required");
 
       return ResponseService.failed(
         res,
-        "userId is required",
+        errorMsgs,
         StatusCode.badRequest
       );
     }

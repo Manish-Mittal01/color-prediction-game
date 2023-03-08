@@ -33,7 +33,7 @@ class PeriodService {
     const currentPeriod = await PeriodModel.findOne({
       periodId: periodId,
     });
-    if (currentPeriod.isResultByAdmin) return;
+    if (currentPeriod && currentPeriod.isResultByAdmin) return;
 
     await PeriodModel.updateOne(
       { periodId: periodId },
@@ -219,10 +219,13 @@ class PeriodService {
             { _id: winnerBet._id },
             { $set: { didWon: true, resultAmount: Number(amount) } }
           ).then((err, docs) => LogService.updateLog("BetWinner", err, docs));
-          await WalletController.updateWalletWinningAmount({
-            userId: winnerBet.userId,
-            amount: amount,
-          });
+
+          if (!fromAdmin) {
+            await WalletController.updateWalletWinningAmount({
+              userId: winnerBet.userId,
+              amount: amount,
+            });
+          }
         }
       } catch (e) {
         console.log(`[CATCH] ${e}`);
