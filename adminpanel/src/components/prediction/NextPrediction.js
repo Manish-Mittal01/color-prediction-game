@@ -136,6 +136,11 @@ export default function NextPrediction() {
             })
     };
 
+    useEffect(() => {
+        if (time.min === "00" && time.sec < 10) {
+            setDisable(true)
+        }
+    }, [time.sec])
 
     return (
         <>

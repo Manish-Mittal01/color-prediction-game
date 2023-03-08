@@ -62,7 +62,7 @@ const Minenav = ({ wallet }) => {
                                 ₹ {wallet.referralAmount}
                             </div> Commission
                             <button className="one_btn ripple">See</button>
-                        </div><div className="top_item"><div>₹ 2382</div>
+                        </div><div className="top_item"><div>₹ {wallet.bonusAmount}</div>
                             Interest
                             <button className="one_btn ripple">See</button>
                         </div>

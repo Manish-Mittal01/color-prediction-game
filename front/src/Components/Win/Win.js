@@ -65,7 +65,8 @@ const Win = () => {
         let walletDetails = {
           totalAmount: data.totalAmount,
           referralAmount: data.referralAmount,
-          withdrawableAmount: data.withdrawableAmount
+          withdrawableAmount: data.withdrawableAmount,
+          bonusAmount: data.bonusAmount
         }
         setWallet(walletDetails)
       })

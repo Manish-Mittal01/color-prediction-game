@@ -12,11 +12,12 @@ export default function Auth({ Comp }) {
     useEffect(() => {
         axios.get(`user/wallet?userId=${userId}`)
             .then(resp => {
-                let { totalAmount, referralAmount, withdrawableAmount } = resp.data.data
+                let { totalAmount, referralAmount, withdrawableAmount, bonusAmount } = resp.data.data
                 let walletDetails = {
                     totalAmount,
                     referralAmount,
-                    withdrawableAmount
+                    withdrawableAmount,
+                    bonusAmount
                 };
                 setWallet(walletDetails)
                 console.log(resp.data)

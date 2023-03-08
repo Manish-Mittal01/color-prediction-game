@@ -86,6 +86,7 @@ export const SubmitRechargeRequest = () => {
     const [transactionId, setTransactionId] = useState();
     const [err, setErr] = useState();
     const [paymentUPI, setPaymentUPI] = useState("");
+    const [adminUPI, setAdminUPI] = useState("")
 
     const location = useLocation()
     const amount = location.state ? location.state.amount : "";
@@ -94,7 +95,8 @@ export const SubmitRechargeRequest = () => {
     useEffect(() => {
         axios.get("admin/details")
             .then((resp) => {
-                console.log(resp.data)
+                setAdminUPI(resp.data.data._doc.upi)
+                console.log(resp.data.data._doc.upi)
             })
             .catch(err => {
                 console.log(err)
@@ -180,7 +182,7 @@ export const SubmitRechargeRequest = () => {
                                     Pay to UPI: <br />
                                     <span id="id"
                                         style={{ color: "#ff0000" }}
-                                    >{upi}</span>
+                                    >{adminUPI}</span>
                                 </div>
                                 <p className="btn-copy" data-clipboard-text="mrginfotech@upi"
                                     style={{ textAlign: 'center', width: 60, fontSize: 16 }}
