@@ -53,24 +53,32 @@ module.exports.sendOtp = async (req, res) => {
     specialChars: false,
   });
 
-  // const greenwebsms = new URLSearchParams();
-  // greenwebsms.append('token', '05fa33c4cb50c35f4a258e85ccf50509');
-  // greenwebsms.append('to', `${mobile}`);
-  // greenwebsms.append('message', `verification code ${OTP}`);
-  // axios.post('http://api.greenweb.com.bd/api.php', greenwebsms).then((resp) => {
-  //     console.log(resp.data)
-  // })
 
   const otp = new Otp({ mobile: mobile, otp: OTP });
   const salt = await bcrypt.genSalt(10);
   otp.otp = await bcrypt.hash(otp.otp, salt);
   const result = await otp.save();
   console.log(OTP);
-  return res.status(200).send({
-    status: success,
-    message: `OTP sent successfully ${OTP}`,
-    err: "",
-  });
+
+
+  let msg = `Please use this code as your one time password (otp). It will expire in 3 minutes.
+  // your OTP is ${OTP}.
+  // NOTE: Never share your otp with anyone`;
+
+
+  await axios.get(`https://www.fast2sms.com/dev/bulkV2?authorization=hLVMdsXvzeZiRCK7Pbf1c9EBxmSrkoFDyl63OAj8GJ04IqWNYgZAdi1VjaIF5UtKbGpLzR8YX7fOkDgo&route=q&message=${msg}&language=english&flash=0&numbers=${mobile}`)
+    .then(resp => {
+      return res.status(200).send({
+        status: success,
+        message: `OTP sent successfully ${OTP}`,
+      });
+    })
+    .catch(err => {
+      return res.status(400).send({
+        status: false,
+        message: "something wrong happend while sending otp",
+      });
+    })
 };
 
 module.exports.verifyOtp = async (req, res) => {
