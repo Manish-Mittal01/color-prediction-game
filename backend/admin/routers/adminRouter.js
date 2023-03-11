@@ -10,6 +10,7 @@ const {
   getBetsAmount,
 } = require("../controllers/predictionController");
 const { AdminController } = require("../controllers/adminController");
+const { AdminBetController } = require("../controllers/betController");
 
 const router = require("express").Router();
 
@@ -30,5 +31,6 @@ router.route("/withdraw").post(TransactionAdminController.withdrawRequest);
 router.route("/nextprediction").post(prediction);
 router.route("/currentPeriodBets").get(getBetsAmount);
 router.route("/details").get(AdminController.getDetails);
+router.route("/bets").get(AdminBetController.getBets);
 
 module.exports = router;
