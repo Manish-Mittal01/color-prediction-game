@@ -5,16 +5,13 @@ import axios from '../../axios/axios';
 import LeftSideSection from '../leftsideSection';
 import SearchBox from '../search/SearchBox';
 
-const User = () => {
-    const [records, setRecords] = useState([]);
+const InviteRecords = () => {
     const [filteredData, setFilteredData] = useState([]);
-    const [searchValue, setSearchValue] = useState("");
 
     useEffect(() => {
         axios.post("admin/allUsers")
             .then(resp => {
                 const users = resp.data.users
-                setRecords(users)
                 setFilteredData(users)
                 console.log(resp.data)
             })
@@ -24,19 +21,11 @@ const User = () => {
     }, []);
 
 
-    function filterResults(value) {
-        setSearchValue(value)
-        let data = records.filter(item => {
-            return item.username.includes(value) || item.userId.includes(value)
-        });
-        setFilteredData(data);
-    }
-
     return (
         <div>
             <LeftSideSection />
             <div style={{ marginInline: 20, marginTop: 80, textAlign: 'center' }}>
-                <SearchBox searchValue={searchValue} filterResults={filterResults} />
+                <h1>Invite Records</h1>
                 <Table style={{ textAlign: 'center' }} className='' responsive striped bordered >
                     <thead>
                         <tr>
@@ -75,4 +64,4 @@ const User = () => {
     )
 }
 
-export default User
+export default InviteRecords

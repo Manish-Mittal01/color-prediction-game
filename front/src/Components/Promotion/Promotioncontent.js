@@ -16,7 +16,7 @@ const Promotion_content = () => {
     const [totalReferrals, setTotalReferrals] = useState(0)
 
     const navigate = useNavigate();
-    const referalLink = `https://domain.com//#/register?r_code=${user}`
+    const referalLink = `https://domain.com/#/register?r_code=${user}`
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem("user"));
@@ -28,7 +28,6 @@ const Promotion_content = () => {
                 let data = resp.data.data
                 setReferrals(data);
                 setTotalReferrals(data.level1?.length + data?.level2.length + data?.level3.length)
-                console.log(data)
             })
             .catch(err => {
                 err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })

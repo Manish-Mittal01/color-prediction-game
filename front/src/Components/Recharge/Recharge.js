@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './Recharge.css'
 import card from '../../images/card.png';
-import { VscThreeBars } from "react-icons/vsc";
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from '../../axios/axios'
 import small1 from '../../images/small1.png'
@@ -29,7 +28,7 @@ const Recharge = ({ wallet }) => {
             <div className='nav_login'>
                 <div className='sections_login'>
                     <div style={{ marginLeft: 14 }}><span className='nav_path'>Recharge</span></div>
-                    <div className='d_d'> <span ><VscThreeBars /></span></div>
+                    {/* <div className='d_d'> <span ><VscThreeBars /></span></div> */}
                 </div>
             </div>
             <div className='balance_av_text'>

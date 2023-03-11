@@ -1,9 +1,12 @@
 import { Badge } from 'react-bootstrap'
-import { IoNotifications } from "react-icons/io5";
+// import { IoNotifications } from "react-icons/io5";
 import React, { useEffect, useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
+// import Modal from 'react-bootstrap/Modal';
 import jwt from 'jwt-decode'
 import { useNavigate } from 'react-router-dom';
+import { blockUser } from '../../common/blockUser';
+import axios from '../../axios/axios'
+import { GoVerified } from 'react-icons/go';
 
 
 const Minenav = ({ wallet }) => {
@@ -12,6 +15,8 @@ const Minenav = ({ wallet }) => {
         user: "",
         mobile: ""
     });
+    const [totalReferrals, setTotalReferrals] = useState(0);
+
     const navigate = useNavigate();
 
 
@@ -23,12 +28,19 @@ const Minenav = ({ wallet }) => {
                 user: userData.userId,
                 mobile: userData.mobile
             });
+
+            axios.get(`user/referrals?userId=${userData.userId}`)
+                .then(resp => {
+                    let data = resp.data.data
+                    setTotalReferrals(data.level1?.length + data?.level2.length + data?.level3.length)
+                })
+                .catch(err => {
+                    err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
+                    console.log(err)
+                })
         }
     }, []);
 
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     return (
         <>
@@ -39,16 +51,16 @@ const Minenav = ({ wallet }) => {
                         <span><div className='user_info'>
                             <ul>
                                 <li>User: {user.mobile}</li>
-                                <li>ID: {user.user}</li>
+                                <li style={{ display: 'flex', alignItems: 'center' }}>ID: {user.user} {totalReferrals > 50 && <GoVerified style={{ marginLeft: 8 }} />} </li>
                             </ul>
                         </div></span>
                     </div>
 
-                    <div className="info_right">
+                    {/* <div className="info_right">
                         <div onClick={handleShow} className="notice">
                             <IoNotifications />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className='nav_2'>
                     <div className="mine_top_items">
@@ -71,17 +83,17 @@ const Minenav = ({ wallet }) => {
 
             </div>
             {/* model */}
-            <Modal show={show} onHide={handleClose}>
+            {/* <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Notice</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Notice not found !</Modal.Body>
-                {/* <Modal.Footer>
+                <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                </Modal.Footer> */}
-            </Modal>
+                </Modal.Footer>
+            </Modal> */}
         </>
     )
 }

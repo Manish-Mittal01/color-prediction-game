@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { VscThreeBars } from 'react-icons/vsc'
 import withdro from '../../images/withdro.png';
 import axios from '../../axios/axios';
 import jwt from 'jwt-decode';
@@ -46,7 +45,7 @@ const Withdrawal = ({ wallet }) => {
             <div className='nav_login'>
                 <div className='sections_login'>
                     <div><span style={{ marginLeft: 14 }} className='nav_path'>Withdrawal</span></div>
-                    <div className='d_d'> <span ><VscThreeBars /></span></div>
+                    {/* <div className='d_d'> <span ><VscThreeBars /></span></div> */}
                 </div>
             </div>
             <div className='balance_av_text'>

@@ -7,7 +7,7 @@ export default function Transaction_card({ item }) {
     console.log(item)
 
     return (
-        <div className={styles.cardMain} style={{ border: "1px solid red" }}>
+        <div className={styles.cardMain}>
             <div className={styles.box1}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div className={styles.iconWrapper} style={{ backgroundColor: color }}>
@@ -16,7 +16,8 @@ export default function Transaction_card({ item }) {
                     <div className={styles.box1Content}>
                         <p className={styles.p}>
                             <span>{item.amount}</span>
-                            <span style={{ color: color }} > {item.status}</span>
+                            <span style={{ color: color }} > {item.status} </span>
+                            <span > {item.transactionType}</span>
                         </p>
                         <p className={styles.p}>
                             <span>Fees: {item.transactionType === "withdraw" ? item.amount * 5 / 95 : 0}</span>

@@ -23,6 +23,14 @@ export const Options = [
         value: "recharge_requests",
     },
     {
+        label: "Invite Records",
+        value: "invite_records",
+    },
+    {
+        label: "Bet Records",
+        value: "Bet_records",
+    },
+    {
         label: "Log Out",
         value: "log_out",
     },

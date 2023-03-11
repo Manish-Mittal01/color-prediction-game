@@ -23,16 +23,12 @@ const Transactions = () => {
             })
     }, []);
 
-    const handleShow = () => {
-        setTransactions([])
-    }
 
     return (
         <>
             <div className='nav_login'>
                 <div className='sections_login'>
                     <div><span style={{ marginLeft: 14 }} className='nav_path'>Transactions</span></div>
-                    <div className='d_d'> <span onClick={handleShow} ><AiOutlineQuestionCircle /></span></div>
                 </div>
             </div>
 

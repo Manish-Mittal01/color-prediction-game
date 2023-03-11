@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Promotion.css'
-import { GoThreeBars } from "react-icons/go";
 import Promotioncontent from './Promotioncontent';
 
 const Promotion = () => {
@@ -14,7 +13,7 @@ const Promotion = () => {
             <div className='nav_login'>
                 <div className='sections_login'>
                     <div><span style={{ marginLeft: 14 }} className='nav_path'>Promotion</span></div>
-                    <div className='d_d'> <span onClick={handleShow} ><GoThreeBars /></span></div>
+                    {/* <div className='d_d'> <span onClick={handleShow} ><GoThreeBars /></span></div> */}
                 </div>
             </div>
             <Promotioncontent />

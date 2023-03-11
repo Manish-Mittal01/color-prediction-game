@@ -14,6 +14,8 @@ import Login from './components/login/Login';
 import WithdrawRecords from './components/withdraw_records/WithdrawRecords';
 import RechargeRecord from './components/recharge_records/RechargeRecord';
 import BlockUser from './components/block_user/BlockUser';
+import InviteRecords from './components/invite_records/InviteRecords';
+import BetRecords from './components/bet_records/BetRecords';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="/rechargeRecord" element={<Auth Comp={RechargeRecord} />} />
           <Route path="/withdraw_requests" element={<Auth Comp={WithdrwaRequests} />} />
           <Route path="/recharge_requests" element={<Auth Comp={DepositRequests} />} />
+          <Route path="/invite_records" element={<Auth Comp={InviteRecords} />} />
+          <Route path="/bet_records" element={<Auth Comp={BetRecords} />} />
           <Route path="/log_out" element={<Auth Comp={Logout} />} />
           <Route path="/setPrediction" element={< Auth Comp={NextPrediction} />} />
           <Route path="/blockUser" element={< Auth Comp={BlockUser} />} />
