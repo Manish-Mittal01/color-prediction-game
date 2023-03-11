@@ -22,7 +22,7 @@ export default function Auth({ Comp }) {
                 setWallet(walletDetails)
                 console.log(resp.data)
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
     }, []);
 
     useEffect(() => {

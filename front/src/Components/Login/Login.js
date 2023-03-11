@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navlogin from './Navlogin'
 import { BsPhone } from "react-icons/bs";
 import { BsFillKeyFill } from "react-icons/bs";
@@ -14,11 +14,15 @@ const Login = () => {
     });
     const [err, setErr] = useState("");
     const [user, setUser] = useState("");
+    const [userLoginIP, setUserLoginIP] = useState("")
 
     const navigate = useNavigate();
 
     async function login() {
-        const user = userDetails;
+        const user = {
+            ...userDetails,
+            loginIP: userLoginIP
+        };
         setErr("")
         if (user.mobile.length !== 10) return setErr("invalid mobile number");
 
@@ -48,6 +52,16 @@ const Login = () => {
             })
             .catch(err => console.log(err))
     }
+
+    useEffect(() => {
+        axios.get("https://api.ipify.org?format=json")
+            .then(resp => {
+                setUserLoginIP(resp.data.ip)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [])
 
     return (
         <>

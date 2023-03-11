@@ -1,0 +1,46 @@
+.cardMain {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.box1 {}
+
+.iconWrapper {
+    background-color: green;
+    padding: 6px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5px;
+}
+
+.dollorIcon {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    padding: 1px;
+    border-radius: 50%;
+    color: green;
+}
+
+.p {
+    margin: 0;
+}
+
+.box1Content {
+    margin-left: 16px;
+    padding-block: 8px;
+}
+
+.box2 {
+    margin-right: 6px;
+    margin-left: 48px;
+}
+
+@media (max-width:470px) {
+    .cardMain {
+        display: block;
+    }
+}

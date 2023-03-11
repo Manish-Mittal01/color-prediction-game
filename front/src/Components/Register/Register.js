@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsFillKeyFill, BsPhone } from 'react-icons/bs'
 import Registernav from './Registernav'
 import './Register.css'
@@ -33,7 +33,7 @@ export const getOtp = ({ user, setErr, setOtpBtn, mode, navigate }) => {
         })
 }
 
-export function verifyOtp({ user, setErr, setOtpBtn, mode, navigate }) {
+export function verifyOtp({ user, setErr, setOtpBtn, mode, navigate, registrationIP }) {
     setOtpBtn(0);
 
     const newUser = {
@@ -41,7 +41,8 @@ export function verifyOtp({ user, setErr, setOtpBtn, mode, navigate }) {
         otp: user.otp,
         mode: mode,
         password: user.password,
-        referralCode: user.referralCode
+        referralCode: user.referralCode,
+        registrationIP
     }
     axios.post("user/sendOtp/verifyOtp", newUser)
         .then(resp => {
@@ -67,7 +68,19 @@ const Register = () => {
     });
     const [err, setErr] = useState();
     const [otpBtn, setOtpBtn] = useState();
+    const [registrationIP, setregistrationIP] = useState("")
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        axios.get("https://api.ipify.org?format=json")
+            .then(resp => {
+                setregistrationIP(resp.data.ip)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [])
 
 
     return (
@@ -145,12 +158,10 @@ const Register = () => {
                 }
                 <div className="input_box_btn">
                     <button onClick={() => {
-                        verifyOtp({ user, setErr, setOtpBtn, mode: "new user", navigate })
+                        verifyOtp({ user, setErr, setOtpBtn, mode: "new user", navigate, registrationIP })
                     }} className="login_btn ripple">Register</button>
                 </div>
             </div>
-
-
         </>
     )
 }
