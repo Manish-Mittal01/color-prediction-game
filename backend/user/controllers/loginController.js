@@ -5,6 +5,7 @@ const { StatusCode } = require("../../common/Constants");
 const { UserController } = require("./userController");
 const { ResponseService } = require("../../common/responseService");
 const UserModel = require("../Models/UserModel");
+const { LogService } = require("../../common/logService");
 const { success, error } = require("../../common/Constants").Status;
 
 module.exports.login = async (req, res) => {
