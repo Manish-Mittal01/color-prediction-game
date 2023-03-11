@@ -5,7 +5,7 @@ module.exports.Status = {
 
 module.exports.periodNames = ["Parity", "Sapre", "Bcone", "Emred"];
 
-module.exports.periodStarts = [1000, 2000, 3000, 4000];
+module.exports.periodStarts = [1001, 2001, 3001, 4001];
 
 module.exports.StatusCode = {
   success: 200,

@@ -84,7 +84,7 @@ export default function Home() {
                     </Col>
                 </Row>
                 <div style={{ textAlign: 'center', width: "100%" }}>
-                    <h2 onClick={() => navigate("/blockUser")} style={{ cursor: 'pointer' }} >Block user</h2>
+                    <h2 onClick={() => navigate("/blockUser")} style={{ cursor: 'pointer', width: 'fit-content', marginInline: 'auto' }} >Block user</h2>
                     <h2 style={{ cursor: 'pointer', width: 'fit-content', marginInline: 'auto' }} onClick={() => navigate("/setPrediction")} >Next Prediction</h2>
                 </div>
             </div>

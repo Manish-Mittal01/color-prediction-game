@@ -43,6 +43,8 @@ const User = () => {
                             <th>S. No.</th>
                             <th>Username</th>
                             <th>userId</th>
+                            <th>Login IP</th>
+                            <th>Registration IP</th>
                             <th>Balance</th>
                             <th>Name</th>
                             <th>Account No.</th>
@@ -59,6 +61,8 @@ const User = () => {
                                         <td>{index + 1}</td>
                                         <td>{item.username}</td>
                                         <td>{item.userId}</td>
+                                        <td>{item.loginIP}</td>
+                                        <td>{item.registrationIP}</td>
                                         <td>{item.balance}</td>
                                         <td >{item.name}</td>
                                         <td >{item.accountNo}</td>

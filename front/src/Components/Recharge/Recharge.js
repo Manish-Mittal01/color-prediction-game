@@ -95,14 +95,12 @@ export const SubmitRechargeRequest = () => {
         axios.get("admin/details")
             .then((resp) => {
                 setAdminUPI(resp.data.data._doc.upi)
-                console.log(resp.data.data._doc.upi)
             })
             .catch(err => {
                 console.log(err)
             })
     }, [])
 
-    const upi = "mrginfotech@upi";
 
     const sendDepositRequest = () => {
         const user = JSON.parse(localStorage.getItem("user"))
@@ -167,7 +165,7 @@ export const SubmitRechargeRequest = () => {
                                     style={{ width: 100, display: "none", height: 100, marginTop: 15 }}
                                 ></div>
                             </div><br />
-                            <div className="upi-info"
+                            {/* <div className="upi-info"
                                 style={{ display: "none", justifyContent: 'center' }}
                             >
                                 <a href="upi://pay?pa=mrginfotech@upi&amp;pn=TcsClubs&amp;am=200&amp;cu=INR&amp;tn=Recharge" className="btn-copy"
@@ -175,7 +173,7 @@ export const SubmitRechargeRequest = () => {
                                     target="_blank">
                                     Pay Now
                                 </a>
-                            </div>
+                            </div> */}
                             <div className="upi-info">
                                 <div>
                                     Pay to UPI: <br />
@@ -183,9 +181,9 @@ export const SubmitRechargeRequest = () => {
                                         style={{ color: "#ff0000" }}
                                     >{adminUPI}</span>
                                 </div>
-                                <p className="btn-copy" data-clipboard-text="mrginfotech@upi"
+                                <p className="btn-copy"
                                     style={{ textAlign: 'center', width: 60, fontSize: 16 }}
-                                    onClick={() => { navigator.clipboard.writeText(upi) }}
+                                    onClick={() => { navigator.clipboard.writeText(adminUPI) }}
                                 >copy</p>
                             </div>
                             <div className="upi-payment-step">
