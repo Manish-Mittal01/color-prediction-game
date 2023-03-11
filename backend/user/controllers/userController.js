@@ -53,36 +53,37 @@ module.exports.sendOtp = async (req, res) => {
     specialChars: false,
   });
 
-
   const otp = new Otp({ mobile: mobile, otp: OTP });
   const salt = await bcrypt.genSalt(10);
   otp.otp = await bcrypt.hash(otp.otp, salt);
   const result = await otp.save();
   console.log(OTP);
 
-
   let msg = `Please use this code as your one time password (otp). It will expire in 3 minutes.
   // your OTP is ${OTP}.
   // NOTE: Never share your otp with anyone`;
 
-
-  await axios.get(`https://www.fast2sms.com/dev/bulkV2?authorization=hLVMdsXvzeZiRCK7Pbf1c9EBxmSrkoFDyl63OAj8GJ04IqWNYgZAdi1VjaIF5UtKbGpLzR8YX7fOkDgo&route=q&message=${msg}&language=english&flash=0&numbers=${mobile}`)
-    .then(resp => {
+  await axios
+    .get(
+      `https://www.fast2sms.com/dev/bulkV2?authorization=hLVMdsXvzeZiRCK7Pbf1c9EBxmSrkoFDyl63OAj8GJ04IqWNYgZAdi1VjaIF5UtKbGpLzR8YX7fOkDgo&route=q&message=${msg}&language=english&flash=0&numbers=${mobile}`
+    )
+    .then((resp) => {
       return res.status(200).send({
         status: success,
         message: `OTP sent successfully ${OTP}`,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       return res.status(400).send({
         status: false,
         message: "something wrong happend while sending otp",
       });
-    })
+    });
 };
 
 module.exports.verifyOtp = async (req, res) => {
-  const { mobile, password, referralCode, otp, mode } = req.body;
+  const { mobile, password, referralCode, otp, mode, registrationIP } =
+    req.body;
   function errorMsg(err) {
     return res.status(400).json({
       status: error,
@@ -95,7 +96,7 @@ module.exports.verifyOtp = async (req, res) => {
 
   if (!mode) return errorMsg("mode is required");
   else if (!["new user", "reset password"].includes(mode))
-    return errorMsg("invalid mode");
+    return errorMsg("Invalid mode");
 
   const otpHolder = await Otp.find({
     mobile: mobile,
@@ -146,6 +147,10 @@ module.exports.verifyOtp = async (req, res) => {
   if (mode === "new user") {
     if (!mobile) return errorMsg("mobile is required");
 
+    if (!registrationIP) {
+      return errorMsg("RegistrationIP is required");
+    }
+
     if (referralCode) {
       const users = await UserModel.find();
       const userIds = users.map((e) => e.userId);
@@ -169,6 +174,7 @@ module.exports.verifyOtp = async (req, res) => {
         mobile: mobile,
         password: password,
         referralCode: referralCode,
+        registrationIP: registrationIP,
       },
       message: "user registered successfully",
       err: "invalid otp or mobile",

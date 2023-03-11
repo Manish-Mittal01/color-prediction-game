@@ -4,10 +4,11 @@ const jwt = require("jsonwebtoken");
 const { StatusCode } = require("../../common/Constants");
 const { UserController } = require("./userController");
 const { ResponseService } = require("../../common/responseService");
+const UserModel = require("../Models/UserModel");
 const { success, error } = require("../../common/Constants").Status;
 
 module.exports.login = async (req, res) => {
-  const { mobile, password } = req.body;
+  const { mobile, password, loginIP } = req.body;
 
   const errMsg = (message, code) => {
     res.status(code).json({
@@ -16,8 +17,19 @@ module.exports.login = async (req, res) => {
     });
   };
 
-  if (!mobile || !password)
-    return errMsg("Invalid username or password", StatusCode.badRequest);
+  if (!mobile || !password || !loginIP) {
+    const errorMsgs = [];
+    if (!mobile) {
+      errorMsgs.push("Mobile is required");
+    }
+    if (!password) {
+      errorMsgs.push("Password is required");
+    }
+    if (!loginIP) {
+      errorMsgs.push("LoginIP is required");
+    }
+    return errMsg(errorMsgs, StatusCode.badRequest);
+  }
 
   const user = await User.findOne({
     mobile: mobile,
@@ -43,6 +55,14 @@ module.exports.login = async (req, res) => {
       process.env.JWT_SECRET_KEY,
       { expiresIn: "7d" }
     );
+    await UserModel.updateOne(
+      { userId: user.userId },
+      {
+        $set: {
+          loginIP: loginIP,
+        },
+      }
+    ).then((err, docs) => LogService.updateLog("User-Login", err, docs));
     return res.status(200).send({
       status: success,
       message: "Login Successful",

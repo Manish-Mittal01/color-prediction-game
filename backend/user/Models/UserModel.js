@@ -21,6 +21,8 @@ const userSchema = Schema(
       type: String,
       default: "active",
     },
+    registrationIP: String,
+    loginIP: String,
   },
   { timestamps: true, versionKey: false }
 );
