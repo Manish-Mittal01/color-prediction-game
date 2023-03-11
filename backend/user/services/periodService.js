@@ -2,6 +2,7 @@ const {
   periodNames,
   StatusCode,
   ColorNumbers,
+  periodStarts,
 } = require("../../common/Constants");
 var mongo = require("mongodb");
 const { Utility } = require("../../common/utility");
@@ -243,12 +244,52 @@ class PeriodService {
     };
   }
 
-  static getPeriodIds(time) {
-    return [1, 2, 3, 4].map((e) => `${time}${e}`).map((e) => parseInt(e));
+  static getFreshIds() {
+    const date = new Date();
+    const periodDate = [date.getFullYear(), date.getMonth(), date.getDate()]
+      .map((e) => (`${e}`.length < 2 ? `0${e}` : e))
+      .join("");
+
+    const periods = [];
+    for (const start of periodStarts) {
+      const period = [periodDate, start].join("");
+      periods.push(parseInt(period));
+    }
+    return periods;
   }
 
-  static createNewPeriods(time) {
-    const periodIds = this.getPeriodIds(time);
+  static async getPeriodIds(time) {
+    const currentSession = await SessionController.getCurrentSession();
+
+    if (!currentSession) {
+      return this.getFreshIds();
+    }
+
+    const _date = currentSession[0].createdAt;
+    const _today = new Date();
+
+    const currentDate = new Date(
+      _date.getFullYear(),
+      _date.getMonth(),
+      _date.getDate()
+    );
+    const todayDate = new Date(
+      _today.getFullYear(),
+      _today.getMonth(),
+      _today.getDate()
+    );
+
+    if (currentDate < todayDate) {
+      return this.getFreshIds();
+    }
+
+    const periodIds = currentSession.map((e) => e.periodId);
+    periodIds.sort();
+    return periodIds.map((e) => e + 1);
+  }
+
+  static async createNewPeriods(time) {
+    const periodIds = await this.getPeriodIds(time);
     const periods = [];
 
     periodIds.forEach(async (id, index) => {

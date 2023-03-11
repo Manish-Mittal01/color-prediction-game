@@ -7,9 +7,11 @@ const { PeriodService } = require("../services/periodService");
 const { SessionController } = require("./sessionController");
 
 class PeriodController {
-  static createNewPeriods = (time) => {
+  static createNewPeriods = async (time) => {
     console.log(`[STARTED] - ${Date(time).toString()}`);
-    SessionController.currentSession = PeriodService.createNewPeriods(time);
+    SessionController.currentSession = await PeriodService.createNewPeriods(
+      time
+    );
   };
 
   static calculatePeriodResult = async (time) =>
