@@ -1,9 +1,10 @@
 const referralModel = require("../../user/Models/referralModel");
 const UserModel = require("../../user/Models/UserModel");
 const walletModal = require("../../user/Models/walletModal");
+const betModel = require("../../user/Models/betModel");
 const { LogService } = require("../../common/logService");
 const { ResponseService } = require("../../common/responseService");
-const { StatusCode } = require("../../common/Constants");
+const { StatusCode, periodNames } = require("../../common/Constants");
 
 class ReferralService {
   static async depositReferralAmount(userId, amount) {
@@ -162,6 +163,16 @@ class ReferralService {
       return ResponseService.failed(res, "User not found", StatusCode.notFound);
     }
 
+    const userWallet = await walletModal.findOne({ userId: user.userId });
+
+    if (!userWallet) {
+      return ResponseService.failed(
+        res,
+        "Wallet not found for the user",
+        StatusCode.notFound
+      );
+    }
+
     const referrals = await referralModel.findOne({ userId: user.userId });
 
     if (!referrals) {
@@ -181,11 +192,11 @@ class ReferralService {
     const users = {};
     const levelKeys = Object.keys(levels);
 
-    for (const key in levelKeys) {
+    for await (const key of levelKeys) {
       const level = levels[key];
       wallets[key] = [];
       users[key] = [];
-      for (const l in level) {
+      for await (const l of level) {
         const user = await UserModel.findOne({ userId: l.referrarId });
         const wallet = await walletModal.findOne({ userId: l.referrarId });
         users[key].push(user);
@@ -197,29 +208,70 @@ class ReferralService {
       (a, b) => a + b.length,
       0
     );
-    const totalDeposit = Object.values(wallets)
-      .flat()
-      .map((w) => w.totalDeposit)
-      .reduce((a, b) => a + b, 0);
+    const totalDeposit =
+      Object.values(wallets)
+        .flat()
+        .map((w) => w.totalDeposit)
+        .reduce((a, b) => a + b, 0) + userWallet.totalDeposit;
 
-    const totalWithdrawl = Object.values(wallets)
-      .flat()
-      .map((w) => w.totalWithdrawl)
-      .reduce((a, b) => a + b, 0);
+    const totalWithdrawl =
+      Object.values(wallets)
+        .flat()
+        .map((w) => w.totalWithdrawl)
+        .reduce((a, b) => a + b, 0) + userWallet.totalWithdrawl;
 
-    const totalBalance = Object.values(wallets)
-      .flat()
-      .map((w) => w.totalAmount)
-      .reduce((a, b) => a + b, 0);
+    const totalBalance =
+      Object.values(wallets)
+        .flat()
+        .map((w) => w.totalAmount)
+        .reduce((a, b) => a + b, 0) + userWallet.totalAmount;
 
     const totalActive = Object.values(users)
       .flat()
       .filter((u) => u.status === "active").length;
 
     const activeUsers = {};
-
     for (const level of Object.keys(users)) {
+      const activeList = [];
+      const levelUsers = users[level];
+      const levelWallets = wallets[level];
+
+      levelUsers.forEach((user, i) => {
+        const wallet = levelWallets[i];
+        const active = {
+          userId: user.userId,
+          mobile: user.mobile,
+          totalDeposit: wallet.totalDeposit,
+          joiningDate: user.createdAt,
+        };
+        activeList.push(active);
+      });
+
+      activeUsers[level] = activeList;
     }
+
+    const allBets = await betModel.find({ userId: user.userId });
+    const betsByType = periodNames.reduce((a, b) => {
+      a[b] = [];
+      return a;
+    }, {});
+
+    const allBetsByType = Object.keys(betsByType).reduce((a, b) => {
+      const bets = allBets
+        .filter((a) => a.periodName === b)
+        .map((e) => e.totalAmount);
+      a[b] = bets.reduce((a, b) => a + b, 0);
+      return a;
+    }, {});
+
+    const userData = {
+      userId: user.userId,
+      mobile: user.mobile,
+      totalDeposit: userWallet.totalDeposit,
+      totalWithdrawl: userWallet.totalWithdrawl,
+      totalBalance: userWallet.totalAmount,
+      betsByType: allBetsByType,
+    };
 
     return ResponseService.success(res, "Referral data", {
       totalReferrals,
@@ -227,6 +279,8 @@ class ReferralService {
       totalWithdrawl,
       totalBalance,
       totalActive,
+      activeUsers,
+      userData,
     });
   }
 }
