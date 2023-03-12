@@ -12,7 +12,7 @@ class TransactionService {
     userId,
     amount,
     transactionType,
-    walletBalance
+    walletBalance,
   }) {
     if (!userId || !amount || !transactionType) {
       const missingFields = [];
@@ -39,7 +39,7 @@ class TransactionService {
       userId: userId,
       amount: amount,
       transactionType: transactionType,
-      wallet: walletBalance
+      wallet: walletBalance,
     }).save();
     return transaction;
   }
@@ -48,13 +48,13 @@ class TransactionService {
     const { userId, amount } = req.body;
 
     const wallet = await walletModal.findOne({ userId: userId });
-    console.log(wallet)
+    console.log(wallet);
     const transaction = await this._createAndValidateTransaction({
       res: res,
       userId: userId,
       amount: amount,
       transactionType: TransactionType.deposit,
-      walletBalance: wallet.totalAmount
+      walletBalance: wallet.totalAmount,
     });
 
     if (transaction == null) {
@@ -93,8 +93,8 @@ class TransactionService {
       return;
     }
     const user = await UserModel.findOne({
-      userId: userId
-    })
+      userId: userId,
+    });
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
@@ -133,12 +133,22 @@ class TransactionService {
       userId: userId,
       amount: withdrawableAmount,
       transactionType: TransactionType.withdraw,
-      walletBalance: wallet.withdrawableAmount
+      walletBalance: wallet.withdrawableAmount,
     });
 
     if (transaction == null) {
       return;
     }
+
+    const result = await walletModal.updateOne(
+      { userId: userId },
+      {
+        $set: {
+          withdrawableAmount: wallet.withdrawableAmount - amount,
+          totalAmount: wallet.totalAmount - amount,
+        },
+      }
+    );
 
     return ResponseService.success(
       res,

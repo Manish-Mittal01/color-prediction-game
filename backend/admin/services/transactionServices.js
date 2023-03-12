@@ -75,19 +75,15 @@ class TransactionAdminService {
   static async depositRequest(req, res) {
     const { userId, amount, isApproved, transactionId } = req.body;
 
-    if (!userId || !amount || isApproved == "false") {
+    if (!userId || !amount || isApproved === undefined || !transactionId) {
       const errorMsgs = [];
 
       if (!userId) errorMsgs.push("userId is required");
       if (!amount) errorMsgs.push("amount is required");
-      if (isApproved == "false") errorMsgs.push("isApproved is required");
+      if (isApproved === undefined) errorMsgs.push("isApproved is required");
       if (!transactionId) errorMsgs.push("transactionId is required");
 
-      return ResponseService.failed(
-        res,
-        errorMsgs,
-        StatusCode.badRequest
-      );
+      return ResponseService.failed(res, errorMsgs, StatusCode.badRequest);
     }
 
     const user = await UserModel.findOne({
@@ -155,6 +151,7 @@ class TransactionAdminService {
           { userId: userId },
           {
             $set: {
+              totalDeposit: wallet.totalDeposit + amount,
               notAllowedAmount: depositAmount,
               totalAmount: totalAmount,
               isFirstDeposit: false,
@@ -217,30 +214,16 @@ class TransactionAdminService {
   static async withdrawRequest(req, res) {
     const { userId, amount, isApproved, transactionId } = req.body;
 
-    if (!userId)
-      return ResponseService.failed(
-        res,
-        "userId is required",
-        StatusCode.badRequest
-      );
-    if (!amount)
-      return ResponseService.failed(
-        res,
-        "amount is required",
-        StatusCode.badRequest
-      );
-    if (isApproved === undefined)
-      return ResponseService.failed(
-        res,
-        "isApproved is required",
-        StatusCode.badRequest
-      );
-    if (!transactionId)
-      return ResponseService.failed(
-        res,
-        "transactionId is required",
-        StatusCode.badRequest
-      );
+    if (!userId || !amount || isApproved === undefined || !transactionId) {
+      const errorMsgs = [];
+
+      if (!userId) errorMsgs.push("userId is required");
+      if (!amount) errorMsgs.push("amount is required");
+      if (isApproved === undefined) errorMsgs.push("isApproved is required");
+      if (!transactionId) errorMsgs.push("transactionId is required");
+
+      return ResponseService.failed(res, errorMsgs, StatusCode.badRequest);
+    }
 
     const user = await UserModel.findOne({
       userId: userId,
@@ -300,15 +283,22 @@ class TransactionAdminService {
         { userId: userId },
         {
           $set: {
-            withdrawableAmount: wallet.withdrawableAmount - amount,
-            totalAmount: wallet.totalAmount - amount,
+            totalWithdrawl: wallet.totalWithdrawl + amount,
           },
         }
       );
-      ResponseService.success(res, "Request Approved Successfully", {});
+      return ResponseService.success(res, "Request Approved Successfully", {});
     } else {
-      ResponseService.success(res, "Request Rejected Successfully", {});
-      return;
+      const result = await walletModal.updateOne(
+        { userId: userId },
+        {
+          $set: {
+            withdrawableAmount: wallet.withdrawableAmount + amount,
+            totalAmount: wallet.totalAmount + amount,
+          },
+        }
+      );
+      return ResponseService.success(res, "Request Rejected Successfully", {});
     }
   }
 }

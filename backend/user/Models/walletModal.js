@@ -15,6 +15,14 @@ const walletSchema = Schema(
       type: Number,
       default: 0,
     },
+    totalDeposit: {
+      type: Number,
+      default: 0,
+    },
+    totalWithdrawl: {
+      type: Number,
+      default: 0,
+    },
     withdrawableAmount: {
       type: Number,
       default: 0,
