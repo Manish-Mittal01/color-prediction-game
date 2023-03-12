@@ -16,6 +16,8 @@ import RechargeRecord from './components/recharge_records/RechargeRecord';
 import BlockUser from './components/block_user/BlockUser';
 import InviteRecords from './components/invite_records/InviteRecords';
 import BetRecords from './components/bet_records/BetRecords';
+import UserDetails from './components/user_records/UserDetails';
+import UserReport from './components/user_records/UserReport';
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
           <Route path="/log_out" element={<Auth Comp={Logout} />} />
           <Route path="/setPrediction" element={< Auth Comp={NextPrediction} />} />
           <Route path="/blockUser" element={< Auth Comp={BlockUser} />} />
+          <Route path="/userdetails" element={< Auth Comp={UserDetails} />} />
+          <Route path="/report" element={< Auth Comp={UserReport} />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>

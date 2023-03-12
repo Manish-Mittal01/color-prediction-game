@@ -45,7 +45,7 @@ export default function LeftSideSection(props) {
     return (
         <div className={!isExpanded ? `${styles.container} hide-scroll` : `${styles.container} ${styles.expanded} hide-scroll`}
         >
-            <p style={{ textAlign: 'center' }} >
+            <p style={{ textAlign: 'center', margin: 4 }} >
                 <GoThreeBars style={{ fontSize: 42 }} onClick={() => setisExpanded(!isExpanded)} />
             </p>
 

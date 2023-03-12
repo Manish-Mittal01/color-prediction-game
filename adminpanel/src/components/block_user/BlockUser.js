@@ -22,13 +22,12 @@ export default function BlockUser() {
                 console.log(err)
             })
     }
-    console.log(err)
 
     return (
         <div>
             <div data-v-309ccc10="" className="recharge">
                 <div data-v-309ccc10="" className="recharge_box">
-                    <h2 style={{ padding: 10 }}>Enter the Username to get Details</h2>
+                    <h2 style={{ padding: 10 }}>Enter the Username to block a user</h2>
                     <div data-v-309ccc10="" className="input_box">
                         <input onChange={(e) => setUser(e.target.value)} data-v-309ccc10="" type="text" id="username" placeholder="Username" />
                         <span data-v-309ccc10="" className="tips_span">Username</span>

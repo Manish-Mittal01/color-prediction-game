@@ -26,7 +26,6 @@ const WithdrwaRequests = () => {
             isApproved,
             transactionId
         }
-        console.log(transactionId)
 
         axios.post('admin/withdraw', transactionDetail)
             .then(resp => {
