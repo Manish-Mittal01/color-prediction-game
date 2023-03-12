@@ -2,6 +2,8 @@ const referralModel = require("../../user/Models/referralModel");
 const UserModel = require("../../user/Models/UserModel");
 const walletModal = require("../../user/Models/walletModal");
 const { LogService } = require("../../common/logService");
+const { ResponseService } = require("../../common/responseService");
+const { StatusCode } = require("../../common/Constants");
 
 class ReferralService {
   static async depositReferralAmount(userId, amount) {
@@ -116,10 +118,10 @@ class ReferralService {
 
     await updateReferralTable();
 
-    console.log("referralLevel", referralLevel)
+    console.log("referralLevel", referralLevel);
 
     referralLevel.forEach((refer) => {
-      console.log(refer)
+      console.log(refer);
       walletModal.findOne({ userId: refer.userId }).then((wallet) => {
         walletModal
           .updateOne(
@@ -128,7 +130,7 @@ class ReferralService {
               $set: {
                 totalAmount: wallet.totalAmount + refer.amount,
                 referralAmount: wallet.referralAmount + refer.amount,
-                notAllowedAmount: wallet.notAllowedAmount + refer.amount
+                notAllowedAmount: wallet.notAllowedAmount + refer.amount,
               },
             }
           )
@@ -136,6 +138,95 @@ class ReferralService {
             LogService.updateLog("Referral-Wallet", err, docs)
           );
       });
+    });
+  }
+
+  static async getReferralData(req, res) {
+    const { mobile, userId } = req.query;
+
+    if (!mobile && !userId) {
+      return ResponseService.failed(
+        res,
+        "mobile or userId is required",
+        StatusCode.badRequest
+      );
+    }
+    let user;
+    if (mobile !== undefined) {
+      user = await UserModel.findOne({ mobile: mobile });
+    } else {
+      user = await UserModel.findOne({ userId: userId });
+    }
+
+    if (!user) {
+      return ResponseService.failed(res, "User not found", StatusCode.notFound);
+    }
+
+    const referrals = await referralModel.findOne({ userId: user.userId });
+
+    if (!referrals) {
+      return ResponseService.failed(
+        res,
+        "Referrals not found for the user",
+        StatusCode.notFound
+      );
+    }
+
+    const levels = {
+      level1: referrals.level1,
+      level2: referrals.level2,
+      level3: referrals.level3,
+    };
+    const wallets = {};
+    const users = {};
+    const levelKeys = Object.keys(levels);
+
+    for (const key in levelKeys) {
+      const level = levels[key];
+      wallets[key] = [];
+      users[key] = [];
+      for (const l in level) {
+        const user = await UserModel.findOne({ userId: l.referrarId });
+        const wallet = await walletModal.findOne({ userId: l.referrarId });
+        users[key].push(user);
+        wallets[key].push(wallet);
+      }
+    }
+
+    const totalReferrals = Object.values(levels).reduce(
+      (a, b) => a + b.length,
+      0
+    );
+    const totalDeposit = Object.values(wallets)
+      .flat()
+      .map((w) => w.totalDeposit)
+      .reduce((a, b) => a + b, 0);
+
+    const totalWithdrawl = Object.values(wallets)
+      .flat()
+      .map((w) => w.totalWithdrawl)
+      .reduce((a, b) => a + b, 0);
+
+    const totalBalance = Object.values(wallets)
+      .flat()
+      .map((w) => w.totalAmount)
+      .reduce((a, b) => a + b, 0);
+
+    const totalActive = Object.values(users)
+      .flat()
+      .filter((u) => u.status === "active").length;
+
+    const activeUsers = {};
+
+    for (const level of Object.keys(users)) {
+    }
+
+    return ResponseService.success(res, "Referral data", {
+      totalReferrals,
+      totalDeposit,
+      totalWithdrawl,
+      totalBalance,
+      totalActive,
     });
   }
 }

@@ -260,7 +260,6 @@ class PeriodService {
 
   static async getPeriodIds(time) {
     const currentSession = await SessionController.getCurrentSession();
-    console.log(currentSession);
 
     if (!currentSession || currentSession.length === 0) {
       return this.getFreshIds();

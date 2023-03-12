@@ -11,6 +11,7 @@ const {
 } = require("../controllers/predictionController");
 const { AdminController } = require("../controllers/adminController");
 const { AdminBetController } = require("../controllers/betController");
+const { ReferralController } = require("../controllers/referalController");
 
 const router = require("express").Router();
 
@@ -32,5 +33,6 @@ router.route("/nextprediction").post(prediction);
 router.route("/currentPeriodBets").get(getBetsAmount);
 router.route("/details").get(AdminController.getDetails);
 router.route("/bets").get(AdminBetController.getBets);
+router.route("/referrals").get(ReferralController.getReferralData);
 
 module.exports = router;

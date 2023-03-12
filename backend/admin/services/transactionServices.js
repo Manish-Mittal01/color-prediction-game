@@ -247,14 +247,6 @@ class TransactionAdminService {
       );
     }
 
-    if (wallet.withdrawableAmount < amount && isApproved) {
-      return ResponseService.failed(
-        res,
-        `Not enough Withdrawable Amount Wallet`,
-        StatusCode.notFound
-      );
-    }
-
     const transaction = await transactionModel.findOne({
       _id: mongo.ObjectId(transactionId),
       status: TransactionStatus.pending,
@@ -294,7 +286,7 @@ class TransactionAdminService {
         {
           $set: {
             withdrawableAmount: wallet.withdrawableAmount + amount,
-            totalAmount: wallet.totalAmount + amount,
+            totalAmount: wallet.totalAmount - amount * 0.95,
           },
         }
       );

@@ -107,7 +107,6 @@ class TransactionService {
       return;
     }
 
-    const withdrawableAmount = amount * 0.95;
     const wallet = await walletModal.findOne({ userId: userId });
 
     if (wallet == null) {
@@ -119,7 +118,7 @@ class TransactionService {
       return;
     }
 
-    if (withdrawableAmount > wallet.withdrawableAmount) {
+    if (amount > wallet.withdrawableAmount) {
       ResponseService.failed(
         res,
         "Not enough withdrawable balance in wallet",
@@ -131,7 +130,7 @@ class TransactionService {
     const transaction = await this._createAndValidateTransaction({
       res: res,
       userId: userId,
-      amount: withdrawableAmount,
+      amount: amount,
       transactionType: TransactionType.withdraw,
       walletBalance: wallet.withdrawableAmount,
     });
