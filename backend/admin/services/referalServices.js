@@ -4,7 +4,11 @@ const walletModal = require("../../user/Models/walletModal");
 const betModel = require("../../user/Models/betModel");
 const { LogService } = require("../../common/logService");
 const { ResponseService } = require("../../common/responseService");
-const { StatusCode, periodNames } = require("../../common/Constants");
+const {
+  StatusCode,
+  periodNames,
+  ReferralBonus,
+} = require("../../common/Constants");
 
 class ReferralService {
   static async depositReferralAmount(userId, amount) {
@@ -30,11 +34,11 @@ class ReferralService {
     for (let index in referralLevel) {
       const refer = referralLevel[index];
       if (refer.level == 1) {
-        referralLevel[index].amount = amount * 0.3;
+        referralLevel[index].amount = amount * ReferralBonus.level1;
       } else if (refer.level == 2) {
-        referralLevel[index].amount = amount * 0.05;
+        referralLevel[index].amount = amount * ReferralBonus.level2;
       } else if (refer.level == 3) {
-        referralLevel[index].amount = 0;
+        referralLevel[index].amount = amount * ReferralBonus.level3;
       }
     }
 

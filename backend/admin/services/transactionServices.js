@@ -2,6 +2,7 @@ const {
   StatusCode,
   TransactionType,
   TransactionStatus,
+  ReferralBonus,
 } = require("../../common/Constants");
 var mongo = require("mongodb");
 const { LogService } = require("../../common/logService");
@@ -136,8 +137,8 @@ class TransactionAdminService {
       let bonusAmount;
       let totalAmount;
       if (wallet.isFirstDeposit && user.referralCode) {
-        bonusAmount = wallet.bonusAmount + amount * 0.3;
-        depositAmount = amount * 1.3; // Adding 30% before of referral
+        bonusAmount = wallet.bonusAmount + amount * ReferralBonus.level1;
+        depositAmount = amount * (1 + ReferralBonus.level1); // Adding 30% before of referral
         totalAmount = wallet.totalAmount + depositAmount;
         ReferralController.depositReferralAmount(userId, amount);
       } else {

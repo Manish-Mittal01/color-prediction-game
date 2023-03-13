@@ -2,7 +2,7 @@ const User = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { StatusCode } = require("../../common/Constants");
-const { ResponseService } = require("../common/responseService");
+const { ResponseService } = require("../../common/responseService");
 const { success, error } = require("../../common/Constants").Status;
 
 module.exports.login = async (req, res) => {

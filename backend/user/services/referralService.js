@@ -1,4 +1,4 @@
-const { StatusCode } = require("../../common/Constants");
+const { StatusCode, ReferralBonus } = require("../../common/Constants");
 const { ResponseService } = require("../../common/responseService");
 const { UserController } = require("../controllers/userController");
 const referralModel = require("../Models/referralModel");
@@ -62,7 +62,9 @@ class ReferralService {
     ResponseService.success(res, "Referrals found", {
       totalReferralAmount: level1Amount + level2Amount + level3Amount,
       totalContributionAmount:
-        level1Amount / 0.3 + level2Amount / 0.05 + level3Amount,
+        level1Amount / ReferralBonus.level1 +
+        level2Amount / ReferralBonus.level2 +
+        level3Amount / ReferralBonus.level3,
       level1: await makeResponseList(referrar.level1),
       level2: await makeResponseList(referrar.level2),
       level3: await makeResponseList(referrar.level3),

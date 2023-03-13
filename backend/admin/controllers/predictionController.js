@@ -6,7 +6,7 @@ const {
 const betModel = require("../../user/Models/betModel");
 const PeriodModel = require("../../user/Models/PeriodModel");
 const { PeriodService } = require("../../user/services/periodService");
-const { ColorNumbers, periodNames } = require("../common/Constants");
+const { ColorNumbers, periodNames } = require("../../common/Constants");
 
 const { success, error } = require("../../common/Constants").Status;
 
