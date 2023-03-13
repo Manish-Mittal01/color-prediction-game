@@ -53,7 +53,6 @@ export default function LeftSideSection(props) {
                 isExpanded &&
                 Options.map((option, index) => {
                     let currentOption = option.value;
-
                     return (
                         <div
                             key={index}

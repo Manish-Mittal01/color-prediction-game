@@ -72,7 +72,7 @@ const MyRecord = () => {
                                                                 {item.resultNumber}
                                                                 {
                                                                     item.resultColor && item.resultColor.split(" ").map(color => {
-                                                                        return <span style={{ color: color }}> {color} </span>
+                                                                        return <span key={color} style={{ color: color }}> {color} </span>
                                                                     })
                                                                 }
                                                             </span>

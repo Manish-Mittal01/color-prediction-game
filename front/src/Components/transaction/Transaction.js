@@ -36,7 +36,7 @@ const Transactions = () => {
             {
                 transactions.length > 0 &&
                 transactions.map((item) => (
-                    <Transaction_card item={item} />
+                    <Transaction_card key={item.userId} item={item} />
 
                 ))
             }

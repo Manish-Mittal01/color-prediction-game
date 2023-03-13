@@ -198,7 +198,7 @@ export default function NextPrediction() {
                         <div className='first_row'>
                             {
                                 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9,].map(item => (
-                                    <p className={'enter_value'}>
+                                    <p key={item} className={'enter_value'}>
                                         {item}
                                         {(currentBets[tab] && currentBets[tab].numbers) && `- ${currentBets[tab].numbers[item] || 0}`}
                                     </p>

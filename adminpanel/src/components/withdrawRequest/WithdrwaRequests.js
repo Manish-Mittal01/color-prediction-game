@@ -65,7 +65,7 @@ const WithdrwaRequests = () => {
                             records.map((item, index) => {
                                 return (
                                     <>
-                                        <tr key={item.userId + index}>
+                                        <tr>
                                             <td>{item.userId}</td>
                                             <td>{item.amount}</td>
                                             <td>{item.status}</td>

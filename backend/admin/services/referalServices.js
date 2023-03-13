@@ -214,7 +214,7 @@ class ReferralService {
         }
       }
 
-      totalReferrals = Object.values(levels).reduce((a, b) => a + b.length, 0);
+      totalReferrals = Object.values(levels).reduce((a, b) => a + b.length, 1);
       totalDeposit =
         Object.values(wallets)
           .flat()

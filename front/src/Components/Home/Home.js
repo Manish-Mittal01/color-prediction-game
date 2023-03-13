@@ -35,7 +35,7 @@ export const Products = memo(() => {
         <ul data-v-68d7bcd4="" className="list_ul">
           {
             img.length > 0 ?
-              img?.map((item) => {
+              img.map((item) => {
                 return (
                   <li key={item.title} data-v-68d7bcd4="" className="list_li">
                     <ol data-v-68d7bcd4="">

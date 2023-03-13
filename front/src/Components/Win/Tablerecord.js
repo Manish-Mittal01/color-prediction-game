@@ -39,7 +39,7 @@ function TableRecord({ history, tab }) {
                                 <td>
                                     {item.resultColor &&
                                         item.resultColor.split(" ").map((color) => (
-                                            <span className='c_red' style={{ color: color }}>
+                                            <span key={color} className='c_red' style={{ color: color }}>
                                                 <GoPrimitiveDot style={{ width: 20, height: 20 }} />
                                             </span>
                                         ))

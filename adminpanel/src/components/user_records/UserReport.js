@@ -18,11 +18,11 @@ export default function UserReport() {
                 <h1 style={{ fontWeight: "bold" }}>User Total Report</h1>
             </div>
             <h3 style={{ textAlign: 'center' }}>
-                Report for User:<span style={{ color: 'red' }}>{userData.mobile}</span></h3>
+                Report for User: {userData.mobile}</h3>
             <h3 style={{ textAlign: 'center' }}>
-                usercode:<span style={{ color: 'red' }}>{userData.userId}</span></h3>
+                usercode: {userData.userId}</h3>
             <h3 style={{ textAlign: 'center' }}>
-                User Balance:<span style={{ color: "green" }}>{userData.userBalance}</span></h3>
+                User Balance: {userData.userBalance}</h3>
 
             <div className="container">
                 <Row style={{ marginInline: 4 }}>
