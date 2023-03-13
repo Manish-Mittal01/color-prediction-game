@@ -173,81 +173,87 @@ class ReferralService {
       );
     }
 
+    let totalReferrals;
+    let totalDeposit;
+    let totalWithdrawl;
+    let totalBalance;
+    let totalActive;
+    let activeUsers;
     const referrals = await referralModel.findOne({ userId: user.userId });
 
     if (!referrals) {
-      return ResponseService.failed(
-        res,
-        "Referrals not found for the user",
-        StatusCode.notFound
-      );
-    }
+      totalReferrals = 0;
+      totalDeposit = userWallet.totalDeposit;
+      totalWithdrawl = userWallet.totalWithdrawl;
+      totalBalance = userWallet.totalAmount;
+      totalActive = 1;
+      activeUsers = { level1: [], level2: [], level3: [] };
+    } else {
+      const levels = {
+        level1: referrals.level1,
+        level2: referrals.level2,
+        level3: referrals.level3,
+      };
+      const wallets = {};
+      const users = {};
+      const levelKeys = Object.keys(levels);
 
-    const levels = {
-      level1: referrals.level1,
-      level2: referrals.level2,
-      level3: referrals.level3,
-    };
-    const wallets = {};
-    const users = {};
-    const levelKeys = Object.keys(levels);
-
-    for await (const key of levelKeys) {
-      const level = levels[key];
-      wallets[key] = [];
-      users[key] = [];
-      for await (const l of level) {
-        const user = await UserModel.findOne({ userId: l.referrarId });
-        const wallet = await walletModal.findOne({ userId: l.referrarId });
-        users[key].push(user);
-        wallets[key].push(wallet);
+      for await (const key of levelKeys) {
+        const level = levels[key];
+        wallets[key] = [];
+        users[key] = [];
+        for await (const l of level) {
+          const user = await UserModel.findOne({ userId: l.referrarId });
+          const wallet = await walletModal.findOne({ userId: l.referrarId });
+          users[key].push(user);
+          wallets[key].push(wallet);
+        }
       }
-    }
 
-    const totalReferrals = Object.values(levels).reduce(
-      (a, b) => a + b.length,
-      0
-    );
-    const totalDeposit =
-      Object.values(wallets)
-        .flat()
-        .map((w) => w.totalDeposit)
-        .reduce((a, b) => a + b, 0) + userWallet.totalDeposit;
+      totalReferrals = Object.values(levels).reduce((a, b) => a + b.length, 0);
+      totalDeposit =
+        Object.values(wallets)
+          .flat()
+          .map((w) => w.totalDeposit)
+          .reduce((a, b) => a + b, 0) + userWallet.totalDeposit;
 
-    const totalWithdrawl =
-      Object.values(wallets)
-        .flat()
-        .map((w) => w.totalWithdrawl)
-        .reduce((a, b) => a + b, 0) + userWallet.totalWithdrawl;
+      totalWithdrawl =
+        Object.values(wallets)
+          .flat()
+          .map((w) => w.totalWithdrawl)
+          .reduce((a, b) => a + b, 0) + userWallet.totalWithdrawl;
 
-    const totalBalance =
-      Object.values(wallets)
-        .flat()
-        .map((w) => w.totalAmount)
-        .reduce((a, b) => a + b, 0) + userWallet.totalAmount;
+      totalBalance =
+        Object.values(wallets)
+          .flat()
+          .map((w) => w.totalAmount)
+          .reduce((a, b) => a + b, 0) + userWallet.totalAmount;
 
-    const totalActive = Object.values(users)
-      .flat()
-      .filter((u) => u.status === "active").length;
+      totalActive =
+        Object.values(users)
+          .flat()
+          .filter((u) => u.status === "active").length + 1;
 
-    const activeUsers = {};
-    for (const level of Object.keys(users)) {
-      const activeList = [];
-      const levelUsers = users[level];
-      const levelWallets = wallets[level];
+      activeUsers = {};
 
-      levelUsers.forEach((user, i) => {
-        const wallet = levelWallets[i];
-        const active = {
-          userId: user.userId,
-          mobile: user.mobile,
-          totalDeposit: wallet.totalDeposit,
-          joiningDate: user.createdAt,
-        };
-        activeList.push(active);
-      });
+      for (const level of Object.keys(users)) {
+        const activeList = [];
+        const levelUsers = users[level];
+        const levelWallets = wallets[level];
 
-      activeUsers[level] = activeList;
+        levelUsers.forEach((user, i) => {
+          const wallet = levelWallets[i];
+          const active = {
+            userId: user.userId,
+            mobile: user.mobile,
+            totalDeposit: wallet.totalDeposit,
+            joiningDate: user.createdAt,
+          };
+          activeList.push(active);
+        });
+
+        activeUsers[level] = activeList;
+      }
     }
 
     const allBets = await betModel.find({ userId: user.userId });
