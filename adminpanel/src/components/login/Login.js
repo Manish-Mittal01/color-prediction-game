@@ -28,7 +28,6 @@ const Login = () => {
                 navigate("/")
             })
             .catch(err => {
-                console.log(err)
                 setErr(err.response.data.message);
             })
     }

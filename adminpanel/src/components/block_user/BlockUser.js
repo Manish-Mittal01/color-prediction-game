@@ -15,11 +15,11 @@ export default function BlockUser() {
                 setErr({});
                 setUser("")
                 alert("user blocked successfully")
-                console.log(resp.data)
+
             })
             .catch(err => {
                 err.response && setErr(err.response.data)
-                console.log(err)
+
             })
     }
 

@@ -12,7 +12,7 @@ const WithdrwaRequests = () => {
         axios.get("admin/withdraw")
             .then(resp => {
                 setRecords(resp.data.data)
-                console.log(resp.data)
+
             })
             .catch(err => {
                 console.log(err)
@@ -32,11 +32,10 @@ const WithdrwaRequests = () => {
                 records.splice(index, 1);
                 setRecords([...records]);
                 setErr({})
-                console.log(resp.data)
+
             })
             .catch(err => {
                 err.response && setErr(err.response.data)
-                console.log(err)
             })
     }
 

@@ -13,7 +13,7 @@ const InviteRecords = () => {
             .then(resp => {
                 const users = resp.data.users
                 setFilteredData(users)
-                console.log(resp.data)
+
             })
             .catch(err => {
                 console.log(err)

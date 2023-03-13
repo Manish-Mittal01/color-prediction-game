@@ -21,7 +21,9 @@ export default function Auth({ Comp }) {
                 };
                 setWallet(walletDetails)
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err)
+            });
     }, []);
 
     useEffect(() => {

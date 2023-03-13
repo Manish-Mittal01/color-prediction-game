@@ -16,7 +16,7 @@ const RechargeRecord = () => {
                 // const users = resp.data.users
                 // setRecords(users)
                 // setFilteredData(users)
-                console.log(resp.data)
+
             })
             .catch(err => {
                 console.log(err)

@@ -15,10 +15,9 @@ const Transactions = () => {
         axios.get(`user/transactions?userId=${userId}`)
             .then(resp => {
                 setTransactions(resp.data.data)
-                console.log(resp.data)
+
             })
             .catch(err => {
-                console.log(err)
                 err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
             })
     }, []);

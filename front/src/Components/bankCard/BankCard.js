@@ -43,12 +43,11 @@ const Bankcard = () => {
             .then(resp => {
                 alert("bank details added successfully");
                 navigate("/mine")
-                console.log(resp.data)
+
             })
             .catch(err => {
                 err.response && setErr(err.response.data.message);
                 err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
-                console.log(err)
             })
     }
 

@@ -20,7 +20,6 @@ export const Products = memo(() => {
           localStorage.setItem("products", JSON.stringify(products))
         })
         .catch(err => {
-          console.log(err)
           setErr(err)
         })
     }

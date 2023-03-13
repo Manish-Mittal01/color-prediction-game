@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
 
 
-
 const Withdrawal = ({ wallet }) => {
     const [amount, setAmount] = useState(0);
     const [password, setPassword] = useState("");
@@ -30,13 +29,11 @@ const Withdrawal = ({ wallet }) => {
             .then(resp => {
                 alert("withdraw request submited successfully");
                 setErr({})
-                console.log(resp.data)
+
             })
             .catch(err => {
-                console.log(err)
                 err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate });
                 setErr(err.response.data)
-
             })
     }
 

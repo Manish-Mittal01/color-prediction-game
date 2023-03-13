@@ -11,7 +11,7 @@ const WithdrwaRequests = () => {
         axios.get("admin/deposit")
             .then(resp => {
                 setRecords(resp.data.data)
-                console.log(resp.data)
+
             })
             .catch(err => {
                 console.log(err)
@@ -30,7 +30,7 @@ const WithdrwaRequests = () => {
             .then(resp => {
                 records.splice(index, 1);
                 setRecords([...records])
-                console.log(resp.data)
+
             })
             .catch(err => {
                 console.log(err)

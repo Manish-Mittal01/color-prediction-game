@@ -31,8 +31,6 @@ const Promotion_content = () => {
             })
             .catch(err => {
                 err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
-
-                console.log(err)
             })
     }, []);
 

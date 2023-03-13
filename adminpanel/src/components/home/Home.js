@@ -20,9 +20,11 @@ export default function Home() {
         axios.post("admin/home")
             .then(resp => {
                 setRecords(resp.data.data)
-                console.log(resp.data)
+
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err)
+            })
     }, [])
 
     return (

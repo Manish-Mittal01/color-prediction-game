@@ -4,7 +4,6 @@ import styles from './Transaction.module.css'
 
 export default function Transaction_card({ item }) {
     const color = item.status === "approved" ? "green" : item.status === "pending" ? "orange" : item.status === "rejected" ? 'red' : ""
-    console.log(item)
 
     return (
         <div className={styles.cardMain}>

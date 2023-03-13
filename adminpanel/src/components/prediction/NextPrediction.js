@@ -36,7 +36,7 @@ export default function NextPrediction() {
         axios.get("admin/currentPeriodBets")
             .then(resp => {
                 setCurrentBets(resp.data.data)
-                console.log(resp.data)
+
             })
             .catch(err => {
                 console.log(err)
@@ -129,7 +129,7 @@ export default function NextPrediction() {
                 setErr("")
                 setValue("")
                 alert("current period prediction added successfully")
-                console.log(resp.data)
+
             })
             .catch(err => {
                 console.log(err)

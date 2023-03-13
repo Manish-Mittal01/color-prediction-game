@@ -35,7 +35,6 @@ const Login = () => {
                 userWallet(jwt(resp.data.token).userId)
             })
             .catch(err => {
-                console.log(err)
                 setErr(err.response.data.message);
             })
     }
@@ -50,7 +49,9 @@ const Login = () => {
                     withdrawableAmount: data.withdrawableAmount
                 }
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     useEffect(() => {

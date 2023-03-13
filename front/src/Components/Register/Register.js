@@ -22,10 +22,10 @@ export const getOtp = ({ user, setErr, setOtpBtn, mode, navigate }) => {
             setErr("")
             setOtpBtn && setOtpBtn("")
             alert("otp sent successfully")
-            console.log(resp.data);
+                ;
         })
         .catch(err => {
-            console.log(err)
+
             setOtpBtn(1)
             setErr(err.response.data);
             err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
@@ -52,7 +52,7 @@ export function verifyOtp({ user, setErr, setOtpBtn, mode, navigate, registratio
             localStorage.clear()
         })
         .catch(err => {
-            console.log(err)
+
             setErr(err.response.data)
             err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
         })
