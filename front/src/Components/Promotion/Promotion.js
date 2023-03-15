@@ -13,20 +13,9 @@ const Promotion = () => {
             <div className='nav_login'>
                 <div className='sections_login'>
                     <div><span style={{ marginLeft: 14 }} className='nav_path'>Promotion</span></div>
-                    {/* <div className='d_d'> <span onClick={handleShow} ><GoThreeBars /></span></div> */}
                 </div>
             </div>
             <Promotioncontent />
-            {/* popup buttons */}
-            {/* <Modal className='wrapper_cus_d5' show={show} onHide={handleClose}>
-                <Modal.Body>
-                    <div><ul className="right_nav">
-                        <li>Bonus Record</li>
-                        <li >Apply Record</li>
-                    </ul>
-                    </div>
-                </Modal.Body>
-            </Modal> */}
         </>
     )
 }

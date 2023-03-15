@@ -10,18 +10,22 @@ const Footer = () => {
     const navbars = [
         {
             icon: <AiFillHome />,
+            label: "Home",
             onClick: () => { navigate("/") }
         },
         {
             icon: <FaSearch />,
+            label: "Search",
             onClick: () => { navigate("/search") }
         },
         {
             icon: <GiTargetPrize />,
+            label: "Win",
             onClick: () => { navigate("/win") }
         },
         {
             icon: <FaUserAlt />,
+            label: "My",
             onClick: () => { navigate("/mine") }
         },
     ]
@@ -34,7 +38,8 @@ const Footer = () => {
                         navbars.map((item, index) => (
                             <li onClick={item.onClick} data-v-405e9a63="" key={index} >
                                 <div className='flex_cus' style={{ color: '#009688', cursor: 'pointer' }}>
-                                    {item.icon}
+                                    <p style={{ marginBottom: 0, marginTop: 12, textAlign: 'center' }}>{item.icon}</p>
+                                    <p style={{ margin: 0 }}>{item.label}</p>
                                 </div>
                             </li>
                         ))
