@@ -50,7 +50,7 @@ export const Products = memo(() => {
                       <div data-v-68d7bcd4="" className="van-multi-ellipsis--l3 info">
                         {item.description}
                       </div>
-                      <p data-v-68d7bcd4="" className="price">₹{item.price}</p>
+                      <p data-v-68d7bcd4="" className="price">$ {item.price}</p>
                     </ol>
                   </li>
                 )

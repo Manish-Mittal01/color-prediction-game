@@ -13,6 +13,7 @@ const main = async () => {
 
     db.once("open", function () {
       console.info("Connected to database");
+      console.log("first")
       app.listen(Config.port, () => {
         console.log(`App is running on ${Config.port}`);
         PeriodController.handlePeriod();
