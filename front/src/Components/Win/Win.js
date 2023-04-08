@@ -70,10 +70,10 @@ const Win = () => {
         }
         setWallet(walletDetails)
       })
-      .catch(err =>  {
-console.log(err)
+      .catch(err => {
+        console.log(err)
 
-      } )
+      })
   }
 
   async function getBets() {
@@ -176,18 +176,25 @@ console.log(err)
 
       <div className='input_value'>
         <div className='first_row'>
-          <button disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet("0")}>0</button>
-          <button disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet("1")}>1</button>
-          <button disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet("2")}>2</button>
-          <button disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet("3")}>3</button>
-          <button disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet("4")}>4</button>
+          {
+            [0, 1, 2, 3, 4].map(item => (
+              <button
+                style={{ backgroundColor: [1, 3].includes(item) ? "red" : [2, 4].includes(item) ? "green" : "", backgroundImage: item === 0 && "linear-gradient(45deg, red 50%, #9c27b0 50%)" }}
+                disabled={disabled}
+                className={disabled ? "enter_value disabled" : 'enter_value'}
+                onClick={() => makeBet(item)}
+              >{item}</button>
+            ))
+          }
         </div>
         <div className='secound_row'>
-          <button disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet("5")}>5</button>
-          <button disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet("6")}>6</button>
-          <button disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet("7")}>7</button>
-          <button disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet("8")}>8</button>
-          <button disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet("9")}>9</button>
+          {
+            [5, 6, 7, 8, 9].map(item => (
+              <button
+                style={{ backgroundColor: [9, 7].includes(item) ? "red" : [6, 8].includes(item) ? "green" : "", backgroundImage: item === 5 && "linear-gradient(45deg, green 50%, #9c27b0 50%)" }}
+                disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet(item)}>{item}</button>
+            ))
+          }
         </div>
 
       </div>

@@ -12,8 +12,8 @@ const MyRecord = () => {
     useEffect(() => {
         axios.get("admin/bets")
             .then(resp => {
-                ;
-                setAllBets(resp.data.data)
+                setAllBets(resp.data.data);
+                console.log(resp.data.data)
             })
             .catch(err => {
                 console.log(err)

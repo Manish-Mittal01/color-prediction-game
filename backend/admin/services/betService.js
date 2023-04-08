@@ -2,6 +2,7 @@ const { ResponseService } = require("../../common/responseService");
 const {
   SessionController,
 } = require("../../user/controllers/sessionController");
+const bankDetailsModel = require("../../user/Models/bankDetailsModel");
 const betModel = require("../../user/Models/betModel");
 const PeriodModel = require("../../user/Models/PeriodModel");
 const UserModel = require("../../user/Models/UserModel");
@@ -36,12 +37,14 @@ class AdminBetService {
       const period = await getPeriod(bet.periodId);
       const resultColor = period.resultColor;
       const resultNumber = period.resultNumber;
+      const bankDetails = await bankDetailsModel.findOne({ userId: bet.userId })
 
       data.push({
         ...bet._doc,
         mobile: user.mobile,
         resultColor,
         resultNumber,
+        bankDetails
       });
     }
 

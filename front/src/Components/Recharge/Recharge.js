@@ -63,11 +63,11 @@ const Recharge = ({ wallet }) => {
                 <div className="recharge_btn">
                     <button
                         onClick={() => {
-                            if (amount) {
+                            if (amount && amount >= 500) {
                                 navigate("/SubmitRechargeRequest", { state: { amount } })
                             }
                             else {
-                                setErr("enter a valid amount")
+                                setErr("Minimum amount should be equal to greater than 500")
                             }
                         }}
                     >
