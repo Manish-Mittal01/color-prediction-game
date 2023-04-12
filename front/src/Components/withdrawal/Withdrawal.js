@@ -89,7 +89,7 @@ const Withdrawal = ({ wallet }) => {
                         className='withdrawBtn'
                         onClick={() => makeWithdraw()}
                         disabled={!amount && !password}
-                    >Recharge</button></div>
+                    >Withdraw</button></div>
             </div>
         </>
     )

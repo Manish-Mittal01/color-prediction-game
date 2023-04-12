@@ -63,11 +63,11 @@ const Recharge = ({ wallet }) => {
                 <div className="recharge_btn">
                     <button
                         onClick={() => {
-                            if (amount && amount >= 500) {
+                            if (amount && amount >= 100) {
                                 navigate("/SubmitRechargeRequest", { state: { amount } })
                             }
                             else {
-                                setErr("Minimum amount should be equal to greater than 500")
+                                setErr("Minimum amount should be equal to greater than 100")
                             }
                         }}
                     >
@@ -84,7 +84,6 @@ export default Recharge;
 export const SubmitRechargeRequest = () => {
     const [transactionId, setTransactionId] = useState();
     const [err, setErr] = useState();
-    const [paymentUPI, setPaymentUPI] = useState("");
     const [adminUPI, setAdminUPI] = useState("")
 
     const location = useLocation()

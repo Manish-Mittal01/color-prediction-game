@@ -32,7 +32,7 @@ export const Products = memo(() => {
   return (
     <div data-v-68d7bcd4="" className="index_list">
       <div data-v-68d7bcd4="" className="list_content">
-        <ul data-v-68d7bcd4="" className="list_ul">
+        <ul data-v-68d7bcd4="" className="list_ul" style={{ paddingInline: "2rem" }}>
           {
             img.length > 0 ?
               img.map((item) => {

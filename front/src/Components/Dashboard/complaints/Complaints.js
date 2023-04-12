@@ -155,12 +155,27 @@
 import React from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
 import { BsArrowLeft } from 'react-icons/bs'
+import { FaTelegram, FaTelegramPlane } from 'react-icons/fa'
 import { GrAdd } from 'react-icons/gr'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Complaints = () => {
+
     return (
-        <>
-            <div className='nav_login'>
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh'
+            }}
+        >
+            <FaTelegram style={{ color: 'blue', fontSize: "10rem" }} />
+            <h3 style={{ textAlign: 'center', paddingInline: "4%", marginBlock: '5vh' }}>Join our telegram channel to get updates <br /> and to raise a complaint </h3>
+            <Link to={"https://t.me/newmalls1235"} target="_blank">Join Telegram</Link>
+            {/* <button onClick={() => navigate("https://t.me/newmalls1235")} >Join Telegram</button> */}
+            {/* <div className='nav_login'>
                 <div className='sections_order'>
                     <div>
                         <span style={{ marginLeft: 14 }} className='nav_path'>Orders</span>
@@ -185,8 +200,8 @@ const Complaints = () => {
                     </Tab>
 
                 </Tabs>
-            </div>
-        </>
+            </div> */}
+        </div>
     )
 }
 

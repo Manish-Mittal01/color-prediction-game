@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../axios/axios'
+import LeftSideSection from '../leftsideSection';
 
 export default function BlockUser() {
     const [user, setUser] = useState("");
@@ -25,7 +26,8 @@ export default function BlockUser() {
 
     return (
         <div>
-            <div data-v-309ccc10="" className="recharge">
+            <LeftSideSection />
+            <div data-v-309ccc10="" className="recharge" style={{ marginTop: 80 }}>
                 <div data-v-309ccc10="" className="recharge_box">
                     <h2 style={{ padding: 10 }}>Enter the Username to block a user</h2>
                     <div data-v-309ccc10="" className="input_box">

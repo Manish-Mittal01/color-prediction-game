@@ -5,7 +5,7 @@ import './Register.css'
 import { SiGooglemessages } from "react-icons/si";
 import { AiFillAccountBook } from 'react-icons/ai';
 import axios from '../../axios/axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
 
 export const getOtp = ({ user, setErr, setOtpBtn, mode, navigate }) => {
@@ -59,7 +59,8 @@ export function verifyOtp({ user, setErr, setOtpBtn, mode, navigate, registratio
 }
 
 const Register = () => {
-    const referralCode = useLocation().state?.referralCode;
+    const [searchparams] = useSearchParams()
+    const referralCode = useLocation().state?.referralCode || searchparams.get("r_code");
     const [user, setUser] = useState({
         mobile: '',
         otp: '',
@@ -79,7 +80,8 @@ const Register = () => {
             })
             .catch(err => {
                 console.log(err)
-            })
+            });
+        let referralCode = searchparams.get("r_code");
     }, [])
 
 
