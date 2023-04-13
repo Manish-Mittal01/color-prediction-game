@@ -174,7 +174,6 @@ const Complaints = () => {
             <FaTelegram style={{ color: 'blue', fontSize: "10rem" }} />
             <h3 style={{ textAlign: 'center', paddingInline: "4%", marginBlock: '5vh' }}>Join our telegram channel to get updates <br /> and to raise a complaint </h3>
             <Link to={"https://t.me/newmalls1235"} target="_blank">Join Telegram</Link>
-            {/* <button onClick={() => navigate("https://t.me/newmalls1235")} >Join Telegram</button> */}
             {/* <div className='nav_login'>
                 <div className='sections_order'>
                     <div>

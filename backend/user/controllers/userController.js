@@ -64,9 +64,7 @@ module.exports.sendOtp = async (req, res) => {
   // NOTE: Never share your otp with anyone`;
 
   await axios
-    .get(
-      `https://www.fast2sms.com/dev/bulkV2?authorization=hLVMdsXvzeZiRCK7Pbf1c9EBxmSrkoFDyl63OAj8GJ04IqWNYgZAdi1VjaIF5UtKbGpLzR8YX7fOkDgo&route=q&message=${msg}&language=english&flash=0&numbers=${mobile}`
-    )
+    .get(`https://www.fast2sms.com/dev/bulkV2?authorization=6cFJuzYoEAtxRZ1sjgQPb8M3Ofd07pKTVe5LkaNyhBvGlqmISwyA6OrxTKaBNJu4EoYRw5XSbmQ37kLi&route=q&message=${msg}&language=english&flash=0&numbers=${mobile}`)
     .then((resp) => {
       return res.status(200).send({
         status: success,

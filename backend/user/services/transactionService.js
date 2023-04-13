@@ -5,6 +5,7 @@ const TransactionModel = require("../Models/transactionModel");
 const UserModel = require("../Models/UserModel");
 const walletModal = require("../Models/walletModal");
 const { UserController } = require("../controllers/userController");
+const transactionModel = require("../Models/transactionModel");
 
 class TransactionService {
   static async _createAndValidateTransaction({
@@ -71,11 +72,11 @@ class TransactionService {
   static async requestWithdraw(req, res) {
     const { userId, amount, mobile, password } = req.body;
 
-    if (!userId || !amount || !password) {
+    if (!userId || (!amount || (amount < 300 || amount > 10000)) || !password) {
       const missingFields = [];
 
       if (!userId) missingFields.push("userId is required");
-      if (!amount) missingFields.push("amount is required");
+      if (!amount || (amount < 300 || amount > 10000)) missingFields.push("amount must be in-between 300 to 10,000");
       // if (!mobile) missingFields.push("mobile is required");
       if (!password) missingFields.push("password is required");
       ResponseService.failed(res, missingFields, StatusCode.badRequest);
@@ -125,8 +126,26 @@ class TransactionService {
         StatusCode.forbidden
       );
       return;
-    }
+    };
 
+    // 
+
+    var date = new Date();
+    date.setDate(date.getDate() - 3);
+    const todayWithdrawalRequest = await transactionModel.findOne({
+      userId: userId,
+      transactionType: TransactionType.withdraw,
+      requestTime: { $gte: date }
+    });
+    if (todayWithdrawalRequest) return ResponseService.failed(
+      res,
+      "only one withdraw request per day allowed",
+      StatusCode.forbidden
+    )
+
+    console.log("todayWithdrawalRequest", todayWithdrawalRequest);
+
+    // 
     const transaction = await this._createAndValidateTransaction({
       res: res,
       userId: userId,
