@@ -123,22 +123,20 @@ class ReferralService {
 
     await updateReferralTable();
 
-    console.log("referralLevel", referralLevel);
 
     referralLevel.forEach((refer) => {
-      console.log(refer);
       walletModal.findOne({ userId: refer.userId }).then((wallet) => {
-        walletModal
-          .updateOne(
-            { userId: refer.userId },
-            {
-              $set: {
-                totalAmount: wallet.totalAmount + refer.amount,
-                referralAmount: wallet.referralAmount + refer.amount,
-                notAllowedAmount: wallet.notAllowedAmount + refer.amount,
-              },
-            }
-          )
+        walletModal.updateOne(
+          { userId: refer.userId },
+          {
+            $set: {
+              totalAmount: wallet.totalAmount + refer.amount,
+              referralAmount: wallet.referralAmount + refer.amount,
+              withdrawableAmount: wallet.withdrawableAmount + refer.amount,
+              // notAllowedAmount: wallet.notAllowedAmount + refer.amount,
+            },
+          }
+        )
           .then((err, docs) =>
             LogService.updateLog("Referral-Wallet", err, docs)
           );

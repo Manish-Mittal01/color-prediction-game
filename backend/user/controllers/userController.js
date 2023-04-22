@@ -60,8 +60,8 @@ module.exports.sendOtp = async (req, res) => {
   console.log(OTP);
 
   let msg = `Please use this code as your one time password (otp). It will expire in 3 minutes.
-  // your OTP is ${OTP}.
-  // NOTE: Never share your otp with anyone`;
+  \n your OTP is ${OTP}.
+  \n NOTE: Never share your otp with anyone`;
 
   await axios
     .get(`https://www.fast2sms.com/dev/bulkV2?authorization=6cFJuzYoEAtxRZ1sjgQPb8M3Ofd07pKTVe5LkaNyhBvGlqmISwyA6OrxTKaBNJu4EoYRw5XSbmQ37kLi&route=q&message=${msg}&language=english&flash=0&numbers=${mobile}`)

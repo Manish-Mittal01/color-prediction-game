@@ -6,9 +6,9 @@ module.exports.Status = {
 module.exports.periodNames = ["Parity", "Sapre", "Bcone", "Emred"];
 
 module.exports.ReferralBonus = {
-  level1: 0.2,
+  level1: 0.1,
   level2: 0.05,
-  level3: 0.05,
+  level3: 0.0,
 };
 
 module.exports.periodStarts = [1001, 2001, 3001, 4001];

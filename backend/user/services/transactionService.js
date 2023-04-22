@@ -49,7 +49,6 @@ class TransactionService {
     const { userId, amount } = req.body;
 
     const wallet = await walletModal.findOne({ userId: userId });
-    console.log(wallet);
     const transaction = await this._createAndValidateTransaction({
       res: res,
       userId: userId,

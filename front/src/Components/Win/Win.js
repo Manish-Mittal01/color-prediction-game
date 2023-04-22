@@ -35,7 +35,7 @@ const Win = () => {
   const [tab, setTab] = useState("Parity");
   const [time, setTime] = useState({ min: "0", sec: "00" });
   const [betNumber, setBetNumber] = useState(1)
-  const [amount, setAmount] = useState(10);
+  const [amount, setAmount] = useState(20);
   const [prediction, setPrediction] = useState("");
   const [periodHistory, setPeriodHistory] = useState({})
   const [show, setShow] = useState(false);
@@ -179,6 +179,7 @@ const Win = () => {
           {
             [0, 1, 2, 3, 4].map(item => (
               <button
+                key={item}
                 style={{ backgroundColor: [1, 3].includes(item) ? "red" : [2, 4].includes(item) ? "green" : "", backgroundImage: item === 0 && "linear-gradient(45deg, red 50%, #9c27b0 50%)" }}
                 disabled={disabled}
                 className={disabled ? "enter_value disabled" : 'enter_value'}
@@ -191,6 +192,7 @@ const Win = () => {
           {
             [5, 6, 7, 8, 9].map(item => (
               <button
+                key={item}
                 style={{ backgroundColor: [9, 7].includes(item) ? "red" : [6, 8].includes(item) ? "green" : "", backgroundImage: item === 5 && "linear-gradient(45deg, green 50%, #9c27b0 50%)" }}
                 disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet(item)}>{item}</button>
             ))
@@ -206,9 +208,11 @@ const Win = () => {
         <Modal.Body>
           <p className='title_dash'>Contract Money</p>
           <div>
-            <button className={amount === 10 ? "numbnerBtn acticeTab" : "numbnerBtn"} onClick={() => setAmount(10)} >10</button>
-            <button className={amount === 100 ? "numbnerBtn acticeTab" : "numbnerBtn"} onClick={() => setAmount(100)} >100</button>
-            <button className={amount === 1000 ? "numbnerBtn acticeTab" : "numbnerBtn"} onClick={() => setAmount(1000)} >1000</button>
+            {
+              [20, 100, 1000].map(item => (
+                <button key={item} className={amount === item ? "numbnerBtn acticeTab" : "numbnerBtn"} onClick={() => setAmount(item)} >{item}</button>
+              ))
+            }
           </div>
           <div className='betNumberWrapper'>
             <button className='numbnerBtn' onClick={() => { betNumber > 1 && setBetNumber(betNumber - 1) }} ><AiOutlineMinus /></button>

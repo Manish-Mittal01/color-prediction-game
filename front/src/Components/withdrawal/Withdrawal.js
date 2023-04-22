@@ -19,6 +19,9 @@ const Withdrawal = ({ wallet }) => {
         if (wallet.withdrawableAmount < amount) {
             return setErr({ message: "not enough balance" })
         }
+        if (amount < 500) {
+            return setErr({ message: "minimum amount for withdrawal should be 500" })
+        }
 
         const withdrawRequest = {
             userId: userData.userId,
