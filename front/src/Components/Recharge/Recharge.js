@@ -10,6 +10,7 @@ import small4 from '../../images/small4.png'
 import small5 from '../../images/small5.png'
 import jwt from 'jwt-decode';
 import { blockUser } from '../../common/blockUser';
+import userId from '../../common/userId';
 
 
 
@@ -18,8 +19,10 @@ const Recharge = ({ wallet }) => {
     const [err, setErr] = useState();
 
     const navigate = useNavigate();
+    const userData = userId();
 
     useEffect(() => {
+        if (!userData) return navigate("/login");
         if (amount) setErr("")
     }, [amount])
 
@@ -89,6 +92,10 @@ export const SubmitRechargeRequest = () => {
     const location = useLocation()
     const amount = location.state ? location.state.amount : "";
     const navigate = useNavigate();
+    const userData = userId();
+    useEffect(() => {
+        if (!userData) return navigate("/login");
+    });
 
     useEffect(() => {
         axios.get("admin/details")

@@ -1,6 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import userId from '../../../common/userId';
+import { useNavigate } from 'react-router-dom';
 
 export default function Policies() {
+  const userData = userId();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!userData) return navigate("/login");
+  });
   return (
     <div>
       <div data-v-4af9315c="" className="privacypolicy">

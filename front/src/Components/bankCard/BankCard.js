@@ -1,11 +1,12 @@
 import jwt from 'jwt-decode';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsArrowLeft } from 'react-icons/bs'
 import { GrAdd } from "react-icons/gr";
 import { getOtp } from '../Register/Register';
 import axios from '../../axios/axios'
 import { useNavigate } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
+import userId from '../../common/userId';
 
 const Bankcard = () => {
     const [fillDetails, setFillDetails] = useState(false);
@@ -22,6 +23,10 @@ const Bankcard = () => {
         otp: ""
     });
     const navigate = useNavigate();
+    const userData = userId();
+    useEffect(() => {
+        if (!userData) return navigate("/login");
+    });
 
     const addBank = () => {
         const userId = localStorage.getItem("user") && jwt(JSON.parse(localStorage.getItem("user")).token).userId

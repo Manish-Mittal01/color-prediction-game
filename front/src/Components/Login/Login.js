@@ -14,7 +14,7 @@ const Login = () => {
     });
     const [err, setErr] = useState("");
     const [user, setUser] = useState("");
-    const [userLoginIP, setUserLoginIP] = useState("")
+    const [userLoginIP, setUserLoginIP] = useState("");
 
     const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const Login = () => {
                 userWallet(jwt(resp.data.token).userId)
             })
             .catch(err => {
-                setErr(err.response.data.message);
+                setErr(err?.response?.data?.message);
             })
     }
 
@@ -65,57 +65,55 @@ const Login = () => {
     }, [])
 
     return (
-        <>
-            <div>
-                <Navlogin />
-                <div style={{ margin: 14 }} className='padd_cus'>
-                    <div className='fild_input'>
-                        <span style={{ marginRight: "10px" }}><BsPhone /></span>
-                        <input
-                            className='signupField'
-                            id="username"
-                            type="number"
-                            placeholder="Mobile Number"
-                            style={{ outline: 'none', border: "none" }}
-                            onChange={(e) => {
-                                setUserDetails({
-                                    ...userDetails,
-                                    mobile: e.target.value
-                                })
-                            }}
-                        />
-                    </div>
-                    <div className='fild_input'>
-                        <span style={{ marginRight: "10px" }}><BsFillKeyFill /></span>
-                        <input
-                            className='signupField'
-                            id="username"
-                            type="password"
-                            placeholder="Password"
-                            style={{ outline: 'none', border: "none" }}
-                            onChange={(e) => {
-                                setUserDetails({
-                                    ...userDetails,
-                                    password: e.target.value
-                                })
-                            }}
-                        />
-                    </div>
-                    <p className='err' >
-                        {err && err}
-                    </p>
-                    <div className="input_box_btn">
-                        <button onClick={() => login()} className="login_btn ripple">Login</button>
-                    </div>
-                    <div className="input_box_btn">
-                        <div className="two_btn">
-                            <button onClick={() => navigate("/register")} className="ripplegrey">Register</button>
-                            <button onClick={() => { navigate("/resetpassword") }} className="ripplegrey">Forgot Password?</button>
-                        </div>
+        <div style={{ marginBottom: 55 }}>
+            <Navlogin />
+            <div style={{ margin: 14 }} className='padd_cus'>
+                <div className='fild_input'>
+                    <span style={{ marginRight: "10px" }}><BsPhone /></span>
+                    <input
+                        className='signupField'
+                        id="username"
+                        type="number"
+                        placeholder="Mobile Number"
+                        style={{ outline: 'none', border: "none" }}
+                        onChange={(e) => {
+                            setUserDetails({
+                                ...userDetails,
+                                mobile: e.target.value
+                            })
+                        }}
+                    />
+                </div>
+                <div className='fild_input'>
+                    <span style={{ marginRight: "10px" }}><BsFillKeyFill /></span>
+                    <input
+                        className='signupField'
+                        id="username"
+                        type="password"
+                        placeholder="Password"
+                        style={{ outline: 'none', border: "none" }}
+                        onChange={(e) => {
+                            setUserDetails({
+                                ...userDetails,
+                                password: e.target.value
+                            })
+                        }}
+                    />
+                </div>
+                <p className='err' >
+                    {err && err}
+                </p>
+                <div className="input_box_btn">
+                    <button onClick={() => login()} className="login_btn ripple">Login</button>
+                </div>
+                <div className="input_box_btn">
+                    <div className="two_btn">
+                        <button onClick={() => navigate("/register")} className="ripplegrey">Register</button>
+                        <button onClick={() => { navigate("/resetpassword") }} className="ripplegrey">Forgot Password?</button>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

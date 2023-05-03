@@ -5,13 +5,15 @@ import { useNavigate } from 'react-router-dom'
 import axios from '../../axios/axios'
 import { blockUser } from '../../common/blockUser'
 import Transaction_card from './Transaction_card'
+import userId from '../../common/userId'
 
 const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const userData = userId();
 
-    const userId = localStorage.getItem("user") && jwt(JSON.parse(localStorage.getItem("user")).token).userId
     useEffect(() => {
+        if (!userData) return navigate("/login");
         axios.get(`user/transactions?userId=${userId}`)
             .then(resp => {
                 setTransactions(resp.data.data)

@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import userId from '../../../common/userId';
+import { useNavigate } from 'react-router-dom';
 
 export default function Riskmanagement() {
+    const userData = userId();
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (!userData) return navigate("/login");
+    });
+
     return (
         <div>
-
-
             <div data-v-1dce78d0="" className="riskagreement">
                 <nav data-v-1dce78d0="" className="top_nav">
                     <div data-v-1dce78d0="" className="left">

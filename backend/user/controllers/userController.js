@@ -2,8 +2,6 @@ const _ = require("lodash");
 const axios = require("axios");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcrypt");
-var mongo = require("mongodb");
-
 const User = require("../Models/UserModel");
 const Otp = require("../Models/OtpModel");
 const { UserServices } = require("../services/userServices");
@@ -27,24 +25,18 @@ class UserController {
 
 module.exports.sendOtp = async (req, res) => {
   const { mobile, mode } = req.body;
-  function errorMsg(err) {
-    return res.status(400).json({
-      status: error,
-      message: err,
-    });
-  }
-  if (!mobile) return errorMsg("mobile is required");
-  else if (mobile.length !== 10) return errorMsg("invalid mobile number");
-  // if (!mode) return errorMsg("mode is required");
-  // else if (!["new user", "reset password"].includes(mode)) return errorMsg("invalid mode");
+
+  if (!mobile) return ResponseService.failed(res, "mobile is required", StatusCode.badRequest);
+  else if (mobile.length !== 10) return ResponseService.failed(res, "invalid mobile number", StatusCode.badRequest);
+  if (!mode) return ResponseService.failed(res, "mode is required", StatusCode.badRequest);
+  else if (!["new user", "reset password"].includes(mode)) return ResponseService.failed(res, "invalid mode", StatusCode.badRequest);
 
   const user = await User.findOne({
     mobile: mobile,
   });
 
-  if (mode === "new user" && user) return errorMsg("user already exists");
-  else if (mode === "reset password" && !user)
-    return errorMsg("user does not exist");
+  if (mode === "new user" && user) return ResponseService.failed(res, "user already exists", StatusCode.badRequest);
+  else if (mode === "reset password" && !user) return ResponseService.failed(res, "user does not exist", StatusCode.badRequest);
 
   const OTP = otpGenerator.generate(6, {
     digits: true,
@@ -61,10 +53,17 @@ module.exports.sendOtp = async (req, res) => {
 
   let msg = `Please use this code as your one time password (otp). It will expire in 3 minutes.
   \n your OTP is ${OTP}.
-  \n NOTE: Never share your otp with anyone`;
+  \n Never share your otp with anyone`;
 
-  await axios
-    .get(`https://www.fast2sms.com/dev/bulkV2?authorization=6cFJuzYoEAtxRZ1sjgQPb8M3Ofd07pKTVe5LkaNyhBvGlqmISwyA6OrxTKaBNJu4EoYRw5XSbmQ37kLi&route=q&message=${msg}&language=english&flash=0&numbers=${mobile}`)
+  // await axios.get("https://type.fit/api/quotes")
+  //   .then(resp => {
+  //     console.log("axios quotes data", resp.data)
+  //   })
+  //   .catch(err => {
+  //     console.log("axios err", err)
+  //   });
+
+  await axios.get(`https://www.fast2sms.com/dev/bulkV2?authorization=6cFJuzYoEAtxRZ1sjgQPb8M3Ofd07pKTVe5LkaNyhBvGlqmISwyA6OrxTKaBNJu4EoYRw5XSbmQ37kLi&route=q&message=${msg}&language=english&flash=0&numbers=${mobile}`)
     .then((resp) => {
       return res.status(200).send({
         status: success,
@@ -77,29 +76,22 @@ module.exports.sendOtp = async (req, res) => {
         message: "something wrong happend while sending otp",
       });
     });
+
+  // return ResponseService.success(res, "Otp sent successfully", {});
 };
 
 module.exports.verifyOtp = async (req, res) => {
-  const { mobile, password, referralCode, otp, mode, registrationIP } =
-    req.body;
-  function errorMsg(err) {
-    return res.status(400).json({
-      status: error,
-      message: err,
-    });
-  }
+  const { mobile, password, referralCode, otp, mode, registrationIP } = req.body;
 
-  if (!otp) return errorMsg("otp is required");
-  if (!password) return errorMsg("password is required");
-
-  if (!mode) return errorMsg("mode is required");
-  else if (!["new user", "reset password"].includes(mode))
-    return errorMsg("Invalid mode");
+  if (!otp) return ResponseService.failed(res, "otp is required", StatusCode.badRequest);
+  if (!password) return ResponseService.failed(res, "password is required", StatusCode.badRequest);
+  if (!mode) return ResponseService.failed(res, "mode is required", StatusCode.badRequest);
+  else if (!["new user", "reset password"].includes(mode)) return ResponseService.failed(res, "Invalid mode", StatusCode.badRequest);
 
   const otpHolder = await Otp.find({
     mobile: mobile,
   });
-  if (otpHolder.length === 0) return errorMsg("Otp expired");
+  if (otpHolder.length === 0) return ResponseService.failed(res, "Otp expired", StatusCode.badRequest);
 
   const rightOtpFind = otpHolder[otpHolder.length - 1];
   const validUser = await bcrypt.compare(otp, rightOtpFind.otp);
@@ -138,15 +130,15 @@ module.exports.verifyOtp = async (req, res) => {
         data: result,
       });
     } else {
-      return errorMsg(err);
+      return ResponseService.failed(res, err, StatusCode.badRequest);
     }
   }
 
   if (mode === "new user") {
-    if (!mobile) return errorMsg("mobile is required");
+    if (!mobile) return ResponseService.failed(res, "mobile is required", StatusCode.badRequest);
 
     if (!registrationIP) {
-      return errorMsg("RegistrationIP is required");
+      return ResponseService.failed(res, "RegistrationIP is required", StatusCode.badRequest);
     }
 
     if (referralCode) {
@@ -160,13 +152,13 @@ module.exports.verifyOtp = async (req, res) => {
         );
       }
     }
-    // if (!referralCode)
-    //   return errorMsg("referralCode is required");
+    if (!referralCode)
+      return ResponseService.failed(res, "referralCode is required", StatusCode.badRequest);
 
-    // let validreferal = await User.findOne({
-    //   userId: referralCode,
-    // });
-    // if (!validreferal) return errorMsg("invalid recommendation code");
+    let validreferal = await User.findOne({
+      userId: referralCode,
+    });
+    if (!validreferal) return ResponseService.failed(res, "invalid recommendation code", StatusCode.badRequest);
     updateUser({
       newUser: {
         mobile: mobile,
@@ -187,7 +179,7 @@ module.exports.verifyOtp = async (req, res) => {
       err: "invalid otp",
     });
   } else {
-    return errorMsg("something wrong happened");
+    return ResponseService.failed(res, "something wrong happened", StatusCode.notFound);
   }
 };
 

@@ -8,7 +8,7 @@ import axios from '../../axios/axios';
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
 
-export const getOtp = ({ user, setErr, setOtpBtn, mode, navigate }) => {
+export const getOtp = ({ user, setErr, setOtpBtn, mode, navigate, setLoadingOtp }) => {
     if (user.mobile.length === 0) {
         setOtpBtn(1)
         return setErr({ err: "enter mobile number" })
@@ -17,19 +17,19 @@ export const getOtp = ({ user, setErr, setOtpBtn, mode, navigate }) => {
         setOtpBtn(1)
         return setErr({ err: "invalid mobile number" });
     }
+    setLoadingOtp("Sending OTP");
     axios.post("user/sendOtp", { mobile: user.mobile, mode: mode })
         .then(resp => {
             setErr("")
             setOtpBtn && setOtpBtn("")
-            alert("otp sent successfully")
-                ;
+            alert("otp sent successfully");
+            setLoadingOtp("Otp Sent");
         })
         .catch(err => {
-
             setOtpBtn(1)
             setErr(err.response.data);
             err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
-
+            setLoadingOtp("Error while sending Otp")
         })
 }
 
@@ -69,7 +69,8 @@ const Register = () => {
     });
     const [err, setErr] = useState();
     const [otpBtn, setOtpBtn] = useState();
-    const [registrationIP, setregistrationIP] = useState("")
+    const [registrationIP, setregistrationIP] = useState("");
+    const [loadingOtp, setLoadingOtp] = useState("");
 
     const navigate = useNavigate();
 
@@ -123,7 +124,7 @@ const Register = () => {
                         </div>
                     </div>
                     <div className='get_otp'>
-                        <button onClick={() => getOtp({ user, setErr, setOtpBtn, mode: "new user", navigate })} style={{ width: "100%" }} className='w-100'>get otp</button>
+                        <button onClick={() => getOtp({ user, setErr, setOtpBtn, mode: "new user", navigate, setLoadingOtp })} style={{ width: "100%" }} className='w-100'>get otp</button>
                     </div>
                 </div>
 

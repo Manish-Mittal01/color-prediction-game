@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BsArrowLeft } from "react-icons/bs";
 import './Recharge.css'
+import userId from '../../common/userId';
+import { useNavigate } from 'react-router-dom';
 
 const Recharge_Record = () => {
+    const userData = userId();
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (!userData) return navigate("/login");
+    });
     return (
         <>
             <div className='nav_login'>

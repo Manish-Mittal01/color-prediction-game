@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import withdro from '../../images/withdro.png';
 import axios from '../../axios/axios';
 import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
+import userId from '../../common/userId';
 
 
 const Withdrawal = ({ wallet }) => {
@@ -11,7 +12,11 @@ const Withdrawal = ({ wallet }) => {
     const [password, setPassword] = useState("");
     const [err, setErr] = useState({})
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const userData = userId();
+    useEffect(() => {
+        if (!userData) return navigate("/login");
+    });
 
     function makeWithdraw() {
         const user = JSON.parse(localStorage.getItem("user"));

@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Promotion.css'
 import Promotioncontent from './Promotioncontent';
+import userId from '../../common/userId';
+import { useNavigate } from 'react-router-dom';
 
 const Promotion = () => {
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const userData = userId();
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (!userData) return navigate("/login");
+    });
 
     return (
         <>

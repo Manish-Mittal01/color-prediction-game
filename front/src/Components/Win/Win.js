@@ -16,6 +16,7 @@ import { BsPlus } from 'react-icons/bs';
 import Timer from './Timer';
 import { useNavigate } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
+import userId from '../../common/userId';
 
 
 const Win = () => {
@@ -43,22 +44,19 @@ const Win = () => {
   const [check, setCheck] = useState(false);
   const [wallet, setWallet] = useState(0)
 
-
-  let user = JSON.parse(localStorage.getItem("user"))
-  let userData = user && jwt(user.token);
-
   const navigate = useNavigate()
-
+  let userData = userId();
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
 
   useEffect(() => {
+    if (!userData) {
+      return navigate("/login")
+    }
     getBets();
     userWallet(userData.userId)
   }, []);
 
-  function userWallet(userId) {
+  async function userWallet(userId) {
     axios.get(`user/wallet?userId=${userId}`)
       .then(resp => {
         let data = resp.data.data

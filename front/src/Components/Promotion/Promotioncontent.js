@@ -16,7 +16,7 @@ const Promotion_content = () => {
     const [totalReferrals, setTotalReferrals] = useState(0)
 
     const navigate = useNavigate();
-    const referalLink = `https://wingame.tech/register?r_code=${user}`
+    const referalLink = `https://winmall.tech/register?r_code=${user}`
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem("user"));

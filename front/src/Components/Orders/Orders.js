@@ -1,13 +1,17 @@
-import React, { useState } from 'react'
-import { BsArrowLeft } from 'react-icons/bs'
+import React, { useEffect, useState } from 'react'
 import './Order.css'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import userId from '../../common/userId';
+import { useNavigate } from 'react-router-dom';
+
 const Orders = () => {
     const [show, setShow] = useState(false);
-    const [modalShow, setModalShow] = React.useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const userData = userId();
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (!userData) return navigate("/login");
+    });
     return (
         <>
             <div className='nav_login'>
