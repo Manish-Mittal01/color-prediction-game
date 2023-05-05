@@ -55,14 +55,6 @@ module.exports.sendOtp = async (req, res) => {
   \n your OTP is ${OTP}.
   \n Never share your otp with anyone`;
 
-  // await axios.get("https://type.fit/api/quotes")
-  //   .then(resp => {
-  //     console.log("axios quotes data", resp.data)
-  //   })
-  //   .catch(err => {
-  //     console.log("axios err", err)
-  //   });
-
   await axios.get(`https://www.fast2sms.com/dev/bulkV2?authorization=6cFJuzYoEAtxRZ1sjgQPb8M3Ofd07pKTVe5LkaNyhBvGlqmISwyA6OrxTKaBNJu4EoYRw5XSbmQ37kLi&route=q&message=${msg}&language=english&flash=0&numbers=${mobile}`)
     .then((resp) => {
       return res.status(200).send({
@@ -77,7 +69,6 @@ module.exports.sendOtp = async (req, res) => {
       });
     });
 
-  // return ResponseService.success(res, "Otp sent successfully", {});
 };
 
 module.exports.verifyOtp = async (req, res) => {

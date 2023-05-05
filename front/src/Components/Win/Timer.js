@@ -1,13 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, memo } from 'react'
 import './Win.css'
 import { GiTargetPrize } from "react-icons/gi";
 import axios from '../../axios/axios';
 import { useNavigate } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
 
-export default function Timer({ periods, setPeriods, setPeriodHistory, time, setTime, tab, getBets }) {
+function Timer({ periods, setPeriods, setPeriodHistory, time, setTime, tab, getBets }) {
     const [err, setErr] = useState();
-    const [timer, setTimer] = useState(0);
     const [updateTimer, setUpdateTimer] = useState(false);
 
     const navigate = useNavigate();
@@ -30,7 +29,6 @@ export default function Timer({ periods, setPeriods, setPeriodHistory, time, set
                 }
                 setPeriods(periodData);
                 let timeRemaning = data.expiredAt - Date.now();
-                setTimer(timeRemaning);
                 clearTimer(getDeadTime(timeRemaning));
             })
             .catch(err => {
@@ -55,7 +53,9 @@ export default function Timer({ periods, setPeriods, setPeriodHistory, time, set
         const total = Date.parse(e) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
-        if (!total || total <= 0) setUpdateTimer(!updateTimer)
+        if (!total || total <= 0) {
+            setUpdateTimer(!updateTimer)
+        }
         return {
             total, minutes, seconds
         };
@@ -78,8 +78,8 @@ export default function Timer({ periods, setPeriods, setPeriodHistory, time, set
     }
 
     const getDeadTime = (timeRemaning) => {
-        let deadline = new Date();
-        deadline.setSeconds(deadline.getSeconds() + timeRemaning / 1000);
+        let deadline = new Date(Date.now() + timeRemaning);
+        // deadline.setSeconds(deadline.getSeconds() + timeRemaning / 1000);
         return deadline;
     };
 
@@ -105,3 +105,5 @@ export default function Timer({ periods, setPeriods, setPeriodHistory, time, set
         </>
     )
 }
+
+export default memo(Timer)

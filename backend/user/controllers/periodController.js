@@ -5,6 +5,7 @@ const Bet = require("../Models/betModel");
 
 const { PeriodService } = require("../services/periodService");
 const { SessionController } = require("./sessionController");
+const PeriodModel = require("../Models/PeriodModel");
 
 class PeriodController {
   static createNewPeriods = async (time) => {
@@ -23,13 +24,13 @@ class PeriodController {
     PeriodService.getCurrentSession(req, res);
 
   static async handlePeriod() {
-    const sessions = await this.getAllPeriods();
+    const sessions = await PeriodModel.find().limit(1)?.sort({ _id: -1 });
     let hasSessionEnded;
     let startTime;
 
     // No previous data
     // We can simply create new Periods
-    if (sessions.length == 0) {
+    if (sessions.length === 0) {
       hasSessionEnded = true;
       startTime = Date.now();
     }

@@ -53,7 +53,7 @@ const Win = () => {
       return navigate("/login")
     }
     getBets();
-    userWallet(userData.userId)
+    userWallet(userData.userId);
   }, []);
 
   async function userWallet(userId) {
@@ -70,14 +70,12 @@ const Win = () => {
       })
       .catch(err => {
         console.log(err)
-
       })
   }
 
   async function getBets() {
     await axios.get(`bet?userId=${userData.userId}`)
       .then(resp => {
-
         let parityRecords = resp.data.data.filter(item => item.periodName === "Parity")
         let sapreRecords = resp.data.data.filter(item => item.periodName === "Sapre")
         let bconRecords = resp.data.data.filter(item => item.periodName === "Bcone")
@@ -88,15 +86,11 @@ const Win = () => {
           Bcone: bconRecords,
           Emred: emredRecords
         });
-
         userWallet(userData.userId);
-
       })
       .catch(err => {
-
         err.response && setErr(err.response.data)
         blockUser({ errMsg: err.response.data.message, navigate: navigate })
-
       });
   }
 
@@ -129,9 +123,7 @@ const Win = () => {
     setBetNumber(1);
     setAmount(10);
     setPrediction("")
-
     handleClose();
-
     getBets();
   };
 
