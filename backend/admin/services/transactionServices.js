@@ -136,6 +136,7 @@ class TransactionAdminService {
       let depositAmount;
       let bonusAmount;
       let totalAmount;
+
       if (wallet.isFirstDeposit && user.referralCode) {
         bonusAmount = wallet.bonusAmount + amount * ReferralBonus.level1;
         depositAmount = amount * (1 + ReferralBonus.level1); // Adding 30% before of referral

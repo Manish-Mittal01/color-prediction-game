@@ -7,11 +7,14 @@ const Header = () => {
         <div data-v-68d7bcd4="" className="logo_box">
           <img
             data-v-68d7bcd4=""
-            src="./apnamalls_files/logo.2f202b25.png"
+            src="appIcon.png"
             alt=""
+            width={36}
+            height={36}
+            style={{ marginRight: 16 }}
           />
+          <span data-v-68d7bcd4="">WinMall</span>
         </div>
-        <span data-v-68d7bcd4="">Open with an app</span>
         <div data-v-68d7bcd4="" className="download_box">
           <a
             data-v-68d7bcd4=""
