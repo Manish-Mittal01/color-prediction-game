@@ -24,8 +24,8 @@ class PeriodController {
     PeriodService.getCurrentSession(req, res);
 
   static async handlePeriod() {
-    // const sessions = await PeriodModel.find().limit(1)?.sort({ _id: -1 });
-    const sessions = await this.getAllPeriods();
+    const sessions = await PeriodModel.find().limit(1)?.sort({ _id: -1 });
+    // const sessions = await this.getAllPeriods();
     let hasSessionEnded;
     let startTime;
 

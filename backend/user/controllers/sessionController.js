@@ -8,7 +8,7 @@ class SessionController {
       return SessionController.currentSession;
     } else {
       const periods = await PeriodModel.find().limit(4).sort({ _id: -1 });
-      periods.reverse();
+      // periods.reverse();
       SessionController.currentSession = periods;
       return periods;
     }
