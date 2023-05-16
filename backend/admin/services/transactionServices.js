@@ -14,32 +14,20 @@ const { ReferralController } = require("../controllers/referalController");
 
 class TransactionAdminService {
   static async getDepositRequests(req, res) {
-    const allDeposits = await transactionModel.find({
+    const depositsPending = await transactionModel.find({
       transactionType: TransactionType.deposit,
+      status: TransactionStatus.pending
     });
 
-    if (!allDeposits || allDeposits.length === 0) {
+    if (!depositsPending || depositsPending.length === 0) {
       return ResponseService.success(res, "No Deposit requests found", []);
     }
 
-    const pending = [];
-
-    async function separateDeposits() {
-      for (let i in allDeposits) {
-        const deposit = allDeposits[i];
-        if (deposit.status === TransactionStatus.pending) {
-          pending.push(deposit);
-        }
-      }
-    }
-
-    await separateDeposits();
-
-    if (!pending || pending.length === 0) {
+    if (!depositsPending || depositsPending.length === 0) {
       return ResponseService.success(res, "No Deposit requests found", []);
     }
 
-    return ResponseService.success(res, "Deposit requests found", pending);
+    return ResponseService.success(res, "Deposit requests found", depositsPending);
   }
 
   static async getDepositHistory(req, res) {

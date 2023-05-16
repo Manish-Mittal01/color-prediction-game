@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./LeftSideSection.module.css";
 import cx from "classnames";
 import { useNavigate } from "react-router-dom";
 import { GoThreeBars } from "react-icons/go";
+import context from "../../context/context/context";
+import jwt from "jwt-decode";
 
 
 export const Options = [
@@ -40,6 +42,12 @@ export const Options = [
 export default function LeftSideSection(props) {
     const [isExpanded, setisExpanded] = useState(false);
 
+    const userData = localStorage.getItem("winmallAdmin");
+    const [admin, setAdmin] = useContext(context);
+    const user = admin ? jwt(admin.token) : userData ? jwt(JSON.parse(userData).token) : "";
+
+    const limitAccess = user.mobile === "8059042829"
+
     const navigate = useNavigate()
 
     return (
@@ -54,29 +62,31 @@ export default function LeftSideSection(props) {
                 Options.map((option, index) => {
                     let currentOption = option.value;
                     return (
-                        <div
-                            key={index}
-                            className={cx(
-                                "unselectable",
-                                styles.option,
-                                currentOption && styles.optionSelected
-                            )}
-                            onClick={(evt) => {
-                                evt.stopPropagation();
-                                navigate(`/${option.value}`)
-                            }}
-                        >
-                            {
-                                <span
-                                    className={cx(
-                                        styles.label,
-                                        currentOption && styles.labelSelected
-                                    )}
-                                >
-                                    {option.label}
-                                </span>
-                            }
-                        </div>
+                        (limitAccess && (index === 2 || index === 3)) ?
+                            "" :
+                            <div
+                                key={index}
+                                className={cx(
+                                    "unselectable",
+                                    styles.option,
+                                    currentOption && styles.optionSelected
+                                )}
+                                onClick={(evt) => {
+                                    evt.stopPropagation();
+                                    navigate(`/${option.value}`)
+                                }}
+                            >
+                                {
+                                    <span
+                                        className={cx(
+                                            styles.label,
+                                            currentOption && styles.labelSelected
+                                        )}
+                                    >
+                                        {option.label}
+                                    </span>
+                                }
+                            </div>
                     );
                 })}
         </div>

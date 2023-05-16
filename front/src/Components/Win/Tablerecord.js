@@ -32,7 +32,7 @@ function TableRecord({ history, tab }) {
                     {
                         (currentPosts && currentPosts?.length > 0) &&
                         currentPosts.map((item, index) => (
-                            <tr key={item.periodId + index}>
+                            <tr key={item.periodId}>
                                 <td>{item.periodId}</td>
                                 <td>{item.price}</td>
                                 <td>{item.resultNumber}</td>

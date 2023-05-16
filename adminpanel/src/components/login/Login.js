@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Navlogin from './Navlogin'
 import { BsPhone } from "react-icons/bs";
 import { BsFillKeyFill } from "react-icons/bs";
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../axios/axios'
+import context from '../../context/context/context';
 
 const Login = () => {
     const [userDetails, setUserDetails] = useState({
@@ -15,6 +16,7 @@ const Login = () => {
     const [user, setUser] = useState("");
 
     const navigate = useNavigate();
+    const [admin, setAdmin] = useContext(context)
 
     async function login() {
         const user = userDetails;
@@ -24,7 +26,8 @@ const Login = () => {
         await axios.post("admin/login", user)
             .then(resp => {
                 setUser(resp.data);
-                localStorage.setItem("user", JSON.stringify(resp.data));
+                setAdmin(resp.data)
+                localStorage.setItem("winmallAdmin", JSON.stringify(resp.data));
                 navigate("/")
             })
             .catch(err => {

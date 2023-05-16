@@ -27,6 +27,7 @@ module.exports.allUsers = async (req, res) => {
           accountNo: bank.acc_number,
           ifsc: bank.ifsc,
           upi: bank.upi,
+          status: item.status
         };
         usersDetails.push(userAllDetails);
       });
@@ -37,6 +38,7 @@ module.exports.allUsers = async (req, res) => {
         loginIP: item.loginIP,
         registrationIP: item.registrationIP,
         balance: userWallet.totalAmount,
+        status: item.status
       };
       usersDetails.push(userAllDetails);
     }

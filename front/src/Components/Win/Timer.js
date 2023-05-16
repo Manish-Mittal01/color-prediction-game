@@ -43,7 +43,6 @@ function Timer({ periods, setPeriods, setPeriodHistory, time, setTime, tab, getB
             .catch(err => {
                 err.response && setErr(err.response.data.message)
                 err.response && blockUser({ errMsg: err.response.data.message, navigate: navigate })
-
             });
 
         getBets();

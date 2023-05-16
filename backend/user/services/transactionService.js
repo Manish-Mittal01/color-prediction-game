@@ -14,6 +14,7 @@ class TransactionService {
     amount,
     transactionType,
     walletBalance,
+    referranceId = ""
   }) {
     if (!userId || !amount || !transactionType) {
       const missingFields = [];
@@ -22,6 +23,7 @@ class TransactionService {
       if (!amount) missingFields.push("amount is required");
       if (!transactionType) missingFields.push("transactionType is required");
       ResponseService.failed(res, missingFields, StatusCode.badRequest);
+      if (!referranceId) missingFields.push("referrance number is tequired");
       return null;
     }
 
@@ -41,12 +43,14 @@ class TransactionService {
       amount: amount,
       transactionType: transactionType,
       wallet: walletBalance,
+      referranceId: referranceId
     }).save();
     return transaction;
   }
 
   static async requestDeposit(req, res) {
-    const { userId, amount } = req.body;
+    const { userId, amount, transactionId } = req.body;
+    if (!transactionId) return ResponseService.failed(res, "transaction is is required", StatusCode.badRequest)
 
     const wallet = await walletModal.findOne({ userId: userId });
     const transaction = await this._createAndValidateTransaction({
@@ -55,6 +59,7 @@ class TransactionService {
       amount: amount,
       transactionType: TransactionType.deposit,
       walletBalance: wallet.totalAmount,
+      referranceId: transactionId
     });
 
     if (transaction == null) {
@@ -127,8 +132,6 @@ class TransactionService {
       return;
     };
 
-    // 
-
     var date = new Date();
     date.setDate(date.getDate() - 3);
     const todayWithdrawalRequest = await transactionModel.findOne({
@@ -142,9 +145,6 @@ class TransactionService {
       StatusCode.forbidden
     )
 
-    console.log("todayWithdrawalRequest", todayWithdrawalRequest);
-
-    // 
     const transaction = await this._createAndValidateTransaction({
       res: res,
       userId: userId,

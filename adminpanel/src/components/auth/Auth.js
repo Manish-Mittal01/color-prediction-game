@@ -5,7 +5,7 @@ export default function Auth({ Comp }) {
     const navigate = useNavigate()
 
     useEffect(() => {
-        let user = localStorage.getItem("user");
+        let user = localStorage.getItem("winmallAdmin");
         if (!user) {
             navigate("/login");
         }

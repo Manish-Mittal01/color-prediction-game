@@ -6,7 +6,7 @@ export default function Logout() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        localStorage.clear();
+        localStorage.removeItem("winmallAdmin");
         navigate("/login")
     }, []);
 

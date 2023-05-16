@@ -27,6 +27,9 @@ const transactionSchema = Schema(
     wallet: {
       type: Number,
       required: true
+    },
+    referranceId: {
+      type: String
     }
   },
   { timestamps: true }

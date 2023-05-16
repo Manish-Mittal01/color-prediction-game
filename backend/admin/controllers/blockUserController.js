@@ -18,7 +18,7 @@ module.exports.blockUser = async (req, res) => {
     return errMsg("invalid user status");
 
   const user = await User.findOne({
-    mobile: mobile,
+    userId: mobile,
   });
 
   if (!user) return errMsg("no user found");
@@ -29,7 +29,6 @@ module.exports.blockUser = async (req, res) => {
     { _id: user._id },
     { status: userStatus }
   );
-  // console.log(user);
 
   res.status(200).send({
     status: success,

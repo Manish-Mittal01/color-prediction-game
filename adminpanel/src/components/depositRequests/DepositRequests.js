@@ -10,8 +10,8 @@ const WithdrwaRequests = () => {
     useEffect(() => {
         axios.get("admin/deposit")
             .then(resp => {
+                const { data } = resp.data
                 setRecords(resp.data.data)
-
             })
             .catch(err => {
                 console.log(err)
@@ -49,6 +49,7 @@ const WithdrwaRequests = () => {
                             <th>amount</th>
                             <th>Status</th>
                             <th>wallet</th>
+                            <th>referrence Number</th>
                             <th>Account No.</th>
                             <th>IFSC</th>
                             <th>UPI</th>
@@ -67,6 +68,7 @@ const WithdrwaRequests = () => {
                                         <td>{item.amount}</td>
                                         <td>{item.status}</td>
                                         <td>{item.wallet}</td>
+                                        <td>{item.referranceId}</td>
                                         <td>{item.balance}</td>
                                         <td >{item.name}</td>
                                         <td >{item.AccountNumber}</td>

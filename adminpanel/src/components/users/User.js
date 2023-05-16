@@ -50,6 +50,7 @@ const User = () => {
                             <th>Account No.</th>
                             <th>IFSC</th>
                             <th>UPI</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,6 +69,7 @@ const User = () => {
                                         <td >{item.accountNo}</td>
                                         <td >{item.ifsc}</td>
                                         <td >{item.upi}</td>
+                                        <td >{item.status}</td>
                                     </tr>
                                 )
                             })
