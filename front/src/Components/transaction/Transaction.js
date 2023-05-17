@@ -14,7 +14,7 @@ const Transactions = () => {
 
     useEffect(() => {
         if (!userData) return navigate("/login");
-        axios.get(`user/transactions?userId=${userId}`)
+        axios.get(`user/transactions?userId=${userData.userId}`)
             .then(resp => {
                 setTransactions(resp.data.data)
 
