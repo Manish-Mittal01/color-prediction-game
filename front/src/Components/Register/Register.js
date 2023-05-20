@@ -49,7 +49,7 @@ export function verifyOtp({ user, setErr, setOtpBtn, mode, navigate, registratio
             setErr("");
             setOtpBtn("");
             navigate("/login");
-            localStorage.clear()
+            localStorage.removeItem("winmallUser")
         })
         .catch(err => {
 
@@ -89,7 +89,7 @@ const Register = () => {
     return (
         <>
             <Registernav />
-            <div style={{ margin: 14 }} className='padd_cus'>
+            <div style={{ margin: 14, marginBottom: 55 }} className='padd_cus'>
                 <div style={{ marginBottom: otpBtn === 1 ? 4 : "" }} className='fild_input'>
                     <span style={{ marginRight: "10px" }}><BsPhone /></span>
                     <input

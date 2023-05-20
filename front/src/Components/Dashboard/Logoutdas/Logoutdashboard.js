@@ -7,8 +7,7 @@ const Logoutdashboard = () => {
 
   function logout() {
     navigate("/login");
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user")
+    localStorage.removeItem("winmallUser")
   }
   return (
     <>

@@ -35,60 +35,6 @@ export const Products = memo(() => {
   return (
     <div data-v-68d7bcd4="" className="index_list">
       <div data-v-68d7bcd4="" className="list_content">
-        {/* <img width={"100%"} height={"260px"} src='homeBanner.jpg' /> */}
-
-
-
-
-        <Carousel variant="dark" interval={1000} controls={false} indicators={false}>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src="banner1.png"
-              alt="First slide"
-              width={"100%"}
-              height={"250vh"}
-            />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src="banner2.png"
-              alt="Second slide"
-              width={"100%"}
-              height={"250vh"}
-            />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src="banner3.png"
-              alt="Third slide"
-              width={"100%"}
-              height={"250vh"}
-            />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src="banner4.png"
-              alt="Third slide"
-              width={"100%"}
-              height={"250vh"}
-            />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src="banner5.png"
-              alt="Third slide"
-              width={"100%"}
-              height={"250vh"}
-            />
-          </Carousel.Item>
-        </Carousel>
-
-
 
         <ul data-v-68d7bcd4="" className="list_ul" style={{ paddingInline: "2rem", marginTop: 24 }}>
           {
@@ -128,6 +74,51 @@ const Home = () => {
             <p data-v-68d7bcd4="" className="top_title">Welcome Back</p>
             <p data-v-68d7bcd4="" className="bot_title">Quality Guarantee</p>
           </div>
+
+          <Carousel variant="dark" interval={1500} controls={false} indicators={false}>
+            <Carousel.Item>
+              <img
+                className="d-block w-100"
+                src="banner1.png"
+                alt="First slide"
+                style={{ height: "65vh" }}
+              />
+            </Carousel.Item>
+            <Carousel.Item>
+              <img
+                className="d-block w-100"
+                src="banner2.png"
+                alt="Second slide"
+                style={{ height: "65vh" }}
+              />
+            </Carousel.Item>
+            <Carousel.Item>
+              <img
+                className="d-block w-100"
+                src="banner3.png"
+                alt="Third slide"
+                style={{ height: "65vh" }}
+              />
+            </Carousel.Item>
+            <Carousel.Item>
+              <img
+                className="d-block w-100"
+                src="banner4.png"
+                alt="Third slide"
+                style={{ height: "65vh" }}
+              />
+            </Carousel.Item>
+            <Carousel.Item>
+              <img
+                className="d-block w-100"
+                src="banner5.png"
+                alt="Third slide"
+                style={{ height: "65vh" }}
+              />
+            </Carousel.Item>
+          </Carousel>
+
+
           <Products />
         </div>
       </div>

@@ -1,7 +1,7 @@
 
 export function blockUser({ errMsg, navigate }) {
     if (errMsg === "User is blocked") {
-        localStorage.clear();
+        localStorage.removeItem("winmallUser");
         navigate("/login");
     }
 };

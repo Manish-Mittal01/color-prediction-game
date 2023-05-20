@@ -13740,6 +13740,10 @@ span.nav_path {
   transform: translate(-50%, -50%);
 }
 
+button:disabled {
+  background-color: lightgrey;
+}
+
 @media (max-width: 800px) {
   .statusDetails {
     width: 100%;

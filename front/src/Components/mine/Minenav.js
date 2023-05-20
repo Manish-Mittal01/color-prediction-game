@@ -21,7 +21,7 @@ const Minenav = ({ wallet }) => {
 
 
     useEffect(() => {
-        let user = JSON.parse(localStorage.getItem("user"));
+        let user = JSON.parse(localStorage.getItem("winmallUser"));
         if (user) {
             const userData = jwt(user.token);
             setUser({

@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom'
 
 export default function AuthLogin({ Comp }) {
     const navigate = useNavigate();
-    const userId = localStorage.getItem("user") && jwt(JSON.parse(localStorage.getItem("user")).token).userId;
+    const userId = localStorage.getItem("winmallUser") && jwt(JSON.parse(localStorage.getItem("winmallUser")).token).userId;
 
     useEffect(() => {
-        let user = localStorage.getItem("authToken");
+        let user = localStorage.getItem("winmallUser");
         if (user && userId) {
             navigate("/");
         }

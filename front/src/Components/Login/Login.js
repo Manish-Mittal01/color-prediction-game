@@ -15,10 +15,12 @@ const Login = () => {
     const [err, setErr] = useState("");
     const [user, setUser] = useState("");
     const [userLoginIP, setUserLoginIP] = useState("");
+    const [disableLogin, setDisableLogin] = useState(false);
 
     const navigate = useNavigate();
 
     async function login() {
+        setDisableLogin(true)
         const user = {
             ...userDetails,
             loginIP: userLoginIP
@@ -29,14 +31,15 @@ const Login = () => {
         await axios.post("user/login", user)
             .then(resp => {
                 setUser(resp.data);
-                localStorage.setItem("authToken", JSON.stringify(user));
-                localStorage.setItem("user", JSON.stringify(resp.data));
+                localStorage.setItem("winmallUser", JSON.stringify(resp.data));
                 navigate("/win");
                 userWallet(jwt(resp.data.token).userId)
             })
             .catch(err => {
                 setErr(err?.response?.data?.message);
             })
+
+        setDisableLogin(false)
     }
 
     function userWallet(userId) {
@@ -104,7 +107,7 @@ const Login = () => {
                     {err && err}
                 </p>
                 <div className="input_box_btn">
-                    <button onClick={() => login()} className="login_btn ripple">Login</button>
+                    <button disabled={disableLogin} onClick={() => login()} className="login_btn ripple">Login</button>
                 </div>
                 <div className="input_box_btn">
                     <div className="two_btn">

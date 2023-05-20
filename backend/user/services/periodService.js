@@ -95,7 +95,7 @@ class PeriodService {
             bet.prediction == period.resultNumber ||
             period.resultColor.includes(bet.prediction)
         );
-        console.log(`Matches ${matches}`);
+
         winningList = matches;
         if (matches.length === 0) {
           winUpdateMultiple = 1;
@@ -111,12 +111,35 @@ class PeriodService {
         }
       } else {
         if (periodBets.length == 0) {
-          const color = Utility.getRandomValue([
-            "red",
-            "green",
-            "violet green",
-            "violet red",
-          ]);
+          // const color = Utility.getRandomValue([
+          //   "red",
+          //   "green",
+          //   "violet green",
+          //   "violet red",
+          // ]);
+
+
+          // set of object with probabilities:
+          const set = { "red": 0.45, "green": 0.45, "violet green": 0.05, "violet red": 0.05 };
+
+          // get probabilities sum:
+          let sum = 0;
+          for (let j in set) {
+            sum += set[j];
+          }
+
+          // choose random integers:
+          function pick_random() {
+            var pick = Math.random() * sum;
+            for (let j in set) {
+              pick -= set[j];
+              if (pick <= 0) {
+                return j;
+              }
+            }
+          }
+          const color = pick_random();
+
           return await this._updatePeriod({
             periodId: periods[i].periodId,
             resultColor: color,

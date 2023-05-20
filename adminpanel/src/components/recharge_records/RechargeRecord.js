@@ -13,9 +13,10 @@ const RechargeRecord = () => {
     useEffect(() => {
         axios.get("admin/deposit/history")
             .then(resp => {
-                // const users = resp.data.users
-                // setRecords(users)
-                // setFilteredData(users)
+                let { data } = resp.data
+                data = [...data.approved, ...data.rejected]
+                setRecords(data)
+                setFilteredData(data)
 
             })
             .catch(err => {
@@ -47,6 +48,9 @@ const RechargeRecord = () => {
                             <th>Account No.</th>
                             <th>IFSC</th>
                             <th>UPI</th>
+                            <th>Amount</th>
+                            <th>Request Time</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,11 +62,14 @@ const RechargeRecord = () => {
                                         <td>{index + 1}</td>
                                         <td>{item.username}</td>
                                         <td>{item.userId}</td>
-                                        <td>{item.balance}</td>
+                                        <td>{item.wallet + item.amount}</td>
                                         <td >{item.name}</td>
                                         <td >{item.accountNo}</td>
                                         <td >{item.ifsc}</td>
                                         <td >{item.upi}</td>
+                                        <td >{item.amount}</td>
+                                        <td >{item.requestTime}</td>
+                                        <td style={{ backgroundColor: item.status === "approved" ? "green" : "red" }} >{item.status}</td>
                                     </tr>
                                 )
                             })

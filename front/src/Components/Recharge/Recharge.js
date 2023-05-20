@@ -8,7 +8,6 @@ import small2 from '../../images/small2.png'
 import small3 from '../../images/small3.png'
 import small4 from '../../images/small4.png'
 import small5 from '../../images/small5.png'
-import jwt from 'jwt-decode';
 import { blockUser } from '../../common/blockUser';
 import userId from '../../common/userId';
 
@@ -109,8 +108,7 @@ export const SubmitRechargeRequest = () => {
 
 
     const sendDepositRequest = () => {
-        const user = JSON.parse(localStorage.getItem("user"))
-        const userData = jwt(user.token);
+        const userData = userId;
 
         const request = {
             userId: userData.userId,

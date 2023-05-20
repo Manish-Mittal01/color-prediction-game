@@ -6,7 +6,8 @@ import Pagination from './Pagination';
 
 function TableRecord({ history, tab }) {
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage, setPostsPerPage] = useState(20);
+    const [postsPerPage, setPostsPerPage] = useState(10);
+
 
     const lastPostIndex = currentPage * postsPerPage;
     const firstPostIndex = lastPostIndex - postsPerPage;
@@ -31,22 +32,41 @@ function TableRecord({ history, tab }) {
                 <tbody>
                     {
                         (currentPosts && currentPosts?.length > 0) &&
-                        currentPosts.map((item, index) => (
-                            <tr key={item.periodId}>
-                                <td>{item.periodId}</td>
-                                <td>{item.price}</td>
-                                <td>{item.resultNumber}</td>
-                                <td>
-                                    {item.resultColor &&
-                                        item.resultColor.split(" ").map((color) => (
-                                            <span key={color} className='c_red' style={{ color: color }}>
-                                                <GoPrimitiveDot style={{ width: 20, height: 20 }} />
-                                            </span>
-                                        ))
-                                    }
-                                </td>
-                            </tr>
-                        ))
+                        currentPosts.map((item, index) => {
+
+                            const newItem = index === 0 ? {
+                                expiredAt: item.expiredAt,
+                                periodId: item.periodId,
+                                price: "",
+                                resultColor: "",
+                                resultNumber: "",
+                                startTime: item.startTime,
+                            } : {
+                                expiredAt: item.expiredAt,
+                                periodId: item.periodId,
+                                price: item.price,
+                                resultColor: item.resultColor,
+                                resultNumber: item.resultNumber,
+                                startTime: item.startTime,
+                            };
+
+                            return (
+                                <tr key={newItem.periodId}>
+                                    <td>{newItem.periodId}</td>
+                                    <td>{newItem.price}</td>
+                                    <td>{newItem.resultNumber}</td>
+                                    <td>
+                                        {newItem.resultColor &&
+                                            newItem.resultColor.split(" ").map((color) => (
+                                                <span key={color} className='c_red' style={{ color: color }}>
+                                                    <GoPrimitiveDot style={{ width: 20, height: 20 }} />
+                                                </span>
+                                            ))
+                                        }
+                                    </td>
+                                </tr>
+                            )
+                        })
                     }
                 </tbody>
             </Table>

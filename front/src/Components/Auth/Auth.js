@@ -7,10 +7,10 @@ export default function Auth({ Comp }) {
     const navigate = useNavigate();
     const [wallet, setWallet] = useState({});
 
-    const userId = localStorage.getItem("user") && jwt(JSON.parse(localStorage.getItem("user")).token).userId;
+    const userId = localStorage.getItem("winmallUser") && jwt(JSON.parse(localStorage.getItem("winmallUser")).token).userId;
 
     useEffect(() => {
-        let user = localStorage.getItem("authToken");
+        let user = localStorage.getItem("winmallUser");
         if (!user) {
             navigate("/login");
             return;

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import './Promotion.css'
-import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import Pagination from '../Win/Pagination';
 import axios from '../../axios/axios'
 import { blockUser } from '../../common/blockUser';
+import userId from '../../common/userId';
 
 const Promotion_content = () => {
     const [user, setUser] = useState();
@@ -19,8 +19,7 @@ const Promotion_content = () => {
     const referalLink = `https://winmall.tech/register?r_code=${user}`
 
     useEffect(() => {
-        let user = JSON.parse(localStorage.getItem("user"));
-        let userData = user && jwt(user.token);
+        let userData = userId();
         setUser(userData.userId);
 
         axios.get(`user/referrals?userId=${userData.userId}`)

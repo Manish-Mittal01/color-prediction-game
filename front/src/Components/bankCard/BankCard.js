@@ -9,27 +9,25 @@ import { blockUser } from '../../common/blockUser';
 import userId from '../../common/userId';
 
 const Bankcard = () => {
+    const userData = userId();
     const [fillDetails, setFillDetails] = useState(false);
     const [err, setErr] = useState({});
-    const userMobile = localStorage.getItem("user") && jwt(JSON.parse(localStorage.getItem("user")).token).mobile
-
     const [bankDetails, setBankDetails] = useState({
         name: "",
         acc_number: "",
         ifsc: "",
         branch: "",
         upi: "",
-        mobile: userMobile,
+        mobile: userData.mobile,
         otp: ""
     });
+
     const navigate = useNavigate();
-    const userData = userId();
     useEffect(() => {
         if (!userData) return navigate("/login");
     });
 
     const addBank = () => {
-        const userId = localStorage.getItem("user") && jwt(JSON.parse(localStorage.getItem("user")).token).userId
         const { name, acc_number, ifsc, branch, upi, mobile, otp } = bankDetails;
 
         if (!acc_number) {
@@ -42,7 +40,7 @@ const Bankcard = () => {
         if (!mobile) return setErr({ mobile: "Mobile is required" });
         if (!otp) return setErr({ otp: "otp is required" });
 
-        const userBankDetails = { ...bankDetails, userId: userId }
+        const userBankDetails = { ...bankDetails, userId: userData.userId }
 
         axios.post("user/userBank", userBankDetails)
             .then(resp => {

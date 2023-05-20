@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import withdro from '../../images/withdro.png';
 import axios from '../../axios/axios';
-import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { blockUser } from '../../common/blockUser';
 import userId from '../../common/userId';
@@ -19,8 +18,7 @@ const Withdrawal = ({ wallet }) => {
     });
 
     function makeWithdraw() {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const userData = jwt(user.token);
+        const userData = userId();
         if (wallet.withdrawableAmount < amount) {
             return setErr({ message: "not enough balance" })
         }

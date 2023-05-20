@@ -12,14 +12,13 @@ const WithdrawRecords = () => {
 
     const navigate = useNavigate()
 
-
     useEffect(() => {
         axios.get("admin/withdraw/history")
             .then(resp => {
-                // const users = resp.data.users
-                // setRecords(users)
-                // setFilteredData(users)
-
+                let { data } = resp.data
+                data = [...data.approved, ...data.rejected]
+                setRecords(data)
+                setFilteredData(data)
             })
             .catch(err => {
                 console.log(err)
@@ -47,10 +46,13 @@ const WithdrawRecords = () => {
                             <th>Username</th>
                             <th>userId</th>
                             <th>Balance</th>
+                            <th>Amount</th>
                             <th>Name</th>
                             <th>Account No.</th>
                             <th>IFSC</th>
                             <th>UPI</th>
+                            <th>Request Time</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,11 +64,14 @@ const WithdrawRecords = () => {
                                         <td>{index + 1}</td>
                                         <td>{item.username}</td>
                                         <td>{item.userId}</td>
-                                        <td>{item.balance}</td>
+                                        <td>{item.wallet}</td>
+                                        <td>{item.amount}</td>
                                         <td >{item.name}</td>
                                         <td >{item.accountNo}</td>
                                         <td >{item.ifsc}</td>
                                         <td >{item.upi}</td>
+                                        <td >{item.requestTime}</td>
+                                        <td >{item.status}</td>
                                     </tr>
                                 )
                             })
