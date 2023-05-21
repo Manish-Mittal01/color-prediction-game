@@ -13744,6 +13744,30 @@ button:disabled {
   background-color: lightgrey;
 }
 
+.myPagination {
+  margin-bottom: 100px;
+  display: flex !important;
+  align-items: center;
+}
+
+.paginationNumber {
+  text-align: right;
+  margin-right: 50px;
+  width: calc(100% - 150px);
+}
+
+.paginationButtons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 50px;
+}
+
+.paginationButtons>p {
+  margin: 0;
+  cursor: pointer;
+}
+
 @media (max-width: 800px) {
   .statusDetails {
     width: 100%;

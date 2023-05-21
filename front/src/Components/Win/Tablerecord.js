@@ -76,6 +76,7 @@ function TableRecord({ history, tab }) {
                 postsPerPage={postsPerPage}
                 setCurrentPage={setCurrentPage}
                 currentPage={currentPage}
+                currentPosts={[firstPostIndex, lastPostIndex]}
             />
         </>
     )

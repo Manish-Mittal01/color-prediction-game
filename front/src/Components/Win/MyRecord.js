@@ -95,6 +95,7 @@ const MyRecord = ({ tab, records, periods }) => {
                 postsPerPage={postsPerPage}
                 setCurrentPage={setCurrentPage}
                 currentPage={currentPage}
+                currentPosts={[firstPostIndex, lastPostIndex]}
             />
         </>
     );

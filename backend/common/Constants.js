@@ -26,8 +26,8 @@ module.exports.StatusCode = {
 };
 
 module.exports.ColorNumbers = {
-  red: [1, 3, 7, 9],
-  green: [2, 4, 6, 8],
+  green: [1, 3, 7, 9],
+  red: [2, 4, 6, 8],
   violet: [0, 5],
 };
 

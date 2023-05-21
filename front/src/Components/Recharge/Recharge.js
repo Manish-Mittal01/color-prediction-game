@@ -108,7 +108,7 @@ export const SubmitRechargeRequest = () => {
 
 
     const sendDepositRequest = () => {
-        const userData = userId;
+        const userData = userId();
 
         const request = {
             userId: userData.userId,

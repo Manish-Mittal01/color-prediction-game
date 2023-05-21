@@ -110,6 +110,7 @@ const Promotion_content = () => {
                 postsPerPage={postsPerPage}
                 setCurrentPage={setCurrentPage}
                 currentPage={currentPage}
+                currentPosts={[firstPostIndex, lastPostIndex]}
             />
         </>
     )

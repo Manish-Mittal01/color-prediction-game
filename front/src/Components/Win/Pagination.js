@@ -6,6 +6,7 @@ const Pagination = ({
     postsPerPage,
     setCurrentPage,
     currentPage,
+    currentPosts
 }) => {
     let pages = [];
 
@@ -14,19 +15,21 @@ const Pagination = ({
     }
 
     return (
-        <div className='pagination' style={{ marginBottom: 100 }}>
-            {pages.map((page, index) => {
-                return (
-                    <button
-                        key={index}
-                        onClick={() => setCurrentPage(page)}
-                        className={page == currentPage ? "active" : ""}
-                        style={{ color: "black" }}
-                    >
-                        {page}
-                    </button>
-                );
-            })}
+        <div className='pagination myPagination'>
+            <div className="paginationNumber">
+                {currentPosts?.[0] + 1}-{currentPosts?.[1]} of {totalPosts}
+            </div>
+            <div className="paginationButtons">
+                <p onClick={() => {
+                    currentPosts?.[0] !== 0 &&
+                        setCurrentPage(currentPage - 1)
+                }} >{"<"}</p>
+                <p onClick={() => {
+                    console.log(currentPosts?.[1], totalPosts)
+                    currentPosts?.[1] <= totalPosts &&
+                        setCurrentPage(currentPage + 1)
+                }}>{">"}</p>
+            </div>
         </div>
     );
 };

@@ -354,7 +354,7 @@ class PeriodService {
 
   static async getHistory(req, res) {
     const periods = await PeriodModel.find()
-      .limit(200 * 4)
+      .limit(800 * 4)
       .sort({ _id: -1 });
 
     if (periods.length == 0) {

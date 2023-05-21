@@ -50,6 +50,7 @@ class TransactionService {
 
   static async requestDeposit(req, res) {
     const { userId, amount, transactionId } = req.body;
+    if (!userId) return ResponseService.failed(res, "user Id is is required", StatusCode.badRequest)
     if (!transactionId) return ResponseService.failed(res, "transaction is is required", StatusCode.badRequest)
 
     const wallet = await walletModal.findOne({ userId: userId });

@@ -125,22 +125,26 @@ class ReferralService {
 
 
     referralLevel.forEach((refer) => {
-      walletModal.findOne({ userId: refer.userId }).then((wallet) => {
-        walletModal.updateOne(
-          { userId: refer.userId },
-          {
-            $set: {
-              totalAmount: wallet.totalAmount + refer.amount,
-              referralAmount: wallet.referralAmount + refer.amount,
-              withdrawableAmount: wallet.withdrawableAmount + refer.amount,
-              // notAllowedAmount: wallet.notAllowedAmount + refer.amount,
-            },
-          }
-        )
-          .then((err, docs) =>
-            LogService.updateLog("Referral-Wallet", err, docs)
-          );
-      });
+      walletModal.findOne({ userId: refer.userId })
+        .then((wallet) => {
+          walletModal.updateOne(
+            { userId: refer.userId },
+            {
+              $set: {
+                totalAmount: wallet.totalAmount + refer.amount,
+                referralAmount: wallet.referralAmount + refer.amount,
+                withdrawableAmount: wallet.withdrawableAmount + refer.amount,
+                // notAllowedAmount: wallet.notAllowedAmount + refer.amount,
+              },
+            }
+          )
+            .then((err, docs) =>
+              LogService.updateLog("Referral-Wallet", err, docs)
+            );
+        })
+        .catch(err => {
+          console.log(err)
+        })
     });
   }
 

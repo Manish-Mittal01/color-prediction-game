@@ -41,7 +41,6 @@ const Win = () => {
   const [periodHistory, setPeriodHistory] = useState({})
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [check, setCheck] = useState(false);
   const [wallet, setWallet] = useState(0)
 
   const navigate = useNavigate()
@@ -170,7 +169,7 @@ const Win = () => {
             [0, 1, 2, 3, 4].map(item => (
               <button
                 key={item}
-                style={{ backgroundColor: [1, 3].includes(item) ? "red" : [2, 4].includes(item) ? "green" : "", backgroundImage: item === 0 && "linear-gradient(45deg, red 50%, #9c27b0 50%)" }}
+                style={{ backgroundColor: [1, 3].includes(item) ? "green" : [2, 4].includes(item) ? "red" : "", backgroundImage: item === 0 && "linear-gradient(45deg, red 50%, #9c27b0 50%)" }}
                 disabled={disabled}
                 className={disabled ? "enter_value disabled" : 'enter_value'}
                 onClick={() => makeBet(item)}
@@ -183,7 +182,7 @@ const Win = () => {
             [5, 6, 7, 8, 9].map(item => (
               <button
                 key={item}
-                style={{ backgroundColor: [9, 7].includes(item) ? "red" : [6, 8].includes(item) ? "green" : "", backgroundImage: item === 5 && "linear-gradient(45deg, green 50%, #9c27b0 50%)" }}
+                style={{ backgroundColor: [9, 7].includes(item) ? "green" : [6, 8].includes(item) ? "red" : "", backgroundImage: item === 5 && "linear-gradient(45deg, green 50%, #9c27b0 50%)" }}
                 disabled={disabled} className={disabled ? "enter_value disabled" : 'enter_value'} onClick={() => makeBet(item)}>{item}</button>
             ))
           }
@@ -211,13 +210,12 @@ const Win = () => {
           </div>
 
           <p className='title_dash'>Total contract money is {betNumber * amount}</p>
-          <span className='wrap_checkbox' >  <Form.Check onChange={() => setCheck(!check)} checked={check} aria-label="option 1" /><span className="checkbox_cus">I agree <span onClick={() => setModalShow(true)} className="rule">PRESALE RULE</span></span></span>
         </Modal.Body>
         <Modal.Footer>
           <Button closeButton onClick={handleClose} style={{ color: '#00897b', marginRight: "10px", fontSize: "" }}>
             CANCEL
           </Button>
-          <Button onClick={confirmBet} className='signin' style={{ color: '#00897b' }} disabled={!check}  >
+          <Button onClick={confirmBet} className='signin' style={{ color: '#00897b' }}  >
             Confirm Order
           </Button>
         </Modal.Footer>

@@ -107,6 +107,7 @@ const MyRecord = () => {
                     postsPerPage={postsPerPage}
                     setCurrentPage={setCurrentPage}
                     currentPage={currentPage}
+                    currentPosts={[firstPostIndex, lastPostIndex]}
                 />
             </div>
         </div>
