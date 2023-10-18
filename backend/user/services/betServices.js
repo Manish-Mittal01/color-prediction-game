@@ -8,34 +8,57 @@ const { SessionController } = require("../controllers/sessionController");
 const WalletModel = require("../Models/walletModal");
 const { UserController } = require("../controllers/userController");
 const { LogService } = require("../../common/logService");
+const { PeriodService } = require("./periodService");
 
 class BetServices {
   static async getBets(req, res) {
+    const page = req.query?.page || 1;
+    const limit = req.query?.limit || 15;
     const userId = req.query.userId;
 
     const validUser = await User.findOne({ userId: userId });
-    if (!validUser)
+    const isActive = await UserController.checkUserActive(userId);
+    if (!validUser || isActive == null)
       return ResponseService.failed(res, "User not Found", StatusCode.notFound);
 
-    const isActive = await UserController.checkUserActive(userId);
-
-    if (isActive == null) {
-      ResponseService.failed(res, "User not Found", StatusCode.notFound);
-      return;
-    }
     if (!isActive) {
       ResponseService.failed(res, "User is blocked", StatusCode.unauthorized);
       return;
     }
 
-    const allBets = await Bet.find({ userId: userId })
-      .limit(100)
+    const parityBets = await Bet.find({ userId: userId, periodName: "Parity" })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ _id: -1 });
+    const sapreBets = await Bet.find({ userId: userId, periodName: "Sapre" })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ _id: -1 });
+    const bconeBets = await Bet.find({ userId: userId, periodName: "Bcone" })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ _id: -1 });
+    const emredBets = await Bet.find({ userId: userId, periodName: "Emred" })
+      .skip((page - 1) * limit)
+      .limit(limit)
       .sort({ _id: -1 });
 
-    if (allBets.length == 0) {
-      ResponseService.success(res, "No Bets Found", allBets);
-      return;
-    }
+    const perityCounts = await Bet.count({
+      userId: userId,
+      periodName: "Parity",
+    });
+    const sapreCounts = await Bet.count({
+      userId: userId,
+      periodName: "Sapre",
+    });
+    const bconeCounts = await Bet.count({
+      userId: userId,
+      periodName: "Bcone",
+    });
+    const emredCounts = await Bet.count({
+      userId: userId,
+      periodName: "Emred",
+    });
 
     function makeResponseObject({ betModel, periodModel }) {
       if (periodModel) {
@@ -68,9 +91,9 @@ class BetServices {
     }
 
     const periodMap = {};
-    const bets = [];
 
-    async function makeResponse() {
+    async function makeResponse(allBets) {
+      const bets = [];
       for (let index in allBets) {
         let period;
         const bet = allBets[index];
@@ -82,11 +105,22 @@ class BetServices {
         }
         bets.push(makeResponseObject({ betModel: bet, periodModel: period }));
       }
+      return bets;
     }
 
-    await makeResponse();
+    const allParityBets = await makeResponse(parityBets);
+    const allSapreBets = await makeResponse(sapreBets);
+    const allBconeBets = await makeResponse(bconeBets);
+    const allEmredBets = await makeResponse(emredBets);
 
-    ResponseService.success(res, `${bets.length} Bet(s) Found`, bets);
+    const response = {
+      parity: { totalCount: perityCounts, data: allParityBets },
+      sapre: { totalCount: sapreCounts, data: allSapreBets },
+      bcone: { totalCount: bconeCounts, data: allBconeBets },
+      emred: { totalCount: emredCounts, data: allEmredBets },
+    };
+
+    ResponseService.success(res, `Bets Found successfully`, response);
   }
 
   static async makeBet(req, res) {

@@ -37,7 +37,7 @@ module.exports.allUsers = async (req, res) => {
         userId: item.userId,
         loginIP: item.loginIP,
         registrationIP: item.registrationIP,
-        balance: userWallet.totalAmount,
+        balance: userWallet?.totalAmount,
         status: item.status
       };
       usersDetails.push(userAllDetails);

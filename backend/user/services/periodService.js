@@ -111,16 +111,13 @@ class PeriodService {
         }
       } else {
         if (periodBets.length == 0) {
-          // const color = Utility.getRandomValue([
-          //   "red",
-          //   "green",
-          //   "violet green",
-          //   "violet red",
-          // ]);
-
-
           // set of object with probabilities:
-          const set = { "red": 0.45, "green": 0.45, "violet green": 0.05, "violet red": 0.05 };
+          const set = {
+            red: 0.45,
+            green: 0.45,
+            "violet green": 0.05,
+            "violet red": 0.05,
+          };
 
           // get probabilities sum:
           let sum = 0;
@@ -353,8 +350,12 @@ class PeriodService {
   }
 
   static async getHistory(req, res) {
+    const page = req.query?.page || 1;
+    const limit = req.query?.limit || 15;
+
     const periods = await PeriodModel.find()
-      .limit(800 * 4)
+      .skip((page - 1) * limit * 4)
+      .limit(limit * 4)
       .sort({ _id: -1 });
 
     if (periods.length == 0) {
